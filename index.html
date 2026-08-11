@@ -12,6 +12,14 @@
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#1e293b">
 
+  <!-- Evitar parpadeo (FOUC) al cargar el tema -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('app-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
   <!-- KaTeX CSS & JS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
