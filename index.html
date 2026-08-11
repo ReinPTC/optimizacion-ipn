@@ -1,0 +1,2799 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Libro Web Interactivo — Unidad 1: Herramientas para la Optimización. Estructura curricular oficial del IPN basada estrictamente en los Apéndices A, B, C y Capítulo 1 de Luenberger & Ye (4ta Ed.).">
+  <title>Unidad 1: Herramientas para la Optimización — Luenberger & Ye</title>
+
+  <!-- Web App Manifest (PWA) -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#1e293b">
+
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Estilos Principales -->
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+
+  <div id="app-layout">
+    <!-- =========================================================================
+       BARRA LATERAL DE NAVEGACIÓN (TEMARIO OFICIAL IPN)
+  ========================================================================== -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span>Optimización</span> IPN
+        </div>
+        <div class="badge-ipn">UNIDAD 1 • TEMARIO OFICIAL IPN</div>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar temas, definiciones, teoremas...">
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-title">Presentación General</div>
+        <a href="#presentacion-materia" class="nav-item active">🏛️ Presentación de la Materia</a>
+        <a href="#equipo-docente" class="nav-item">👨‍🏫 Contacto & Asesorías</a>
+
+        <div class="nav-group-title">Unidad 1: Herramientas para la Optimización</div>
+        <a href="#intro" class="nav-item">📖 Introducción Unidad 1</a>
+
+        <div class="nav-group-title">1.1 Revisión de Álgebra Lineal</div>
+        <a href="#sec-1-1-1" class="nav-item nav-subitem">1.1.1 Notación Matricial</a>
+        <a href="#sec-1-1-2" class="nav-item nav-subitem">1.1.2 Espacios</a>
+        <a href="#sec-1-1-3" class="nav-item nav-subitem">1.1.3 Valores Propios y Formas Cuadráticas</a>
+        <a href="#sec-1-1-4" class="nav-item nav-subitem">1.1.4 Conceptos Topológicos y Funciones</a>
+        <a href="#sec-1-1-5" class="nav-item nav-subitem">1.1.5 Eliminación Gaussiana y Factorización LU</a>
+
+        <div class="nav-group-title">1.2 Conjuntos Convexos</div>
+        <a href="#sec-1-2-1" class="nav-item nav-subitem">1.2.1 Hiperplanos y Politopos</a>
+        <a href="#sec-1-2-2" class="nav-item nav-subitem">1.2.2 Hiperplanos Separadores y de Apoyo</a>
+        <a href="#sec-1-2-3" class="nav-item nav-subitem">1.2.3 Puntos Extremos</a>
+
+        <div class="nav-group-title">1.3 Elementos para la Optimización</div>
+        <a href="#sec-1-3-1" class="nav-item nav-subitem">1.3.1 Tipos de Problemas y Espacios de Búsqueda</a>
+        <a href="#sec-1-3-2" class="nav-item nav-subitem">1.3.2 Tamaño y Dificultad de los Problemas</a>
+        <a href="#sec-1-3-3" class="nav-item nav-subitem">1.3.3 Algoritmos Iterativos y su Convergencia</a>
+
+        <div class="nav-group-title">Recursos & Bibliografía</div>
+        <a href="#python-modules" class="nav-item">🐍 Suite de Módulos en Python</a>
+        <a href="#bibliografia-oficial" class="nav-item">📚 Bibliografía Oficial IPN</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div>ESFM — IPN • Licenciatura en Matemática Algorítmica</div>
+        <div>David G. Luenberger & Yinyu Ye (4ta Ed.)</div>
+      </div>
+    </aside>
+
+    <!-- =========================================================================
+       CONTENIDO PRINCIPAL
+  ========================================================================== -->
+    <div id="main-wrapper">
+      <header id="top-header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Abrir Menú">☰</button>
+          <div class="header-breadcrumbs">
+            <span>IPN — ESFM</span> / <span>Optimización</span> / <span id="breadcrumbCurrent"
+              class="current">Presentación del Curso</span>
+          </div>
+        </div>
+        <div class="header-controls">
+          <button id="themeToggleBtn" class="btn-ctrl">☀️ Modo Claro</button>
+        </div>
+      </header>
+
+      <main class="content-container">
+
+        <!-- =====================================================================
+           PRESENTACIÓN GENERAL DE LA UNIDAD DE APRENDIZAJE (IPN — ESFM)
+      ====================================================================== -->
+        <section id="presentacion-materia" class="course-presentation-section">
+          <div class="course-header-badge">
+            🏛️ Instituto Politécnico Nacional • Escuela Superior de Física y Matemáticas
+          </div>
+
+          <h1 class="course-title">Optimización</h1>
+          <div class="course-subtitle">Licenciatura en Matemática Algorítmica — Quinto Semestre (Semestre V)</div>
+
+          <p style="font-size: 1.05rem; line-height: 1.7; color: var(--text-primary); margin-bottom: 1.5rem;">
+            Bienvenido al <strong>Libro de Texto Digital Interactivo de Optimización</strong>. Esta plataforma formativa
+            ha sido concebida como una obra viva y modular de referencia analítica y numérica rigurosa para los alumnos
+            de la ESFM. El libro abarca el estudio formal de los métodos lineales, no lineales y convexos, combinando la
+            fundamentación matemática estricta con visualizadores interactivos en tiempo real y código computacional
+            verificable.
+          </p>
+
+          <!-- Ficha Técnica del Programa Oficial -->
+          <div class="course-meta-grid">
+            <div class="course-meta-item">
+              <div class="meta-label">Unidad Académica</div>
+              <div class="meta-value">ESFM — IPN</div>
+            </div>
+            <div class="course-meta-item">
+              <div class="meta-label">Programa Académico</div>
+              <div class="meta-value">Lic. en Matemática Algorítmica</div>
+            </div>
+            <div class="course-meta-item">
+              <div class="meta-label">Área de Formación & Tipo</div>
+              <div class="meta-value">Científica básica • Teórico-Práctica</div>
+            </div>
+            <div class="course-meta-item">
+              <div class="meta-label">Créditos Oficiales</div>
+              <div class="meta-value">ESFM: 10.5 | SATCA: 8.4</div>
+            </div>
+          </div>
+
+          <!-- Intención Educativa y Propósito General -->
+          <div class="syllabus-intent-box">
+            <div class="syllabus-intent-title">
+              🎯 Intención Educativa (Programa de Estudios Oficial IPN — Hoja 2 de 9)
+            </div>
+            <p class="syllabus-intent-text">
+              La unidad de aprendizaje <em>Optimización</em> contribuye al perfil de egreso de la Licenciatura en
+              Matemática Algorítmica proporcionando bases teóricas y prácticas para el desarrollo de los algoritmos de
+              optimización que se aplican en la solución de problemas actuales. Asimismo, fomenta las habilidades de
+              resolución de problemas, pensamiento crítico, trabajo colaborativo y la capacidad para aplicar los
+              conocimientos con compromiso ético.<br><br>
+              <strong>Eje Curricular:</strong> Tiene como antecedentes <em>Álgebra Lineal Avanzada</em> y <em>Cálculo
+                Multivariable</em>, y como consecuentes <em>Aprendizaje Máquina Estadístico</em>, <em>Teoría del
+                Control</em> y <em>Negociación de Activos Financieros</em>.
+            </p>
+          </div>
+
+          <div class="syllabus-intent-box" style="border-left-color: #10b981; background: rgba(16, 185, 129, 0.04);">
+            <div class="syllabus-intent-title" style="color: #10b981;">
+              📌 Propósito de la Unidad de Aprendizaje
+            </div>
+            <p class="syllabus-intent-text" style="font-weight: 500;">
+              Resuelve problemas de optimización a partir de técnicas algorítmicas para problemas lineales y no
+              lineales.
+            </p>
+          </div>
+
+          <!-- EQUIPO DOCENTE & ASESORÍAS -->
+          <div id="equipo-docente" style="margin-top: 2rem;">
+            <h3 style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 0.5rem;">
+              👨‍🏫 Cuerpo Docente & Asesoría Académica
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+              Acompañamiento teórico, algorítmico y de programación para los estudiantes del curso:
+            </p>
+
+            <div class="staff-grid">
+              <div class="staff-card">
+                <div class="staff-avatar">👨‍🏫</div>
+                <div class="staff-info">
+                  <div class="staff-name">Dr. Rafael Martínez Martínez</div>
+                  <div class="staff-role">Profesor Titular</div>
+                  <div class="staff-institution">Escuela Superior de Física y Matemáticas (ESFM — IPN)</div>
+                </div>
+              </div>
+
+              <div class="staff-card">
+                <div class="staff-avatar">👨‍💻</div>
+                <div class="staff-info">
+                  <div class="staff-name">Ing. Terán Cuevas Edgar Román</div>
+                  <div class="staff-role">Asesor Auxiliar</div>
+                  <div class="staff-institution">Escuela Superior de Física y Matemáticas (ESFM — IPN)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =====================================================================
+           HERO BANNER — UNIDAD 1: HERRAMIENTAS PARA LA OPTIMIZACIÓN
+      ====================================================================== -->
+        <section id="intro" class="hero-banner">
+          <span class="hero-tag">Módulo Activo • Unidad 1 (Temario Oficial IPN — Hoja 3 de 9)</span>
+          <h2 class="hero-title" style="font-size: 2.1rem; margin-top: 0.25rem;">Unidad 1: Herramientas para la
+            Optimización</h2>
+          <p style="font-size: 1.05rem; color: var(--text-primary); line-height: 1.7;">
+            Fundamentación analítica, topológica y geométrica rigurosa basada en los <strong>Apéndices A, B, C y
+              Capítulo 1 de David G. Luenberger & Yinyu Ye, <em>Linear and Nonlinear Programming</em> (4ta Edición,
+              Springer 2016)</strong>.
+          </p>
+          <div class="hero-meta">
+            <div><strong>Unidad de Competencia 1:</strong> Identifica los elementos necesarios para el estudio de los
+              algoritmos de optimización a partir del álgebra lineal y los conjuntos convexos.</div>
+            <div><strong>Metodología Pedagógica:</strong> Definiciones formales estructuradas, teoremas con hipótesis y
+              tesis explícitas, demostraciones analíticas rigurosas y <strong>ejemplos numéricos paso a paso</strong>
+              para cada concepto.</div>
+          </div>
+        </section>
+
+        <!-- =====================================================================
+           TEMA 1.1: REVISIÓN DE ÁLGEBRA LINEAL
+      ====================================================================== -->
+        <section id="sec-1-1">
+          <h2>
+            <span>1.1 Revisión de Álgebra Lineal</span>
+            <span class="ref-badge" style="width: fit-content;">Luenberger Apéndices A y C</span>
+          </h2>
+          <p>
+            Esta sección cubre la totalidad de los fundamentos del <strong>Apéndice A</strong> (Revisión Matemática) y
+            del <strong>Apéndice C</strong> (Eliminación Gaussiana) de Luenberger, proporcionando la estructura
+            algebraica, topológica y numérica indispensable para el diseño y análisis de algoritmos de optimización.
+          </p>
+
+          <!-- 1.1.1 Notación Matricial -->
+          <div id="sec-1-1-1" style="margin-top: 2.5rem;">
+            <h3>
+              <span>1.1.1 Notación Matricial</span>
+              <span class="ref-badge">Luenberger Apéndice A.1–A.2</span>
+            </h3>
+            <p>
+              Revisión formal de la teoría de conjuntos, operadores extremales de optimización, espacios matriciales y
+              partición por bloques.
+            </p>
+
+            <!-- Definición: Conjuntos -->
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Fundamentos de Teoría de Conjuntos</div>
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Pertenencia a un Conjunto:</div>
+                  <div class="notation-formula">$x \in S$ indica que el elemento $x$ pertenece al conjunto $S$; $\quad y
+                    \notin S$ indica que $y$ no pertenece a $S$.</div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Especificación de Conjuntos:</div>
+                  <div class="notation-formula">Por extensión: $S = \{1, 2, 3, 4\}$; $\quad$ Por comprensión: $S = \{x
+                    \in E^n : P(x)\}$, donde $P(x)$ es una propiedad o predicado.</div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Unión e Intersección:</div>
+                  <div class="notation-formula">
+                    Unión: $S \cup T = \{x : x \in S \text{ o } x \in T\}$; $\quad$ Intersección: $S \cap T = \{x : x
+                    \in S \text{ y } x \in T\}$.
+                  </div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Inclusión y Conjunto Vacío:</div>
+                  <div class="notation-formula">
+                    $S \subset T$ (o $T \supset S$) si para todo $x \in S \implies x \in T$. El conjunto vacío que no
+                    contiene elementos se denota $\emptyset$.
+                  </div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Intervalos en la Recta Real $\mathbb{R}$:</div>
+                  <div class="notation-formula">
+                    Intervalo cerrado: $[a, b] = \{x \in \mathbb{R} : a \le x \le b\}$; $\quad$ Intervalo abierto: $(a,
+                    b) = \{x \in \mathbb{R} : a < x < b\}$. </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Definición: Operadores de Minimización y Cotas Extremales -->
+              <div class="math-box box-def">
+                <div class="math-box-header">Definición: Operadores de Minimización, Argmin, Cotas, Supremo e Ínfimo
+                </div>
+
+                <div class="formula-card">
+                  <div class="formula-card-title">Operador de Minimización sobre un Conjunto Factible</div>
+                  $$\min_{x \in S} f(x) \quad \iff \quad \min \{f(x) : x \in S\}$$
+                </div>
+
+                <div class="formula-card">
+                  <div class="formula-card-title">Operador Argmin (Conjunto de Puntos Óptimos)</div>
+                  $$\operatorname{argmin} \{f(x) : x \in S\} = \left\{ x^* \in S : f(x^*) \le f(x), \; \forall x \in S
+                  \right\}$$
+                </div>
+
+                <h4 style="margin-top: 1.5rem; color: var(--accent-primary);">1. Concepto de Cotas (Superior e Inferior)
+                </h4>
+                <p>
+                  Sea $S \subset \mathbb{R}$ un subconjunto no vacío de números reales:
+                </p>
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Cota Superior:</div>
+                    <div class="notation-formula">Un número $M \in \mathbb{R}$ es cota superior de $S$ si satisface:
+                      $\forall x \in S \implies x \le M$. Si existe al menos una cota superior, decimos que $S$ está
+                      <strong>acotado superiormente</strong>.</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Cota Inferior:</div>
+                    <div class="notation-formula">Un número $m \in \mathbb{R}$ es cota inferior de $S$ si satisface:
+                      $\forall x \in S \implies x \ge m$. Si existe al menos una cota inferior, decimos que $S$ está
+                      <strong>acotado inferiormente</strong>.</div>
+                  </div>
+                </div>
+
+                <h4 style="margin-top: 1.5rem; color: var(--accent-primary);">2. Definición Formal de Supremo ($\sup$) e
+                  Ínfimo ($\inf$)</h4>
+                <p>
+                  Por el <em>Axioma de Completitud</em> de los números reales ($\mathbb{R}$), todo conjunto no vacío y
+                  acotado posee cotas extremales únicas:
+                </p>
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Supremo ($\sup$):</div>
+                    <div class="notation-formula">
+                      El <strong>supremo</strong> (o <em>mínima cota superior</em>), denotado $\sup(S)$ o $\sup_{x \in
+                      S} x$, es la menor de todas las cotas superiores de $S$. Se caracteriza por dos condiciones:
+                      <ol style="margin-left: 1.25rem; margin-top: 0.3rem;">
+                        <li>$\forall x \in S \implies x \le \sup(S)$ (es cota superior).</li>
+                        <li>$\forall \varepsilon > 0, \; \exists x \in S \text{ tal que } x > \sup(S) - \varepsilon$
+                          (ningún número menor es cota superior).</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Ínfimo ($\inf$):</div>
+                    <div class="notation-formula">
+                      El <strong>ínfimo</strong> (o <em>mayor cota inferior</em>), denotado $\inf(S)$ o $\inf_{x \in S}
+                      x$, es la mayor de todas las cotas inferiores de $S$. Se caracteriza por:
+                      <ol style="margin-left: 1.25rem; margin-top: 0.3rem;">
+                        <li>$\forall x \in S \implies x \ge \inf(S)$ (es cota inferior).</li>
+                        <li>$\forall \varepsilon > 0, \; \exists x \in S \text{ tal que } x < \inf(S) + \varepsilon$
+                            (ningún número mayor es cota inferior).</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+
+                <h4 style="margin-top: 1.5rem; color: var(--accent-primary);">3. Distinción Fundamental: $\sup / \inf$
+                  frente a $\max / \min$</h4>
+                <p>
+                  La diferencia clave en optimización radica en la <strong>pertenencia al conjunto</strong>:
+                </p>
+                <ul style="margin-left: 1.5rem; line-height: 1.8; color: var(--text-secondary);">
+                  <li><strong>Máximo ($\max$) y Mínimo ($\min$):</strong> Si el supremo pertenece a $S$, entonces
+                    $\max(S) = \sup(S)$. Si el supremo no pertenece a $S$, el conjunto <strong>no tiene máximo</strong>
+                    (aunque su supremo exista perfectamente en $\mathbb{R}$).</li>
+                  <li><strong>Ínfimo ($\inf$) y Mínimo ($\min$):</strong> Si el ínfimo pertenece a $S$, entonces
+                    $\min(S) = \inf(S)$. Si el ínfimo no pertenece a $S$, el conjunto <strong>no tiene mínimo</strong>.
+                  </li>
+                  <li><strong>Relevancia en Optimización:</strong> Si optimizamos sobre conjuntos abiertos o regiones no
+                    acotadas, la función puede acercarse a un límite sin alcanzarlo jamás. Por esta razón, teoremas
+                    rigurosos como el <em>Teorema 1 de Separación de Luenberger</em> se enuncian con $\inf_{\mathbf{x}
+                    \in C} \mathbf{a}^T\mathbf{x}$ en lugar de $\min$, garantizando validez universal incluso si el
+                    conjunto $C$ no contiene a su frontera.</li>
+                </ul>
+              </div>
+
+              <!-- Ejemplo Práctico 1A: Minimización y Argmin -->
+              <div class="math-box box-ex">
+                <div class="math-box-header">Ejemplo Práctico 1A: Operadores de Minimización y $\operatorname{argmin}$
+                  (Escalar y Multivariable)</div>
+
+                <div class="example-steps">
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Caso 1: Función Escalar con Minimizador Único</div>
+                    Sea $f(x) = (x - 1)^2 + 3$ definida sobre el intervalo cerrado $S = [-2, 2]$.
+                    <ul style="margin-left: 1.25rem; margin-top: 0.35rem; line-height: 1.8;">
+                      <li><strong>Valor Mínimo (Escalar $\in \mathbb{R}$):</strong> $\min_{x \in S} f(x) = f(1) = 3$.
+                      </li>
+                      <li><strong>Conjunto Argmin (Subconjunto de puntos $\subset S$):</strong>
+                        $\operatorname{argmin}_{x \in S} f(x) = \{1\}$.</li>
+                    </ul>
+                  </div>
+
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Caso 2: Función Multivariable con Múltiples Minimizadores
+                      Globales</div>
+                    Sea $f(x_1, x_2) = (x_1^2 - 1)^2 + x_2^2$ sobre el espacio $\mathbb{R}^2$.
+                    <ul style="margin-left: 1.25rem; margin-top: 0.35rem; line-height: 1.8;">
+                      <li><strong>Valor Mínimo Global:</strong> Como $(x_1^2-1)^2 \ge 0$ y $x_2^2 \ge 0$, el menor valor
+                        alcanzable es $\min_{\mathbf{x} \in \mathbb{R}^2} f(\mathbf{x}) = 0$.</li>
+                      <li><strong>Conjunto $\operatorname{argmin}$ (Múltiples Puntos Óptimos):</strong> El mínimo $0$ se
+                        alcanza cuando $x_1^2 = 1$ (es decir, $x_1 = \pm 1$) y $x_2 = 0$:
+                        $$\operatorname{argmin}_{\mathbf{x} \in \mathbb{R}^2} f(\mathbf{x}) = \left\{ \begin{pmatrix} 1
+                        \\ 0 \end{pmatrix}, \; \begin{pmatrix} -1 \\ 0 \end{pmatrix} \right\}$$
+                        <em>Nota Pedagógica:</em> Esto evidencia con precisión por qué el $\operatorname{argmin}$ se
+                        define matemáticamente como un <strong>conjunto de vectores</strong> y no como un número
+                        escalar.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ejemplo Práctico 1B: Supremo e Ínfimo vs Máximo y Mínimo -->
+              <div class="math-box box-ex">
+                <div class="math-box-header">Ejemplo Práctico 1B: Comparativa Exhaustiva entre $\sup / \inf$ y $\max /
+                  \min$</div>
+
+                <table class="academic-table">
+                  <thead>
+                    <tr>
+                      <th>Conjunto $S \subset \mathbb{R}$</th>
+                      <th>Ínfimo ($\inf S$)</th>
+                      <th>Mínimo ($\min S$)</th>
+                      <th>Supremo ($\sup S$)</th>
+                      <th>Máximo ($\max S$)</th>
+                      <th>Diagnóstico de Pertenencia</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Intervalo Cerrado $[2, 5]$</strong></td>
+                      <td>$2$</td>
+                      <td>$2$</td>
+                      <td>$5$</td>
+                      <td>$5$</td>
+                      <td>Ambos extremos pertenecen al conjunto ($2 \in S, 5 \in S$).</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Intervalo Abierto $(2, 5)$</strong></td>
+                      <td>$2$</td>
+                      <td><em>No existe</em></td>
+                      <td>$5$</td>
+                      <td><em>No existe</em></td>
+                      <td>Las cotas extremales no pertenecen al conjunto ($2 \notin S, 5 \notin S$).</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Semiabierto $[2, 5)$</strong></td>
+                      <td>$2$</td>
+                      <td>$2$</td>
+                      <td>$5$</td>
+                      <td><em>No existe</em></td>
+                      <td>El ínfimo sí pertenece ($2 \in S$), pero el supremo no ($5 \notin S$).</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Sucesión $\{1 - \frac{1}{n} : n \in \mathbb{N}\}$</strong></td>
+                      <td>$0$</td>
+                      <td>$0$ (con $n=1$)</td>
+                      <td>$1$</td>
+                      <td><em>No existe</em></td>
+                      <td>$S = \{0, \frac{1}{2}, \frac{2}{3}, \frac{3}{4}, \dots\}$. Se acerca a $1$ tanto como se
+                        desee, pero $1 \notin S$.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Semirrecta $(0, \infty)$</strong></td>
+                      <td>$0$</td>
+                      <td><em>No existe</em></td>
+                      <td>$+\infty$</td>
+                      <td><em>No existe</em></td>
+                      <td>Acotado inferiormente ($\inf=0$), pero no acotado superiormente ($\sup=+\infty$).</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="example-steps" style="margin-top: 1rem;">
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Caso 3: Función Asintótica en Optimización (Ínfimo sin Mínimo)
+                    </div>
+                    Sea $f(x) = \frac{1}{x}$ definida sobre el dominio factible abierto $X = (0, \infty)$.
+                    $$\inf_{x \in X} f(x) = 0, \qquad \text{sin embargo } \min_{x \in X} f(x) \text{ NO EXISTE}$$
+                    pues no existe ningún número real $x^* \in (0, \infty)$ tal que $\frac{1}{x^*} = 0$.
+                  </div>
+                </div>
+              </div>
+
+              <!-- =================================================================
+               1.1.1.B NOTACIÓN MATRICIAL Y ÁLGEBRA LINEAL (APÉNDICE A.2)
+          ================================================================== -->
+              <div class="math-box box-def">
+                <div class="math-box-header">Definición: Notación Matricial, Operaciones y Álgebra (Luenberger Apéndice
+                  A.2, pp. 494–495)</div>
+
+                <p>
+                  Una <strong>matriz</strong> es un arreglo rectangular de números, llamados <em>elementos</em>. La
+                  matriz misma se denota mediante una letra mayúscula en negrita $\mathbf{A}$. Cuando no se utilizan
+                  números específicos, los elementos se denotan mediante letras minúsculas en cursiva con un doble
+                  subíndice $a_{ij}$, donde el primer índice $i$ designa la fila y el segundo índice $j$ designa la
+                  columna:
+                </p>
+
+                <div class="formula-card">
+                  <div class="formula-card-title">Matriz Real de Dimensión $m \times n$ y Notación de Elemento General
+                  </div>
+                  $$\mathbf{A} = \begin{bmatrix}
+                  a_{11} & a_{12} & \cdots & a_{1n} \\
+                  a_{21} & a_{22} & \cdots & a_{2n} \\
+                  \vdots & \vdots & \ddots & \vdots \\
+                  a_{m1} & a_{m2} & \cdots & a_{mn}
+                  \end{bmatrix} = [a_{ij}]$$
+                </div>
+
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Matriz Cero ($\mathbf{0}$):</div>
+                    <div class="notation-formula">
+                      Una matriz de dimensión $m \times n$ cuyos elementos son todos iguales a cero se denomina
+                      <strong>matriz cero</strong> y se denota $\mathbf{0}$.
+                    </div>
+                  </div>
+
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Matriz Cuadrada e Identidad ($\mathbf{I}$):</div>
+                    <div class="notation-formula">
+                      Una matriz con igual número de filas y columnas ($m = n$) es una <strong>matriz cuadrada</strong>.
+                      Una matriz cuadrada cuyos elementos cumplen $a_{ij} = 0$ para $i \neq j$ y $a_{ii} = 1$ para todo
+                      $i = 1, 2, \dots, n$ se denomina <strong>matriz identidad</strong> y se denota $\mathbf{I}$:
+                      $$\mathbf{I} = \begin{bmatrix} 1 & 0 & \cdots & 0 \\ 0 & 1 & \cdots & 0 \\ \vdots & \vdots &
+                      \ddots & \vdots \\ 0 & 0 & \cdots & 1 \end{bmatrix}$$
+                    </div>
+                  </div>
+
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Suma de Matrices ($\mathbf{A} + \mathbf{B}$):</div>
+                    <div class="notation-formula">
+                      La suma de dos matrices de igual dimensión $m \times n$, denotada $\mathbf{A} + \mathbf{B}$, es la
+                      matriz cuyos elementos son la suma de los elementos correspondientes: $[\mathbf{A} +
+                      \mathbf{B}]_{ij} = a_{ij} + b_{ij}$.
+                    </div>
+                  </div>
+
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Producto por un Escalar ($\lambda \mathbf{A}$ o $\mathbf{A}\lambda$):
+                    </div>
+                    <div class="notation-formula">
+                      El producto de una matriz $\mathbf{A}$ por un escalar $\lambda \in \mathbb{R}$ se obtiene
+                      multiplicando cada elemento de $\mathbf{A}$ por $\lambda$: $[\lambda \mathbf{A}]_{ij} = \lambda
+                      a_{ij}$.
+                    </div>
+                  </div>
+
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Producto Matricial ($\mathbf{A}\mathbf{B}$):</div>
+                    <div class="notation-formula">
+                      El producto $\mathbf{A}\mathbf{B}$ de una matriz $\mathbf{A} \in \mathbb{R}^{m \times n}$ y una
+                      matriz $\mathbf{B} \in \mathbb{R}^{n \times p}$ es la matriz $\mathbf{C} \in \mathbb{R}^{m \times
+                      p}$ cuyos elementos $c_{ij}$ están dados por la suma de productos:
+                      $$c_{ij} = \sum_{k=1}^n a_{ik} b_{kj}, \quad i = 1, \dots, m, \quad j = 1, \dots, p$$
+                    </div>
+                  </div>
+
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Transpuesta ($\mathbf{A}^T$) y Matriz Simétrica:</div>
+                    <div class="notation-formula">
+                      La <strong>transpuesta</strong> de una matriz $\mathbf{A} \in \mathbb{R}^{m \times n}$ es la
+                      matriz $\mathbf{A}^T \in \mathbb{R}^{n \times m}$ con elementos $[a_{ij}^T] = a_{ji}$. Una matriz
+                      cuadrada $\mathbf{A}$ es <strong>simétrica</strong> si y solo si coincide con su transpuesta:
+                      $$\mathbf{A}^T = \mathbf{A}$$
+                    </div>
+                  </div>
+
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Matriz No Singular, Inversa ($\mathbf{A}^{-1}$) y Determinante
+                      ($\det(\mathbf{A})$):</div>
+                    <div class="notation-formula">
+                      Una matriz cuadrada $\mathbf{A}$ es <strong>no singular</strong> (o invertible) si existe una
+                      matriz única $\mathbf{A}^{-1}$, llamada <em>inversa</em> de $\mathbf{A}$, tal que:
+                      $$\mathbf{A}^{-1}\mathbf{A} = \mathbf{I} = \mathbf{A}\mathbf{A}^{-1}$$
+                      El determinante de una matriz cuadrada se denota $\det(\mathbf{A})$. Una matriz cuadrada es no
+                      singular si y solo si su determinante es no nulo:
+                      $$\det(\mathbf{A}) \neq 0 \iff \mathbf{A} \text{ es no singular}$$
+                    </div>
+                  </div>
+
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Matrices Similares (Semejantes):</div>
+                    <div class="notation-formula">
+                      Dos matrices cuadradas $n \times n$ $\mathbf{A}$ y $\mathbf{B}$ son <strong>similares</strong> (o
+                      semejantes) si existe una matriz no singular $\mathbf{S}$ tal que:
+                      $$\mathbf{B} = \mathbf{S}^{-1}\mathbf{A}\mathbf{S}$$
+                      <em>Propiedad:</em> Las matrices similares comparten el mismo polinomio característico, la misma
+                      traza, el mismo determinante y los mismos valores propios.
+                    </div>
+                  </div>
+                </div>
+
+                <h4 style="margin-top: 1.75rem; color: var(--accent-primary);">Convención de Vectores Fila y Columna:
+                  Espacios $E_n$ frente a $E^n$ (Luenberger p. 495)</h4>
+                <p>
+                  Las matrices de una sola fila se denominan <strong>vectores fila</strong>; las matrices de una sola
+                  columna se denominan <strong>vectores columna</strong>. Ambos tipos se denotan con letras minúsculas
+                  en negrita:
+                </p>
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Vectores Fila ($\mathbf{b} \in E_n$):</div>
+                    <div class="notation-formula">
+                      Se escriben horizontalmente con corchetes: $\mathbf{b} = [b_1, b_2, \dots, b_n] \in E_n$ (el
+                      subíndice $n$ designa vectores fila).
+                    </div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Vectores Columna ($\mathbf{a} \in E^n$):</div>
+                    <div class="notation-formula">
+                      Para economizar espacio tipográfico y evitar desplegar columnas extensas en el texto, los vectores
+                      columna se escriben entre paréntesis: $\mathbf{a} = (a_1, a_2, \dots, a_n) \in E^n$ (el
+                      superíndice $n$ designa vectores columna).
+                    </div>
+                  </div>
+                </div>
+
+                <h4 style="margin-top: 1.75rem; color: var(--accent-primary);">Partición de Matrices en Submatrices y
+                  Bloques (Luenberger p. 495)</h4>
+                <p>
+                  En optimización es frecuente particionar matrices trazando líneas divisorias entre bloques:
+                </p>
+                <div class="formula-card">
+                  <div class="formula-card-title">Partición General en Submatrices Bloque $\mathbf{A}_{ij}$</div>
+                  $$\mathbf{A} = \left[\begin{array}{cc|cc}
+                  a_{11} & a_{12} & a_{13} & a_{14} \\
+                  a_{21} & a_{22} & a_{23} & a_{24} \\
+                  \hline
+                  a_{31} & a_{32} & a_{33} & a_{34}
+                  \end{array}\right] = \begin{bmatrix} \mathbf{A}_{11} & \mathbf{A}_{12} \\ \mathbf{A}_{21} &
+                  \mathbf{A}_{22} \end{bmatrix}$$
+                </div>
+
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Partición por Vectores Columna:</div>
+                    <div class="notation-formula">
+                      Denotando las columnas de una matriz $m \times n$ $\mathbf{A}$ como $\mathbf{a}_j \in E^m$ ($j =
+                      1, 2, \dots, n$), escribimos:
+                      $$\mathbf{A} = [\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_n]$$
+                    </div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Partición por Vectores Fila:</div>
+                    <div class="notation-formula">
+                      Denotando las filas de $\mathbf{A}$ como $\mathbf{a}^i \in E_n$ ($i = 1, 2, \dots, m$),
+                      escribimos:
+                      $$\mathbf{A} = (\mathbf{a}^1, \mathbf{a}^2, \dots, \mathbf{a}^m)$$
+                    </div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Partición por Bloques $[\mathbf{B} \mid \mathbf{N}]$ (Base y No-Base):</div>
+                    <div class="notation-formula">
+                      <p style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        Siguiendo este patrón, escribimos $\mathbf{A} = [\mathbf{B} \mid \mathbf{N}]$ para la partición donde
+                        $\mathbf{B}$ y $\mathbf{N}$ son submatrices contiguas. Esta notación es el pilar de la programación lineal, donde particionamos una matriz $\mathbf{A} \in \mathbb{R}^{m \times n}$ de la siguiente manera:
+                      </p>
+                      <ul style="margin-left: 1.5rem; margin-bottom: 0.5rem; color: var(--text-secondary); line-height: 1.6;">
+                        <li>$\mathbf{B}$: Submatriz cuadrada $m \times m$ formada por $m$ columnas linealmente independientes de $\mathbf{A}$ (matriz <em>básica</em>, no singular).</li>
+                        <li>$\mathbf{N}$: Submatriz de dimensiones $m \times (n-m)$ que contiene las columnas restantes (matriz <em>no básica</em>).</li>
+                      </ul>
+                      <p style="margin-bottom: 0.5rem;">
+                        Si el vector $\mathbf{x}$ se descompone conformemente como $\mathbf{x} = (\mathbf{x}_B, \mathbf{x}_N)$, entonces la ecuación de restricciones $\mathbf{A}\mathbf{x} = \mathbf{b}$ se expresa como:
+                      </p>
+                      $$\mathbf{A}\mathbf{x} = [\mathbf{B} \mid \mathbf{N}] \begin{pmatrix} \mathbf{x}_B \\ \mathbf{x}_N \end{pmatrix} = \mathbf{B}\mathbf{x}_B + \mathbf{N}\mathbf{x}_N = \mathbf{b}$$
+                      <p style="margin-top: 0.5rem;">
+                        En una <strong>solución básica</strong>, se fijan en cero las variables no básicas ($\mathbf{x}_N = \mathbf{0}$). La ecuación se reduce a $\mathbf{B}\mathbf{x}_B = \mathbf{b}$, lo que permite obtener los valores de las variables básicas mediante inversión matricial:
+                        $$\mathbf{x}_B = \mathbf{B}^{-1}\mathbf{b}$$
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ejemplo Práctico 2 -->
+              <div class="math-box box-ex">
+                <div class="math-box-header">Ejemplo Práctico 2: Operaciones Matriciales, Partición por Bloques y
+                  Multiplicación Vectorial</div>
+                <div class="example-steps">
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Planteamiento de la Matriz Particionada:</div>
+                    Sea la matriz $\mathbf{A} \in \mathbb{R}^{2 \times 4}$ particionada en submatrices $\mathbf{A} =
+                    [\mathbf{B} \mid \mathbf{C}]$:
+                    $$\mathbf{A} = \left[\begin{array}{cc|cc} 2 & 1 & 1 & 0 \\ 1 & 3 & 0 & 1 \end{array}\right] \implies
+                    \mathbf{B} = \begin{bmatrix} 2 & 1 \\ 1 & 3 \end{bmatrix}, \quad \mathbf{C} = \begin{bmatrix} 1 & 0
+                    \\ 0 & 1 \end{bmatrix} = \mathbf{I}_2$$
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Verificación de No Singularidad, Simetría e Inversa de
+                      $\mathbf{B}$:</div>
+                    * <strong>Simetría:</strong> $\mathbf{B}^T = \begin{bmatrix} 2 & 1 \\ 1 & 3 \end{bmatrix} =
+                    \mathbf{B} \implies \mathbf{B}$ es simétrica.<br>
+                    * <strong>Determinante:</strong> $\det(\mathbf{B}) = (2)(3) - (1)(1) = 6 - 1 = 5 \neq 0 \implies
+                    \mathbf{B}$ es no singular.<br>
+                    * <strong>Matriz Inversa:</strong> $\mathbf{B}^{-1} = \frac{1}{5} \begin{bmatrix} 3 & -1 \\ -1 & 2
+                    \end{bmatrix} = \begin{bmatrix} 0.6 & -0.2 \\ -0.2 & 0.4 \end{bmatrix}$.
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Multiplicación por Bloques con Vector Columna $\mathbf{x} = (x_1,
+                      x_2, x_3, x_4) \in E^4$:</div>
+                    Particionando $\mathbf{x} = (\mathbf{x}_B, \mathbf{x}_C)$ con $\mathbf{x}_B = (x_1, x_2)$ y
+                    $\mathbf{x}_C = (x_3, x_4)$:
+                    $$\mathbf{A}\mathbf{x} = [\mathbf{B}, \mathbf{C}] \begin{pmatrix} \mathbf{x}_B \\ \mathbf{x}_C
+                    \end{pmatrix} = \mathbf{B}\mathbf{x}_B + \mathbf{C}\mathbf{x}_C = \begin{bmatrix} 2 & 1 \\ 1 & 3
+                    \end{bmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} + \begin{bmatrix} 1 & 0 \\ 0 & 1
+                    \end{bmatrix} \begin{pmatrix} x_3 \\ x_4 \end{pmatrix} = \begin{pmatrix} 2x_1 + x_2 + x_3 \\ x_1 +
+                    3x_2 + x_4 \end{pmatrix} \quad \checkmark$$
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1.1.2 Espacios -->
+            <div id="sec-1-1-2" style="margin-top: 2.5rem;">
+              <h3>
+                <span>1.1.2 Espacios</span>
+                <span class="ref-badge">Luenberger Apéndice A.3</span>
+              </h3>
+              <p>
+                Estructura del espacio euclidiano $n$-dimensional $E^n$, producto interior, ortogonalidad, subespacios y
+                operadores lineales.
+              </p>
+
+              <!-- Proposición: Cauchy-Schwarz -->
+              <div class="math-box box-prop">
+                <div class="math-box-header">Proposición: Geometría Euclidiana y Desigualdad de Cauchy-Schwarz</div>
+
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Segmento de Recta:</div>
+                    <div class="notation-formula">El segmento continuo entre dos puntos $\mathbf{x}, \mathbf{y} \in E^n$
+                      se define como: $[\mathbf{x}, \mathbf{y}] = \left\{ \alpha \mathbf{x} + (1-\alpha)\mathbf{y} \in
+                      E^n : 0 \le \alpha \le 1 \right\}$.</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Vector No Negativo:</div>
+                    <div class="notation-formula">$\mathbf{x} \ge \mathbf{0} \iff x_i \ge 0$ para todo $i \in \{1, 2,
+                      \dots, n\}$.</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Producto Escalar y Ortogonalidad:</div>
+                    <div class="notation-formula">$\mathbf{x}^T\mathbf{y} = \mathbf{y}^T\mathbf{x} = \sum_{i=1}^n x_i
+                      y_i$. Se dice que $\mathbf{x}$ y $\mathbf{y}$ son <strong>mutuamente ortogonales</strong>
+                      ($\mathbf{x} \perp \mathbf{y}$) si y solo si $\mathbf{x}^T\mathbf{y} = 0$.</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Norma Euclidiana (Longitud):</div>
+                    <div class="notation-formula">$\|\mathbf{x}\| = \sqrt{\mathbf{x}^T\mathbf{x}} = \left( \sum_{i=1}^n
+                      x_i^2 \right)^{1/2}$.</div>
+                  </div>
+                </div>
+
+                <div class="formula-card" style="margin-top: 1rem;">
+                  <div class="formula-card-title">Desigualdad de Cauchy-Schwarz (Luenberger p. 497)</div>
+                  $$\left| \mathbf{x}^T\mathbf{y} \right| \le \|\mathbf{x}\| \|\mathbf{y}\|, \quad \forall \mathbf{x},
+                  \mathbf{y} \in E^n$$
+                </div>
+
+                <details class="proof-box">
+                  <summary>Demostración Formal Completa de Luenberger (p. 497)</summary>
+                  <div class="proof-content">
+                    Para cualquier escalar $\alpha \in \mathbb{R}$, evaluamos la norma al cuadrado del vector
+                    $\mathbf{x} - \alpha \mathbf{y}$:
+                    $$\|\mathbf{x} - \alpha \mathbf{y}\|^2 = (\mathbf{x} - \alpha \mathbf{y})^T(\mathbf{x} - \alpha
+                    \mathbf{y}) = \|\mathbf{x}\|^2 - 2\alpha (\mathbf{x}^T\mathbf{y}) + \alpha^2 \|\mathbf{y}\|^2 \ge
+                    0$$
+                    Dado que esta función cuadrática $P(\alpha) = A\alpha^2 + B\alpha + C \ge 0$ es no negativa para
+                    todo $\alpha \in \mathbb{R}$, su discriminante $\Delta = B^2 - 4AC$ no puede ser estrictamente
+                    positivo:
+                    $$\Delta = 4(\mathbf{x}^T\mathbf{y})^2 - 4\|\mathbf{x}\|^2\|\mathbf{y}\|^2 \le 0 \implies
+                    (\mathbf{x}^T\mathbf{y})^2 \le \|\mathbf{x}\|^2\|\mathbf{y}\|^2$$
+                    Extrayendo raíz cuadrada positiva en ambos miembros se obtiene rigurosamente:
+                    $$|\mathbf{x}^T\mathbf{y}| \le \|\mathbf{x}\| \|\mathbf{y}\| \quad \text{■}$$
+                  </div>
+                </details>
+              </div>
+
+              <!-- Ejemplo Práctico 3 -->
+              <div class="math-box box-ex">
+                <div class="math-box-header">Ejemplo Práctico 3: Verificación de Cauchy-Schwarz en $E^2$</div>
+                <div class="example-steps">
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Vectores de Prueba:</div>
+                    Sean $\mathbf{x} = (3, 4) \in E^2$ e $\mathbf{y} = (1, 2) \in E^2$.
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Producto Escalar y Normas:</div>
+                    $$\mathbf{x}^T\mathbf{y} = (3)(1) + (4)(2) = 3 + 8 = 11$$
+                    $$\|\mathbf{x}\| = \sqrt{3^2 + 4^2} = \sqrt{25} = 5, \qquad \|\mathbf{y}\| = \sqrt{1^2 + 2^2} =
+                    \sqrt{5} \approx 2.236$$
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Verificación de la Cota:</div>
+                    $$|\mathbf{x}^T\mathbf{y}| = 11 \le \|\mathbf{x}\| \|\mathbf{y}\| = 5\sqrt{5} \approx 11.1803 \quad
+                    \checkmark$$
+                  </div>
+                </div>
+              </div>
+
+              <!-- Definición: Independencia Lineal y Base -->
+              <div class="math-box box-def">
+                <div class="math-box-header">Definición: Independencia Lineal, Base y Rango (Luenberger p. 497)</div>
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Dependencia e Independencia Lineal:</div>
+                    <div class="notation-formula">
+                      Un conjunto de vectores $\mathbf{a}_1, \dots, \mathbf{a}_k$ es <strong>linealmente dependiente</strong> si existen escalares $\lambda_1, \dots, \lambda_k$, no todos cero, tales que $\sum_{i=1}^k \lambda_i \mathbf{a}_i = \mathbf{0}$. Si ningún conjunto de escalares cumple esto (salvo todos cero), los vectores son <strong>linealmente independientes</strong>.
+                    </div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Combinación Lineal, Espacio Generado y Base:</div>
+                    <div class="notation-formula">
+                      Una <em>combinación lineal</em> es un vector de la forma $\sum_{i=1}^k \lambda_i \mathbf{a}_i$. El conjunto de todas las combinaciones lineales posibles es el espacio <strong>generado</strong> (span) por los vectores. Un conjunto linealmente independiente que genera a $E^n$ es una <strong>base</strong> para $E^n$. <em>Propiedad:</em> Toda base de $E^n$ contiene exactamente $n$ vectores.
+                    </div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Rango de una Matriz:</div>
+                    <div class="notation-formula">
+                      El <strong>rango</strong> de una matriz $\mathbf{A}$ es el número máximo de columnas (o filas) linealmente independientes en $\mathbf{A}$. Una matriz $\mathbf{A}$ de $m \times n$ tiene <strong>rango completo</strong> (full rank) si su rango es igual a $\min(m, n)$.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Definición: Subespacios y Mapeos -->
+              <div class="math-box box-def">
+                <div class="math-box-header">Definición: Subespacios y Mapeos Lineales (Luenberger p. 498)</div>
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Subespacio y Dimensión:</div>
+                    <div class="notation-formula">
+                      Un <strong>subespacio</strong> $M$ de $E^n$ es un subconjunto cerrado bajo suma vectorial y multiplicación escalar (si $\mathbf{a}, \mathbf{b} \in M$, entonces $\lambda\mathbf{a} + \mu\mathbf{b} \in M$). La <strong>dimensión</strong> de $M$ es el número máximo de vectores linealmente independientes en $M$.
+                    </div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Mapeos y Norma de un Mapeo Lineal:</div>
+                    <div class="notation-formula">
+                      Una correspondencia $\mathbf{A}$ que asocia puntos del espacio $X$ con puntos de $Y$ se denota $\mathbf{A}: X \to Y$. La <strong>norma</strong> de un mapeo lineal $\mathbf{A}$ se define como:
+                      $$|\mathbf{A}| = \max_{|\mathbf{x}| \le 1} |\mathbf{A}\mathbf{x}|$$
+                      De esto se deduce la acotación matricial: $|\mathbf{A}\mathbf{x}| \le |\mathbf{A}| \cdot |\mathbf{x}|$.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Teorema: Proyección Ortogonal -->
+              <div class="math-box box-thm">
+                <div class="math-box-header">Teorema: Descomposición y Proyección Ortogonal Única</div>
+                <p>
+                  Sea $M \subset E^n$ un subespacio lineal y sea $M^\perp$ su <strong>complemento ortogonal</strong>:
+                  $$M^\perp = \left\{ \mathbf{y} \in E^n : \mathbf{y}^T\mathbf{x} = 0, \; \forall \mathbf{x} \in M
+                  \right\}$$
+                </p>
+                <div class="formula-card">
+                  <div class="formula-card-title">Teorema de Proyección Ortogonal Única</div>
+                  $$\forall \mathbf{x} \in E^n, \quad \exists! \; \mathbf{a} \in M, \; \mathbf{b} \in M^\perp \quad
+                  \text{tal que} \quad \mathbf{x} = \mathbf{a} + \mathbf{b}$$
+                </div>
+              </div>
+
+              <!-- Ejemplo Práctico 4 -->
+              <div class="math-box box-ex">
+                <div class="math-box-header">Ejemplo Práctico 4: Descomposición Ortogonal Única de un Vector</div>
+                <div class="example-steps">
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Planteamiento:</div>
+                    Descomponer el vector $\mathbf{x} = (2, 5) \in E^2$ sobre el subespacio $M =
+                    \operatorname{span}\{(1, 1)\}$ y su complemento ortogonal $M^\perp$.
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Proyección Ortogonal sobre $M$:</div>
+                    Tomando el vector base $\mathbf{u} = (1, 1)$:
+                    $$\mathbf{a} = \operatorname{proj}_M(\mathbf{x}) =
+                    \frac{\mathbf{x}^T\mathbf{u}}{\mathbf{u}^T\mathbf{u}} \mathbf{u} = \frac{(2)(1) + (5)(1)}{1^2 + 1^2}
+                    \begin{pmatrix} 1 \\ 1 \end{pmatrix} = \frac{7}{2} \begin{pmatrix} 1 \\ 1 \end{pmatrix} =
+                    \begin{pmatrix} 3.5 \\ 3.5 \end{pmatrix} \in M$$
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Componente Ortogonal $\mathbf{b} \in M^\perp$:</div>
+                    $$\mathbf{b} = \mathbf{x} - \mathbf{a} = \begin{pmatrix} 2 \\ 5 \end{pmatrix} - \begin{pmatrix} 3.5
+                    \\ 3.5 \end{pmatrix} = \begin{pmatrix} -1.5 \\ 1.5 \end{pmatrix} \in M^\perp$$
+                    Comprobación de ortogonalidad: $\mathbf{a}^T\mathbf{b} = (3.5)(-1.5) + (3.5)(1.5) = -5.25 + 5.25 =
+                    0$. $\checkmark$
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1.1.3 Valores Propios y Formas Cuadráticas -->
+            <div id="sec-1-1-3" style="margin-top: 2.5rem;">
+              <h3>
+                <span>1.1.3 Valores Propios y Formas Cuadráticas</span>
+                <span class="ref-badge">Luenberger Apéndice A.4</span>
+              </h3>
+              <p>
+                Dada una matriz cuadrada $\mathbf{A}$ de $n \times n$, un escalar $\lambda$ y un vector no nulo $\mathbf{x} \neq \mathbf{0}$ que satisfacen la ecuación $\mathbf{A}\mathbf{x} = \lambda \mathbf{x}$ se denominan, respectivamente, <strong>valor propio (autovalor)</strong> y <strong>vector propio (autovector)</strong> de $\mathbf{A}$. 
+              </p>
+              <p>
+                Para que $\lambda$ sea un valor propio es condición necesaria y suficiente que la matriz $(\mathbf{A} - \lambda \mathbf{I})$ sea singular, lo que conduce a la ecuación característica:
+                $$\det(\mathbf{A} - \lambda \mathbf{I}) = 0$$
+                La expansión de este determinante produce un polinomio de orden $n$, el cual puede resolverse para obtener $n$ raíces complejas (posiblemente repetidas), que constituyen los autovalores de $\mathbf{A}$. A partir de aquí, asumimos que $\mathbf{A}$ es <strong>simétrica</strong>.
+              </p>
+
+              <!-- Teorema: Propiedades Espectrales -->
+              <div class="math-box box-thm">
+                <div class="math-box-header">Teorema: Propiedades Espectrales de Matrices Simétricas Reales ($\mathbf{A}^T = \mathbf{A}$)</div>
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">1. Espectro Real:</div>
+                    <div class="notation-formula">Todos los autovalores $\lambda_1, \lambda_2, \dots, \lambda_n$ son estrictamente reales.</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">2. Ortogonalidad:</div>
+                    <div class="notation-formula">Los autovectores asociados a autovalores distintos son ortogonales ($\lambda_i \neq \lambda_j \implies \mathbf{u}_i^T\mathbf{u}_j = 0$).</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">3. Base Ortonormal y Matriz Ortogonal:</div>
+                    <div class="notation-formula">Existe una base ortogonal para $E^n$ formada por autovectores de $\mathbf{A}$. Si se normalizan a magnitud unitaria, construimos la matriz $\mathbf{Q} = [\mathbf{u}_1, \dots, \mathbf{u}_n]$. Notamos que $\mathbf{Q}^T\mathbf{Q} = \mathbf{I} \implies \mathbf{Q}^T = \mathbf{Q}^{-1}$ (matriz ortogonal).</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">4. Diagonalización (Luenberger p. 498):</div>
+                    <div class="notation-formula">
+                      Mediante la matriz ortogonal, $\mathbf{A}$ es similar a una matriz diagonal $\mathbf{\Lambda}$:
+                      $$\mathbf{Q}^{-1}\mathbf{A}\mathbf{Q} = \mathbf{Q}^T\mathbf{A}\mathbf{Q} = \mathbf{Q}^T [\mathbf{A}\mathbf{u}_1, \dots, \mathbf{A}\mathbf{u}_n] = \mathbf{Q}^T [\lambda_1\mathbf{u}_1, \dots, \lambda_n\mathbf{u}_n] = \mathbf{\Lambda}$$
+                      Donde $\mathbf{\Lambda} = \operatorname{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)$.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Definición: Formas Cuadráticas -->
+              <div class="math-box box-def">
+                <div class="math-box-header">Definición: Signatura de Formas Cuadráticas y Raíz Cuadrada
+                  $\mathbf{A}^{1/2}$</div>
+
+                <p>
+                  Mediante la transformación ortogonal $\mathbf{y} = \mathbf{Q}^T\mathbf{x} \iff \mathbf{x} =
+                  \mathbf{Q}\mathbf{y}$, la forma cuadrática se desacopla en una suma de cuadrados canónica:
+                  $$\mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{y}^T\mathbf{Q}^T\mathbf{A}\mathbf{Q}\mathbf{y} =
+                  \mathbf{y}^T\mathbf{\Lambda}\mathbf{y} = \sum_{i=1}^n \lambda_i y_i^2$$
+                </p>
+
+                <table class="academic-table" style="margin-top: 1rem;">
+                  <thead>
+                    <tr>
+                      <th>Clasificación</th>
+                      <th>Condición de la Forma Cuadrática</th>
+                      <th>Criterio Espectral</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Definida Positiva ($PD$)</strong></td>
+                      <td>$\mathbf{x}^T\mathbf{A}\mathbf{x} > 0, \quad \forall \mathbf{x} \neq \mathbf{0}$</td>
+                      <td>$\lambda_i > 0, \quad \forall i \in \{1,\dots,n\}$</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Semidefinida Positiva ($PSD$)</strong></td>
+                      <td>$\mathbf{x}^T\mathbf{A}\mathbf{x} \ge 0, \quad \forall \mathbf{x} \in E^n$</td>
+                      <td>$\lambda_i \ge 0, \quad \forall i \in \{1,\dots,n\}$</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Definida Negativa ($ND$)</strong></td>
+                      <td>$\mathbf{x}^T\mathbf{A}\mathbf{x} < 0, \quad \forall \mathbf{x} \neq \mathbf{0}$</td>
+                      <td>$\lambda_i < 0, \quad \forall i \in \{1,\dots,n\}$</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Semidefinida Negativa ($NSD$)</strong></td>
+                      <td>$\mathbf{x}^T\mathbf{A}\mathbf{x} \le 0, \quad \forall \mathbf{x} \in E^n$</td>
+                      <td>$\lambda_i \le 0, \quad \forall i \in \{1,\dots,n\}$</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Indefinida</strong></td>
+                      <td>Cambia de signo según el vector $\mathbf{x}$</td>
+                      <td>$\exists \lambda_j > 0$ y $\exists \lambda_k < 0$</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="formula-card" style="margin-top: 1rem;">
+                  <div class="formula-card-title">Raíz Cuadrada Simétrica Única de una Matriz $PSD$ (Luenberger p. 499)
+                  </div>
+                  $$\mathbf{A}^{1/2} = \mathbf{Q}\mathbf{\Lambda}^{1/2}\mathbf{Q}^T = \mathbf{Q}
+                  \operatorname{diag}\left( \sqrt{\lambda_1}, \sqrt{\lambda_2}, \dots, \sqrt{\lambda_n} \right)
+                  \mathbf{Q}^T \implies \mathbf{A}^{1/2}\mathbf{A}^{1/2} = \mathbf{A}$$
+                </div>
+              </div>
+
+              <!-- Ejemplo Práctico 5 -->
+              <div class="math-box box-ex">
+                <div class="math-box-header">Ejemplo Práctico 5: Diagonalización y Raíz Cuadrada Matricial</div>
+                <div class="example-steps">
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Matriz Simétrica Definida Positiva:</div>
+                    Sea $\mathbf{A} = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$. Ecuación característica:
+                    $$\det(\mathbf{A} - \lambda\mathbf{I}) = (2-\lambda)^2 - 1 = \lambda^2 - 4\lambda + 3 = (\lambda -
+                    3)(\lambda - 1) = 0 \implies \lambda_1 = 3, \; \lambda_2 = 1$$
+                    Como $\lambda_1, \lambda_2 > 0$, la matriz $\mathbf{A}$ es <strong>Definida Positiva
+                      ($PD$)</strong>.
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Matriz Ortogonal de Autovectores $\mathbf{Q}$:</div>
+                    $$\mathbf{u}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}, \qquad \mathbf{u}_2 =
+                    \frac{1}{\sqrt{2}}\begin{pmatrix} -1 \\ 1 \end{pmatrix} \implies \mathbf{Q} =
+                    \frac{1}{\sqrt{2}}\begin{bmatrix} 1 & -1 \\ 1 & 1 \end{bmatrix}$$
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Construcción de la Raíz Cuadrada $\mathbf{A}^{1/2}$:</div>
+                    $$\mathbf{A}^{1/2} = \mathbf{Q} \begin{bmatrix} \sqrt{3} & 0 \\ 0 & \sqrt{1} \end{bmatrix}
+                    \mathbf{Q}^T = \frac{1}{2} \begin{bmatrix} \sqrt{3}+1 & \sqrt{3}-1 \\ \sqrt{3}-1 & \sqrt{3}+1
+                    \end{bmatrix} \approx \begin{bmatrix} 1.366 & 0.366 \\ 0.366 & 1.366 \end{bmatrix}$$
+                    Comprobación: $(\mathbf{A}^{1/2})^2 = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} = \mathbf{A}$.
+                    $\checkmark$
+                  </div>
+                </div>
+              </div>
+
+              <!-- Explicación Teórica: Deducción y Geometría de las Curvas de Nivel -->
+              <div class="math-box box-prop">
+                <div class="math-box-header">Deducción Geométrica: Origen de las Curvas de Nivel, Autovalores y
+                  Determinante</div>
+
+                <h4 style="color: var(--accent-primary); margin-top: 0.5rem;">1. ¿Qué es una Curva de Nivel de una Forma
+                  Cuadrática?</h4>
+                <p>
+                  Sea $\mathbf{x} = (x_1, x_2)^T \in \mathbb{R}^2$ y una matriz simétrica real $\mathbf{A} =
+                  \begin{bmatrix} a_{11} & a_{12} \\ a_{12} & a_{22} \end{bmatrix}$. La forma cuadrática asociada define
+                  una superficie tridimensional $z = q(x_1, x_2)$:
+                  $$q(x_1, x_2) = \mathbf{x}^T\mathbf{A}\mathbf{x} = a_{11}x_1^2 + 2a_{12}x_1x_2 + a_{22}x_2^2$$
+                  Una <strong>curva de nivel</strong> de valor constante $c \in \mathbb{R}$ es el conjunto de todos los
+                  puntos $(x_1, x_2)$ que satisfacen:
+                  $$\mathcal{C}_c = \left\{ (x_1, x_2) \in \mathbb{R}^2 : a_{11}x_1^2 + 2a_{12}x_1x_2 + a_{22}x_2^2 = c
+                  \right\}$$
+                  Geométricamente, representa el <em>corte horizontal</em> de la superficie $z = q(x_1, x_2)$ a una
+                  altura fija $z = c$, proyectado sobre el plano cartesiano $(x_1, x_2)$.
+                </p>
+
+                <h4 style="color: var(--accent-primary); margin-top: 1.5rem;">2. Desacoplamiento por Autovectores
+                  (Rotación a los Ejes Principales)</h4>
+                <p>
+                  El término cruzado $2a_{12}x_1x_2$ hace que la cónica esté <strong>inclinada/rotada</strong> respecto
+                  a los ejes originales $(x_1, x_2)$. Por el <em>Teorema Espectral</em> (Luenberger Apéndice A.4),
+                  existe una matriz ortogonal de rotación $\mathbf{Q} = [\mathbf{u}_1 \mid \mathbf{u}_2]$ formada por
+                  los autovectores unitarios de $\mathbf{A}$ tal que:
+                  $$\mathbf{Q}^T\mathbf{A}\mathbf{Q} = \mathbf{\Lambda} = \begin{bmatrix} \lambda_1 & 0 \\ 0 & \lambda_2
+                  \end{bmatrix}$$
+                  Al aplicar el cambio de variables $\mathbf{x} = \mathbf{Q}\mathbf{y}$ (donde $\mathbf{y} = (y_1,
+                  y_2)^T$ representa las coordenadas sobre los ejes de los autovectores), la ecuación se transforma
+                  exactamente en:
+                  $$\mathbf{x}^T\mathbf{A}\mathbf{x} = c \quad \iff \quad \mathbf{y}^T\mathbf{\Lambda}\mathbf{y} = c
+                  \quad \iff \quad \lambda_1 y_1^2 + \lambda_2 y_2^2 = c$$
+                </p>
+
+                <h4 style="color: var(--accent-primary); margin-top: 1.5rem;">3. Relación con la Ecuación Canónica de
+                  las Cónicas</h4>
+                <div class="notation-list">
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Caso 1: Elipses Concétricas ($\lambda_1 > 0, \lambda_2 > 0$ —
+                      Definida Positiva)</div>
+                    <div class="notation-formula">
+                      Dividiendo entre $c > 0$ obtenemos la <strong>ecuación canónica de una elipse</strong>:
+                      $$\frac{y_1^2}{\left(\sqrt{c/\lambda_1}\right)^2} +
+                      \frac{y_2^2}{\left(\sqrt{c/\lambda_2}\right)^2} = 1$$
+                      <ul style="margin-left: 1.25rem; margin-top: 0.35rem; line-height: 1.8;">
+                        <li><strong>Semiejes de la elipse:</strong> Las longitudes son $r_1 =
+                          \sqrt{\frac{c}{\lambda_1}}$ en dirección del autovector $\mathbf{u}_1$, y $r_2 =
+                          \sqrt{\frac{c}{\lambda_2}}$ en dirección de $\mathbf{u}_2$.</li>
+                        <li><strong>Efecto de la magnitud del autovalor:</strong> Un autovalor más grande ($\lambda_i
+                          \uparrow$) produce una curvatura más pronunciada de la superficie y, por tanto, un semieje
+                          <em>más corto</em> ($r_i \downarrow$).</li>
+                        <li><strong>Interpretación en Optimización:</strong> Si $\lambda_1 = \lambda_2$, las curvas son
+                          círculos perfectos; si $\lambda_1 \gg \lambda_2$, las elipses son muy alargadas y el número de
+                          condición $\kappa(\mathbf{A}) = \frac{\lambda_1}{\lambda_2}$ es alto, provocando oscilaciones
+                          lentas en métodos de gradiente.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Caso 2: Hipérbolas ($\lambda_1 > 0, \lambda_2 < 0$ —
+                        Indefinida)</div>
+                        <div class="notation-formula">
+                          $$\frac{y_1^2}{\left(\sqrt{c/\lambda_1}\right)^2} -
+                          \frac{y_2^2}{\left(\sqrt{|c/\lambda_2|}\right)^2} = 1$$
+                          Las curvas de nivel son <strong>hipérbolas</strong> y la superficie es una <em>silla de
+                            montar</em> (*saddle point*). La función crece en la dirección de $\mathbf{u}_1$ y decrece
+                          en la de $\mathbf{u}_2$.
+                        </div>
+                    </div>
+
+                    <div class="notation-item">
+                      <div class="notation-label">🔹 Caso 3: Rectas Paralelas ($\lambda_1 > 0, \lambda_2 = 0$ —
+                        Semidefinida Positiva)</div>
+                      <div class="notation-formula">
+                        $$\lambda_1 y_1^2 = c \implies y_1 = \pm \sqrt{\frac{c}{\lambda_1}}$$
+                        Las curvas de nivel son <strong>dos rectas paralelas degeneradas</strong> a lo largo del eje
+                        $\mathbf{u}_2$, representando un canal o valle con infinitos puntos mínimos globales.
+                      </div>
+                    </div>
+                  </div>
+
+                  <h4 style="color: var(--accent-primary); margin-top: 1.5rem;">4. Diagnóstico Inmediato mediante
+                    Determinante y Traza</h4>
+                  <p>
+                    El cálculo de autovalores para una matriz $2 \times 2$ proviene del polinomio característico
+                    $\lambda^2 - \operatorname{tr}(\mathbf{A})\lambda + \det(\mathbf{A}) = 0$:
+                  </p>
+                  <table class="academic-table">
+                    <thead>
+                      <tr>
+                        <th>Signo del Determinante ($\det\mathbf{A} = \lambda_1\lambda_2$)</th>
+                        <th>Signo de la Traza ($\operatorname{tr}\mathbf{A} = \lambda_1+\lambda_2$)</th>
+                        <th>Signos de $\lambda_1, \lambda_2$</th>
+                        <th>Geometría de las Curvas de Nivel</th>
+                        <th>Tipo de Punto Crítico en el Origen</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>$\det(\mathbf{A}) > 0$</td>
+                        <td>$\operatorname{tr}(\mathbf{A}) > 0$ ($a_{11}>0$)</td>
+                        <td>$\lambda_1 > 0, \; \lambda_2 > 0$</td>
+                        <td><strong>Elipses concéntricas cerradas</strong></td>
+                        <td><strong>Mínimo Global Estricto</strong></td>
+                      </tr>
+                      <tr>
+                        <td>$\det(\mathbf{A}) > 0$</td>
+                        <td>$\operatorname{tr}(\mathbf{A}) < 0$ ($a_{11}<0$)</td>
+                        <td>$\lambda_1 < 0, \; \lambda_2 < 0$</td>
+                        <td><strong>Elipses concéntricas (valores $c<0$)< /strong>
+                        </td>
+                        <td><strong>Máximo Global Estricto</strong></td>
+                      </tr>
+                      <tr>
+                        <td>$\det(\mathbf{A}) < 0$</td>
+                        <td>Indiferente</td>
+                        <td>$\lambda_1 > 0, \; \lambda_2 < 0$</td>
+                        <td><strong>Hipérbolas cruzadas</strong></td>
+                        <td><strong>Punto de Ensilladura (Saddle Point)</strong></td>
+                      </tr>
+                      <tr>
+                        <td>$\det(\mathbf{A}) = 0$</td>
+                        <td>$\operatorname{tr}(\mathbf{A}) \neq 0$</td>
+                        <td>Un autovalor es nulo ($\lambda_2=0$)</td>
+                        <td><strong>Líneas rectas paralelas</strong></td>
+                        <td><strong>Valle de Mínimos No Únicos</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- INTERACTIVE TOOL 1 -->
+                <div class="interactive-panel">
+                  <div class="interactive-header">
+                    <div class="interactive-title">
+                      <span>⚡</span> Herramienta Interactiva 1: Curvas de Nivel y Signatura Espectral de Formas
+                      Cuadráticas
+                    </div>
+                    <span id="signatureBadge" class="stat-badge" style="background:#dbeafe; color:#1d4ed8;">Definida
+                      Positiva</span>
+                  </div>
+                  <div class="interactive-grid">
+                    <div class="canvas-wrapper">
+                      <canvas id="quadCanvas" width="400" height="280"></canvas>
+                    </div>
+                    <div class="control-panel">
+                      <p style="font-size: 0.85rem;">
+                        <strong>Guía de Uso:</strong> Modifica los coeficientes de $\mathbf{A} = \begin{pmatrix} a_{11}
+                        & a_{12} \\ a_{12} & a_{22} \end{pmatrix}$. Observa cómo:
+                        <br>1. El <strong>término $a_{12}$</strong> rota los ejes elípticos en la dirección de los
+                        autovectores.
+                        <br>2. Si <strong>$\det(\mathbf{A}) > 0$</strong> se forman elipses (mínimo). Si
+                        <strong>$\det(\mathbf{A}) < 0$</strong> se forman hipérbolas (ensilladura).
+                      </p>
+                      <div class="control-group">
+                        <label><span>$a_{11}$ (Curvatura en $x_1$):</span> <span id="valA11">2.0</span></label>
+                        <input type="range" id="sliderA11" class="slider-ctrl" min="-4" max="4" step="0.2" value="2.0">
+                      </div>
+                      <div class="control-group">
+                        <label><span>$a_{12}$ (Término Cruzado / Rotación):</span> <span id="valA12">0.5</span></label>
+                        <input type="range" id="sliderA12" class="slider-ctrl" min="-4" max="4" step="0.2" value="0.5">
+                      </div>
+                      <div class="control-group">
+                        <label><span>$a_{22}$ (Curvatura en $x_2$):</span> <span id="valA22">2.0</span></label>
+                        <input type="range" id="sliderA22" class="slider-ctrl" min="-4" max="4" step="0.2" value="2.0">
+                      </div>
+                      <div id="eigenvalStats" class="stat-badge">λ₁ = 2.50, λ₂ = 1.50, det(A) = 3.75</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 1.1.4 Conceptos Topológicos y Funciones -->
+              <div id="sec-1-1-4" style="margin-top: 2.5rem;">
+                <h3>
+                  <span>1.1.4 Conceptos Topológicos y Funciones</span>
+                  <span class="ref-badge">Luenberger Apéndice A.5–A.6</span>
+                </h3>
+                <p>
+                  Esta sección desarrolla de forma rigurosa los fundamentos de topología en el espacio euclidiano $E^n$,
+                  sucesiones, compacidad de Bolzano-Weierstrass, continuidad, el Teorema del Valor Extremo de
+                  Weierstrass, derivabilidad multivariable, matrices Jacobianas y Hessianass, aproximaciones de Taylor
+                  de orden 1 y 2, el Teorema de la Función Implícita con derivación matricial y la notación asintótica
+                  de Landau.
+                </p>
+
+                <!-- =================================================================
+               1.1.4.A TOPOLOGÍA EN E^n (APÉNDICE A.5)
+          ================================================================== -->
+                <div class="math-box box-def">
+                  <div class="math-box-header">Definición: Topología en $E^n$, Sucesiones y Espacios Métricos Completos
+                    (Luenberger A.5)</div>
+
+                  <p>
+                    El espacio euclidiano $E^n$ está dotado de la métrica estándar inducida por la norma $d(\mathbf{x},
+                    \mathbf{y}) = \|\mathbf{x} - \mathbf{y}\| = \left(\sum_{i=1}^n (x_i - y_i)^2\right)^{1/2}$.
+                  </p>
+
+                  <div class="notation-list">
+                    <div class="notation-item">
+                      <div class="notation-label">🔹 Sucesión y Convergencia en $E^n$:</div>
+                      <div class="notation-formula">
+                        Una sucesión $\{\mathbf{x}_k\}_{k=1}^\infty \subset E^n$ converge a un vector límite $\mathbf{x}
+                        \in E^n$, denotado $\mathbf{x}_k \to \mathbf{x}$ o $\lim_{k \to \infty} \mathbf{x}_k =
+                        \mathbf{x}$, si:
+                        $$\forall \varepsilon > 0, \quad \exists N \in \mathbb{N} \quad \text{tal que} \quad k \ge N
+                        \implies \|\mathbf{x}_k - \mathbf{x}\| < \varepsilon$$ </div>
+                      </div>
+                      <div class="notation-item">
+                        <div class="notation-label">🔹 Teorema de Convergencia por Componentes:</div>
+                        <div class="notation-formula">
+                          La convergencia en norma en $E^n$ es equivalente a la convergencia escalar en cada una de sus
+                          $n$ coordenadas:
+                          $$\mathbf{x}_k \to \mathbf{x} \quad \iff \quad \lim_{k \to \infty} x_{k,i} = x_i, \quad
+                          \forall i \in \{1, 2, \dots, n\}$$
+                        </div>
+                      </div>
+                      <div class="notation-item">
+                        <div class="notation-label">🔹 Sucesión de Cauchy y Completitud de $E^n$:</div>
+                        <div class="notation-formula">
+                          $\{\mathbf{x}_k\}$ es una sucesión de Cauchy si $\forall \varepsilon > 0, \; \exists N : k, m
+                          \ge N \implies \|\mathbf{x}_k - \mathbf{x}_m\| < \varepsilon$. Al ser $E^n$ un espacio métrico
+                            <strong>completo</strong>, toda sucesión de Cauchy converge a un punto dentro de $E^n$.
+                        </div>
+                      </div>
+                      <div class="notation-item">
+                        <div class="notation-label">🔹 Punto Límite (de Acumulación) y Subsucesiones:</div>
+                        <div class="notation-formula">
+                          Un punto $\mathbf{x}^* \in E^n$ es punto límite de $\{\mathbf{x}_k\}$ si existe una subsucesión que converge a $\mathbf{x}^*$. Es decir, existe un subconjunto de enteros positivos $\mathcal{K}$ tal que $\{\mathbf{x}_k\}_{k \in \mathcal{K}}$ converge a $\mathbf{x}^*$.
+                        </div>
+                      </div>
+                      <div class="notation-item">
+                        <div class="notation-label">🔹 Límite Superior de una Sucesión Real:</div>
+                        <div class="notation-formula">
+                          Dada una sucesión acotada de números reales $\{r_k\}_{k=0}^\infty$, si definimos $s_k = \sup\{r_i : i \ge k\}$, entonces $\{s_k\}$ converge a un número real $s_0$. Este número se llama el <strong>límite superior</strong> de $\{r_k\}$ y se denota $\overline{\lim}_{k \to \infty} r_k$.
+                        </div>
+                      </div>
+                      <div class="notation-item">
+                        <div class="notation-label">🔹 Bola Abierta (Esfera) o Vecindad:</div>
+                        <div class="notation-formula">
+                          Una bola (o esfera) alrededor de $\mathbf{x}$ es un conjunto de la forma $\{\mathbf{y} : \|\mathbf{y} - \mathbf{x}\| < \varepsilon\}$ para algún $\varepsilon > 0$. También se le llama <em>vecindad</em> de $\mathbf{x}$ de radio $\varepsilon$.
+                        </div>
+                      </div>
+                      <div class="notation-item">
+                        <div class="notation-label">🔹 Conjuntos Abiertos, Cerrados, Interior, Clausura y Frontera:</div>
+                        <div class="notation-formula">
+                          <ul style="margin-left: 1.5rem; margin-top: 0.35rem; color: var(--text-secondary); line-height: 1.6;">
+                            <li><strong>Abierto:</strong> $S$ es abierto si alrededor de todo punto en $S$ hay una esfera contenida en $S$. En general, carecen de fronteras definidas.</li>
+                            <li><strong>Interior ($\mathring{S}$):</strong> Conjunto de puntos en $S$ que son centro de alguna esfera contenida en $S$. Es el <em>mayor conjunto abierto</em> contenido en $S$.</li>
+                            <li><strong>Cerrado:</strong> $P$ es cerrado si todo punto arbitrariamente cercano a $P$ es miembro de $P$ (si $\mathbf{x}_k \to \mathbf{x}$ con $\mathbf{x}_k \in P \implies \mathbf{x} \in P$).</li>
+                            <li><strong>Clausura ($\bar{P}$):</strong> Es el <em>menor conjunto cerrado</em> que contiene a $P$.</li>
+                            <li><strong>Frontera:</strong> Es la parte de la clausura de un conjunto que no está en su interior.</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="notation-item">
+                        <div class="notation-label">🔹 Conjunto Acotado y Conjunto Compacto:</div>
+                        <div class="notation-formula">
+                          * <strong>Acotado:</strong> $\exists M < \infty$ tal que $\|\mathbf{x}\| \le M$ para todo
+                            $\mathbf{x} \in S$.<br>
+                            * <strong>Compacto (Heine-Borel en $E^n$):</strong> $K \subset E^n$ es compacto si y solo si
+                            es simultáneamente <em>cerrado</em> y <em>acotado</em>.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Teorema de Bolzano-Weierstrass -->
+                  <div class="math-box box-thm">
+                    <div class="math-box-header">Teorema de Bolzano-Weierstrass para Sucesiones (Luenberger Apéndice
+                      A.5, p. 500)</div>
+
+                    <div class="formula-card">
+                      <div class="formula-card-title">Enunciado Fundamental del Teorema de Bolzano-Weierstrass</div>
+                      <p style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary);">
+                        Toda sucesión acotada $\{\mathbf{x}_k\}_{k=1}^\infty \subset E^n$ contiene al menos una
+                        subsucesión convergente. En particular, si $K \subset E^n$ es un conjunto compacto y
+                        $\{\mathbf{x}_k\} \subset K$:
+                      </p>
+                      $$\exists \, \text{subsucesión } \{\mathbf{x}_k\}_{k \in \mathcal{K}} \subseteq \{\mathbf{x}_k\}
+                      \quad \text{tal que} \quad \lim_{k \in \mathcal{K}} \mathbf{x}_k = \mathbf{x}^* \in K$$
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                      <em>Relevancia en Optimización:</em> Garantiza que las trayectorias iterativas generadas por
+                      algoritmos acotados siempre poseen al menos un punto de acumulación factible dentro del conjunto.
+                    </p>
+                  </div>
+
+                  <!-- =================================================================
+               1.1.4.B FUNCIONES CONTINUAS Y WEIERSTRASS (APÉNDICE A.6)
+          ================================================================== -->
+                  <div class="math-box box-def">
+                    <div class="math-box-header">Definición: Continuidad de Funciones Multivariables (Luenberger A.6)
+                    </div>
+
+                      <div class="notation-list">
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Continuidad Puntual ($\varepsilon-\delta$):</div>
+                          <div class="notation-formula">
+                            Una función de valores reales $f$ definida en un subconjunto de $E^n$ es continua en $\mathbf{x}$ si $\mathbf{x}_k \to \mathbf{x} \implies f(\mathbf{x}_k) \to f(\mathbf{x})$. Equivalentemente, $\forall \varepsilon > 0, \exists \delta > 0$ tal que $\|\mathbf{y} - \mathbf{x}\| < \delta \implies |f(\mathbf{y}) - f(\mathbf{x})| < \varepsilon$.
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Funciones Vectoriales y Clases $C^p$:</div>
+                          <div class="notation-formula">
+                            Un conjunto de funciones de valores reales $f_1, \dots, f_m$ en $E^n$ puede verse como una única función vectorial $\mathbf{f} = (f_1, \dots, f_m) \in E^m$. Se dice que $\mathbf{f}$ es continua si cada componente es continua, escribiéndose $\mathbf{f} \in C$. Si tienen primeras derivadas parciales continuas, escribimos $\mathbf{f} \in C^1$. En general, si tienen derivadas parciales continuas de orden $p$, escribimos $\mathbf{f} \in C^p$.
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Caracterización Secuencial:</div>
+                          <div class="notation-formula">
+                            $f$ es continua en $\mathbf{x}_0 \iff$ para toda sucesión $\{\mathbf{x}_k\} \subset S$ con $\mathbf{x}_k \to \mathbf{x}_0$, se cumple que $\lim_{k \to \infty} f(\mathbf{x}_k) = f(\mathbf{x}_0)$.
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Caracterización Topológica (Preimágenes):</div>
+                          <div class="notation-formula">
+                            $f: E^n \to E^m$ es continua $\iff$ la preimagen $f^{-1}(V) = \{\mathbf{x} \in E^n : f(\mathbf{x}) \in V\}$ de todo conjunto abierto $V \subset E^m$ es un conjunto abierto en $E^n$ (y la preimagen de todo cerrado es cerrada).
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Preservación de Compacidad:</div>
+                          <div class="notation-formula">
+                            Si $K \subset E^n$ es compacto y $f: K \to E^m$ es continua $\implies$ el conjunto imagen $f(K) = \{f(\mathbf{x}) : \mathbf{x} \in K\}$ es un conjunto compacto en $E^m$.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Teorema de Weierstrass del Valor Extremo -->
+                    <div class="math-box box-thm">
+                      <div class="math-box-header">Teorema de Weierstrass del Valor Extremo (Luenberger Apéndice A.6, p.
+                        500)</div>
+
+                      <div class="formula-card">
+                        <div class="formula-card-title">Enunciado Formal del Teorema de Weierstrass</div>
+                        <p
+                          style="font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 0.6rem; line-height: 1.6;">
+                          <em>"Sea $f$ una función continua de valores reales sobre un subconjunto compacto $K$ de
+                            $E^n$. Entonces $f$ es acotada sobre $K$ y alcanza su valor mínimo y su valor máximo en
+                            $K$."</em>
+                        </p>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary);">
+                          Si $K \subset E^n$ es <strong>compacto no vacío</strong> y $f: K \to \mathbb{R}$ es
+                          <strong>continua</strong>:
+                        </p>
+                        $$\exists \mathbf{x}_*, \mathbf{x}^* \in K \quad \text{tales que} \quad f(\mathbf{x}_*) \le
+                        f(\mathbf{x}) \le f(\mathbf{x}^*), \quad \forall \mathbf{x} \in K$$
+                        $$\min_{\mathbf{x} \in K} f(\mathbf{x}) = f(\mathbf{x}_*) \quad \text{y} \quad \max_{\mathbf{x}
+                        \in K} f(\mathbf{x}) = f(\mathbf{x}^*)$$
+                      </div>
+                    </div>
+
+                    <!-- Ejemplo Práctico 6 -->
+                    <div class="math-box box-ex">
+                      <div class="math-box-header">Ejemplo Práctico 6: Existencia de Óptimos por Compacidad de
+                        Weierstrass</div>
+                      <div class="example-steps">
+                        <div class="example-step">
+                          <div class="example-step-title">📌 Caso 1 (Existencia Garantizada en Conjunto Compacto):</div>
+                          Sea $f(x_1, x_2) = x_1^2 - 2x_1 + x_2^2$ sobre el disco cerrado y acotado $K = \{(x_1, x_2)
+                          \in E^2 : x_1^2 + x_2^2 \le 4\}$. Al ser $K$ compacto y $f$ continua, por Weierstrass existen
+                          mínimo y máximo globales:
+                          $$\min_{\mathbf{x} \in K} f(\mathbf{x}) = f(1, 0) = -1, \qquad \max_{\mathbf{x} \in K}
+                          f(\mathbf{x}) = f(-2, 0) = 8$$
+                        </div>
+                        <div class="example-step">
+                          <div class="example-step-title">📌 Caso 2 (Falla por Falta de Compacidad):</div>
+                          Sobre el conjunto abierto $S = \{(x_1, x_2) : x_1 > 0, x_2 > 0\}$, la función continua $f(x_1,
+                          x_2) = \frac{1}{x_1 + x_2}$ tiene $\inf_{\mathbf{x} \in S} f(\mathbf{x}) = 0$, pero
+                          <strong>nunca alcanza su valor mínimo</strong> en ningún punto de $S$.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- =================================================================
+               NOTACIÓN ASINTÓTICA DE LANDAU (APÉNDICE A.6)
+          ================================================================== -->
+                    <div class="math-box box-note">
+                      <div class="math-box-header">Notación Asintótica de Landau ($O, o$) (Luenberger Apéndice A.6)</div>
+                      <p style="margin-bottom: 0.5rem;">
+                        Para que las definiciones de diferenciabilidad y las expansiones de Taylor tengan coherencia matemática, es indispensable definir primero cómo se comportan los términos de error o residuales.
+                      </p>
+                      <div class="notation-list">
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Caso Escalar ($x \to 0$):</div>
+                          <div class="notation-formula">
+                            Si $g$ es una función de variable real, la notación $g(x) = O(x)$ significa que $g(x)$ tiende a cero <em>al menos tan rápido</em> como $x$. De manera formal, existe un $K \ge 0$ tal que $\left|\frac{g(x)}{x}\right| \le K$ conforme $x \to 0$.<br><br>
+                            La notación $g(x) = o(x)$ significa que $g(x)$ tiende a cero <em>estrictamente más rápido</em> que $x$; o de forma equivalente, que el límite de $\left|\frac{g(x)}{x}\right|$ cuando $x \to 0$ es cero.
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Caso Vectorial ($\|\mathbf{h}\| \to 0$):</div>
+                          <div class="notation-formula">
+                            <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
+                              <li><strong>$O(\|\mathbf{h}\|)$:</strong> Existe $K < \infty$ y $\delta > 0$ tal que $\|g(\mathbf{h})\| \le K \|\mathbf{h}\|$ para todo $\|\mathbf{h}\| < \delta$.</li>
+                              <li><strong>$o(\|\mathbf{h}\|)$:</strong> El error se desvanece más rápido que la norma, es decir, $\lim_{\|\mathbf{h}\| \to 0} \frac{\|g(\mathbf{h})\|}{\|\mathbf{h}\|} = 0$.</li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Reglas Útiles (Álgebra de Errores):</div>
+                          <div class="notation-formula">
+                            $o(\|\mathbf{h}\|) + o(\|\mathbf{h}\|) = o(\|\mathbf{h}\|)$, $\quad O(\|\mathbf{h}\|) \cdot O(\|\mathbf{h}\|) = O(\|\mathbf{h}\|^2)$, $\quad o(\|\mathbf{h}\|^2) \subset o(\|\mathbf{h}\|) \subset O(\|\mathbf{h}\|)$.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- =================================================================
+               1.1.4.C CÁLCULO DIFERENCIAL MULTIVARIABLE (APÉNDICE A.6)
+          ================================================================== -->
+                    <div class="math-box box-prop">
+                      <div class="math-box-header">Proposición: Diferenciabilidad, Derivada Direccional, Gradiente y
+                        Hessiano (Luenberger A.6)</div>
+
+                      <div class="notation-list">
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Derivada Direccional:</div>
+                          <div class="notation-formula">
+                            Para una dirección $\mathbf{d} \in E^n$ ($\|\mathbf{d}\| \neq 0$), la tasa de cambio de $f$
+                            a lo largo de $\mathbf{d}$ es:
+                            $$\frac{\partial f(\mathbf{x})}{\partial \mathbf{d}} = \lim_{\alpha \to 0^+}
+                            \frac{f(\mathbf{x} + \alpha \mathbf{d}) - f(\mathbf{x})}{\alpha} = \nabla
+                            f(\mathbf{x})\mathbf{d}$$
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Diferenciabilidad de Fréchet:</div>
+                          <div class="notation-formula">
+                            $f: E^n \to \mathbb{R}$ es diferenciable en $\mathbf{x}$ si existe un vector fila $\nabla
+                            f(\mathbf{x}) \in E_n$ tal que:
+                            $$f(\mathbf{x} + \mathbf{h}) = f(\mathbf{x}) + \nabla f(\mathbf{x})\mathbf{h} +
+                            o(\|\mathbf{h}\|) \quad \text{cuando } \|\mathbf{h}\| \to 0$$
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Vector Gradiente e Interpretación Geométrica:</div>
+                          <div class="notation-formula">
+                            $$\nabla f(\mathbf{x}) = \left[ \frac{\partial f(\mathbf{x})}{\partial x_1}, \frac{\partial
+                            f(\mathbf{x})}{\partial x_2}, \dots, \frac{\partial f(\mathbf{x})}{\partial x_n} \right] \in
+                            E_n$$
+                            El gradiente $\nabla f(\mathbf{x})^T$ apunta en la dirección de <strong>máximo crecimiento
+                              local</strong> de $f$, y es estrictamente <strong>ortogonal a las hipersuperficies de
+                              nivel</strong> $\{\mathbf{x} : f(\mathbf{x}) = c\}$.
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Matriz Jacobiana y Regla de la Cadena:</div>
+                          <div class="notation-formula">
+                            Para una función vectorial $\mathbf{f}: E^n \to E^m$, la matriz Jacobiana es
+                            $\mathbf{J}_{\mathbf{f}}(\mathbf{x}) = \left[ \frac{\partial f_i(\mathbf{x})}{\partial x_j}
+                            \right] \in \mathbb{R}^{m \times n}$.<br>
+                            Regla de la Cadena: Si $\mathbf{y} = \mathbf{g}(\mathbf{x})$ y $z = f(\mathbf{y}) \implies
+                            \nabla(f \circ \mathbf{g})(\mathbf{x}) = \nabla f(\mathbf{g}(\mathbf{x}))
+                            \mathbf{J}_{\mathbf{g}}(\mathbf{x})$.
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Matriz Hessiana y Teorema de Clairaut-Schwarz ($C^2$):</div>
+                          <div class="notation-formula">
+                            $$\mathbf{F}(\mathbf{x}) = \nabla^2 f(\mathbf{x}) = \begin{bmatrix}
+                            \frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2} &
+                            \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+                            \frac{\partial^2 f}{\partial x_2 \partial x_1} & \frac{\partial^2 f}{\partial x_2^2} &
+                            \cdots & \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
+                            \vdots & \vdots & \ddots & \vdots \\
+                            \frac{\partial^2 f}{\partial x_n \partial x_1} & \frac{\partial^2 f}{\partial x_n \partial
+                            x_2} & \cdots & \frac{\partial^2 f}{\partial x_n^2}
+                            \end{bmatrix} \in \mathbb{R}^{n \times n}$$
+                            Si $f \in C^2$, las derivadas cruzadas coinciden $\frac{\partial^2 f}{\partial x_i \partial
+                            x_j} = \frac{\partial^2 f}{\partial x_j \partial x_i} \implies \mathbf{F}(\mathbf{x})^T =
+                            \mathbf{F}(\mathbf{x})$ (matriz simétrica real).
+                          </div>
+                        </div>
+                        <div class="notation-item">
+                          <div class="notation-label">🔹 Hessiano de una Función Vectorial:</div>
+                          <div class="notation-formula">
+                            Para una función vectorial $\mathbf{f} = (f_1, f_2, \dots, f_m) \in C^2$, se definen los $m$ Hessianos $\mathbf{F}_1(\mathbf{x}), \mathbf{F}_2(\mathbf{x}), \dots, \mathbf{F}_m(\mathbf{x})$ correspondientes a cada componente. Dado cualquier vector fila $\boldsymbol{\lambda}^T = [\lambda_1, \lambda_2, \dots, \lambda_m] \in E_m$, la función de valores reales $\boldsymbol{\lambda}^T \mathbf{f}$ tiene un gradiente igual a $\boldsymbol{\lambda}^T \nabla\mathbf{f}(\mathbf{x})$ y un Hessiano, denotado como $\boldsymbol{\lambda}^T \mathbf{F}(\mathbf{x})$, igual a:
+                            $$\boldsymbol{\lambda}^T \mathbf{F}(\mathbf{x}) = \sum_{i=1}^m \lambda_i \mathbf{F}_i(\mathbf{x})$$
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Ejemplo Práctico 7 -->
+                    <div class="math-box box-ex">
+                      <div class="math-box-header">Ejemplo Práctico 7: Cálculo del Gradiente, Jacobiano y Hessiano
+                        Multivariable</div>
+                      <div class="example-steps">
+                        <div class="example-step">
+                          <div class="example-step-title">📌 Función Escalar Multivariable:</div>
+                          Sea $f(x_1, x_2) = x_1^3 + 2x_1 x_2^2 - 4x_2$. Evaluamos en el punto $\mathbf{x}^0 = (1, 2)$.
+                        </div>
+                        <div class="example-step">
+                          <div class="example-step-title">📌 Vector Gradiente $\nabla f$:</div>
+                          $$\nabla f(\mathbf{x}) = \left[ 3x_1^2 + 2x_2^2, \; 4x_1 x_2 - 4 \right] \implies \nabla f(1,
+                          2) = \left[ 3(1)^2 + 2(2)^2, \; 4(1)(2) - 4 \right] = [11, 4]$$
+                        </div>
+                        <div class="example-step">
+                          <div class="example-step-title">📌 Matriz Hessiana $\mathbf{F}(\mathbf{x})$:</div>
+                          $$\mathbf{F}(\mathbf{x}) = \begin{bmatrix} 6x_1 & 4x_2 \\ 4x_2 & 4x_1 \end{bmatrix} \implies
+                          \mathbf{F}(1, 2) = \begin{bmatrix} 6(1) & 4(2) \\ 4(2) & 4(1) \end{bmatrix} = \begin{bmatrix}
+                          6 & 8 \\ 8 & 4 \end{bmatrix}$$
+                          Se comprueba la simetría exacta $f_{12} = f_{21} = 8$.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- =================================================================
+               1.1.4.D TEOREMAS DE TAYLOR Y APROXIMACIONES (APÉNDICE A.6)
+          ================================================================== -->
+                    <div class="math-box box-thm">
+                      <div class="math-box-header">Teoremas de Taylor y del Valor Medio Multivariable (Luenberger
+                        Apéndice A.6, p. 501)</div>
+
+                      <div class="formula-card">
+                        <div class="formula-card-title">1. Teorema del Valor Medio de Primer Orden ($f \in C^1$)</div>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary);">
+                          Para dos puntos $\mathbf{x}_1, \mathbf{x}_2 \in E^n$, existe un escalar $\theta \in (0, 1)$
+                          tal que:
+                        </p>
+                        $$f(\mathbf{x}_2) = f(\mathbf{x}_1) + \nabla f\big(\theta \mathbf{x}_1 +
+                        (1-\theta)\mathbf{x}_2\big)(\mathbf{x}_2 - \mathbf{x}_1)$$
+                      </div>
+
+                      <div class="formula-card">
+                        <div class="formula-card-title">2. Teorema de Taylor de Segundo Orden con Resto de Lagrange ($f
+                          \in C^2$)</div>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary);">
+                          Existe $\theta \in (0, 1)$ tal que la expansión exacta de segundo orden satisface:
+                        </p>
+                        $$f(\mathbf{x}_2) = f(\mathbf{x}_1) + \nabla f(\mathbf{x}_1)(\mathbf{x}_2 - \mathbf{x}_1) +
+                        \frac{1}{2}(\mathbf{x}_2 - \mathbf{x}_1)^T \mathbf{F}\big(\theta \mathbf{x}_1 +
+                        (1-\theta)\mathbf{x}_2\big)(\mathbf{x}_2 - \mathbf{x}_1)$$
+                      </div>
+
+                      <div class="formula-card">
+                        <div class="formula-card-title">3. Aproximación Asintótica Cuadrática de Taylor ($f \in C^2$)
+                        </div>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary);">
+                          Para un incremento vectorial $\mathbf{h} \in E^n$ cercano al origen ($\|\mathbf{h}\| \to 0$):
+                        </p>
+                        $$f(\mathbf{x} + \mathbf{h}) = f(\mathbf{x}) + \nabla f(\mathbf{x})\mathbf{h} +
+                        \frac{1}{2}\mathbf{h}^T \mathbf{F}(\mathbf{x})\mathbf{h} + o(\|\mathbf{h}\|^2)$$
+                      </div>
+                      <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                        <em>Relevancia en Optimización:</em> Esta aproximación cuadrática local es la base matemática de
+                        todos los algoritmos de segundo orden, incluidos el <strong>Método de Newton</strong> y los
+                        métodos <strong>Cuasi-Newton (BFGS)</strong>.
+                      </p>
+                    </div>
+
+                    <!-- =================================================================
+               1.1.4.E TEOREMA DE LA FUNCIÓN IMPLÍCITA (APÉNDICE A.6)
+          ================================================================== -->
+                    <div class="math-box box-thm">
+                      <div class="math-box-header">Teorema de la Función Implícita (Luenberger Apéndice A.6, p. 502)
+                      </div>
+
+                      <p>
+                        Supongamos que tenemos un conjunto de $m$ ecuaciones en $n$ variables ($m < n$):
+                          $$h_i(\mathbf{x})=0, \quad i=1, 2, \dots, m$$ </p>
+                          <p>
+                            El <strong>Teorema de la Función Implícita</strong> aborda la cuestión de si, al fijar $n -
+                            m$ de las variables, las ecuaciones pueden resolverse para las $m$ variables restantes. Así,
+                            seleccionando $m$ variables, digamos $x_1, x_2, \dots, x_m$, deseamos determinar si estas
+                            pueden expresarse en términos de las variables restantes en la forma:
+                            $$x_i = \phi_i(x_{m+1}, x_{m+2}, \dots, x_n), \quad i = 1, 2, \dots, m$$
+                            Las funciones $\phi_i$, si existen, se denominan <em>funciones implícitas</em>.
+                          </p>
+
+                          <div class="formula-card">
+                            <div class="formula-card-title">Enunciado Formal del Teorema de Luenberger (p. 502)</div>
+                            <p
+                              style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary); text-align: left;">
+                              Sea $\mathbf{x}^0 = (x_1^0, x_2^0, \dots, x_n^0)$ un punto en $E^n$ que satisface las
+                              propiedades:
+                            </p>
+                            <ol style="margin-left: 1.5rem; text-align: left; line-height: 1.8;">
+                              <li>Las funciones $h_i \in C^p$ ($i = 1, 2, \dots, m$) en alguna vecindad de
+                                $\mathbf{x}^0$, para algún $p \ge 1$.</li>
+                              <li>$h_i(\mathbf{x}^0) = 0, \quad i = 1, 2, \dots, m$.</li>
+                              <li>La matriz Jacobiana de dimensión $m \times m$:
+                                $$\mathbf{J} = \begin{bmatrix}
+                                \frac{\partial h_1(\mathbf{x}^0)}{\partial x_1} & \cdots & \frac{\partial
+                                h_1(\mathbf{x}^0)}{\partial x_m} \\
+                                \vdots & \ddots & \vdots \\
+                                \frac{\partial h_m(\mathbf{x}^0)}{\partial x_1} & \cdots & \frac{\partial
+                                h_m(\mathbf{x}^0)}{\partial x_m}
+                                \end{bmatrix}$$
+                                es <strong>no singular</strong> ($\det(\mathbf{J}) \neq 0$).
+                              </li>
+                            </ol>
+                            <p
+                              style="font-size: 0.95rem; margin-top: 1rem; margin-bottom: 0.4rem; color: var(--text-primary); text-align: left;">
+                              <strong>Tesis del Teorema:</strong> Entonces existe una vecindad de $\hat{\mathbf{x}}^0 =
+                              (x_{m+1}^0, x_{m+2}^0, \dots, x_n^0) \in E^{n-m}$ tal que para todo $\hat{\mathbf{x}} =
+                              (x_{m+1}, x_{m+2}, \dots, x_n)$ en esta vecindad existen funciones únicas
+                              $\phi_i(\hat{\mathbf{x}})$ ($i = 1, 2, \dots, m$) tales que:
+                            </p>
+                            <ol style="margin-left: 1.5rem; text-align: left; line-height: 1.8;">
+                              <li>$\phi_i \in C^p$.</li>
+                              <li>$x_i^0 = \phi_i(\hat{\mathbf{x}}^0), \quad i = 1, 2, \dots, m$.</li>
+                              <li>$h_i\big(\phi_1(\hat{\mathbf{x}}), \phi_2(\hat{\mathbf{x}}), \dots,
+                                \phi_m(\hat{\mathbf{x}}), x_{m+1}, \dots, x_n\big) = 0, \quad i = 1, 2, \dots, m$.</li>
+                            </ol>
+                          </div>
+
+                          <p style="font-size: 0.95rem; margin-top: 1rem;">
+                            <strong>Cálculo de Derivadas de las Funciones Implícitas (Luenberger p. 502):</strong>
+                            Diferenciando la identidad respecto a $\hat{\mathbf{x}}$ mediante la regla de la cadena, se
+                            obtiene la expresión exacta del Jacobiano implícito:
+                            $$\mathbf{J} \nabla \boldsymbol{\phi}(\hat{\mathbf{x}}) +
+                            \nabla_{\hat{\mathbf{x}}}\mathbf{h} = \mathbf{0} \implies \nabla
+                            \boldsymbol{\phi}(\hat{\mathbf{x}}) = -\mathbf{J}^{-1} \nabla_{\hat{\mathbf{x}}}\mathbf{h}
+                            \in \mathbb{R}^{m \times (n-m)}$$
+                          </p>
+                    </div>
+
+                    <!-- Ejemplos Prácticos de Función Implícita -->
+                    <div class="math-box box-ex">
+                      <div class="math-box-header">Ejemplos Prácticos: Aplicación del Teorema de la Función Implícita (Luenberger p. 502-503)</div>
+                      <div class="example-steps">
+                        <div class="example-step">
+                          <div class="example-step-title">📌 Ejemplo 1 (Falla de la Condición del Jacobiano):</div>
+                          <p style="margin-top:0.35rem; margin-bottom:0;">Consideremos la ecuación escalar $h(x_1, x_2) = x_1^2 + x_2 = 0$. Una solución evidente es $x_1 = 0, x_2 = 0$. Sin embargo, en una vecindad de esta solución <strong>no existe</strong> ninguna función $\phi$ tal que $x_1 = \phi(x_2)$.</p>
+                          <p style="margin-top:0.5rem; margin-bottom:0;">En esta solución, la condición (iii) del teorema de la función implícita se viola porque el Jacobiano respecto a $x_1$ evaluado en el origen es nulo ($\frac{\partial h(0,0)}{\partial x_1} = 2x_1\big|_{(0,0)} = 0$). En cualquier otra solución, sin embargo, dicha función $\phi$ sí existe.</p>
+                        </div>
+                        <div class="example-step">
+                          <div class="example-step-title">📌 Ejemplo 2 (Generalización No Lineal de la Teoría Lineal):</div>
+                          <p style="margin-top:0.35rem; margin-bottom:0;">Sea $\mathbf{A}$ una matriz de $m \times n$ (con $m < n$) y consideremos el sistema de ecuaciones lineales $\mathbf{A}\mathbf{x} = \mathbf{b}$. Si particionamos $\mathbf{A}$ como $\mathbf{A} = [\mathbf{B}, \mathbf{C}]$ donde $\mathbf{B}$ es de $m \times m$, entonces la condición (iii) del teorema se satisface <strong>si y solo si $\mathbf{B}$ es no singular</strong>.</p>
+                          <p style="margin-top:0.5rem; margin-bottom:0;">Esta condición se corresponde exactamente con lo que nos dicta la teoría de ecuaciones lineales (donde particionamos en base y no-base). En vista de este ejemplo, la función implícita puede considerarse como una generalización no lineal de la teoría lineal.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 1.1.5 Eliminación Gaussiana -->
+                    <div id="sec-1-1-5" style="margin-top: 2.5rem;">
+                      <h3>
+                        <span>1.1.5 Eliminación Gaussiana y Factorización LU</span>
+                        <span class="ref-badge">Luenberger Apéndice C</span>
+                      </h3>
+                      <p>
+                        El <strong>Apéndice C de Luenberger (pp. 513–515)</strong> constituye el pilar numérico
+                        fundamental para la resolución de sistemas lineales $\mathbf{A}\mathbf{x} = \mathbf{b}$, el
+                        álgebra del método simplex en programación lineal y los métodos de segundo orden (Newton). Esta
+                        sección desglosa rigurosamente el paso básico de eliminación, las matrices elementales
+                        $\mathbf{M}_k$, la descomposición $\mathbf{A} = \mathbf{L}\mathbf{U}$, el algoritmo de solución
+                        bifásica y el análisis del conteo exacto de operaciones.
+                      </p>
+
+                      <!-- =================================================================
+               1.1.5.A EL PASO BÁSICO Y MATRICES ELEMENTALES M_k (APÉNDICE C.1)
+          ================================================================== -->
+                      <div class="math-box box-def">
+                        <div class="math-box-header">1. Sistemas Triangulares y el Paso Básico de Eliminación (Luenberger C.1)</div>
+
+                        <p>
+                          La motivación subyacente de la eliminación Gaussiana es la enorme facilidad con la que se resuelven los sistemas de ecuaciones triangulares. Formalmente, una matriz cuadrada $\mathbf{C} = [c_{ij}]$ se denomina <strong>triangular inferior</strong> si $c_{ij} = 0$ para $i < j$, y <strong>triangular superior</strong> si $c_{ij} = 0$ para $i > j$.
+                        </p>
+                        <p style="margin-top: 0.5rem;">
+                          Dado un sistema general $\mathbf{A}\mathbf{x} = \mathbf{b}$, intentamos transformarlo para que aparezcan ceros debajo de la diagonal principal iterativamente.
+                        </p>
+                        
+                        <div class="notation-list">
+                          <div class="notation-item">
+                            <div class="notation-label">🔹 Paso 1 (Matriz $\mathbf{M}_1$):</div>
+                            <div class="notation-formula">
+                              Asumiendo que $a_{11} \neq 0$, restamos múltiplos de la primera ecuación a las demás para obtener ceros en la primera columna debajo de $a_{11}$. Definimos $m_{k1} = a_{k1}/a_{11}$ y construimos la matriz elemental $\mathbf{M}_1$:
+                              $$\mathbf{M}_1 = \begin{bmatrix} 
+                              1 & 0 & \cdots & 0 \\ 
+                              -m_{21} & 1 & \cdots & 0 \\ 
+                              -m_{31} & 0 & \ddots & \vdots \\ 
+                              \vdots & \vdots & & 0 \\ 
+                              -m_{n1} & 0 & \cdots & 1 \end{bmatrix}$$
+                              El nuevo sistema de ecuaciones puede expresarse como $\mathbf{A}^{(2)}\mathbf{x} = \mathbf{b}^{(2)}$, con $\mathbf{A}^{(2)} = \mathbf{M}_1\mathbf{A}$ y $\mathbf{b}^{(2)} = \mathbf{M}_1\mathbf{b}$. La matriz $\mathbf{A}^{(2)}$ tiene $a_{k1}^{(2)} = 0$ para $k > 1$.
+                            </div>
+                          </div>
+                          <div class="notation-item">
+                            <div class="notation-label">🔹 Paso 2 (Matriz $\mathbf{M}_2$):</div>
+                            <div class="notation-formula">
+                              A continuación, asumiendo $a_{22}^{(2)} \neq 0$, se restan múltiplos de la segunda ecuación a las ecuaciones 3 hasta $n$ para generar ceros debajo de $a_{22}^{(2)}$. Esto equivale a pre-multiplicar por $\mathbf{M}_2$:
+                              $$\mathbf{M}_2 = \begin{bmatrix} 
+                              1 & 0 & 0 & \cdots & 0 \\ 
+                              0 & 1 & 0 & \cdots & 0 \\ 
+                              0 & -m_{32} & 1 & \cdots & 0 \\ 
+                              \vdots & \vdots & \vdots & \ddots & \vdots \\ 
+                              0 & -m_{n2} & 0 & \cdots & 1 \end{bmatrix}, \quad \text{donde } m_{k2} = \frac{a_{k2}^{(2)}}{a_{22}^{(2)}}$$
+                              Esto produce $\mathbf{A}^{(3)} = \mathbf{M}_2\mathbf{A}^{(2)}$ y $\mathbf{b}^{(3)} = \mathbf{M}_2\mathbf{b}^{(2)}$.
+                            </div>
+                          </div>
+                          <div class="notation-item">
+                            <div class="notation-label">🔹 Paso $n-1$ (Obtención de $\mathbf{U}$):</div>
+                            <div class="notation-formula">
+                              Procediendo de esta manera, obtenemos una matriz triangular superior, la cual denotamos por $\mathbf{U}$:
+                              $$\mathbf{A}^{(n)} = \mathbf{M}_{n-1} \mathbf{M}_{n-2} \cdots \mathbf{M}_1 \mathbf{A} \equiv \mathbf{U}$$
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- =================================================================
+               1.1.5.B FACTORIZACIÓN TRIANGULAR A = LU (APÉNDICE C.2)
+          ================================================================== -->
+                      <div class="math-box box-thm">
+                        <div class="math-box-header">2. Teorema de Factorización Triangular $\mathbf{A} =
+                          \mathbf{L}\mathbf{U}$ (Luenberger C.2, p. 516)</div>
+
+                        <p>
+                          Si definimos $\mathbf{M} = \mathbf{M}_{n-1} \mathbf{M}_{n-2} \cdots \mathbf{M}_1$, esta matriz es triangular inferior. Dado que $\mathbf{M}\mathbf{A} = \mathbf{U}$, tenemos formalmente que $\mathbf{A} = \mathbf{M}^{-1}\mathbf{U}$. La matriz $\mathbf{L} = \mathbf{M}^{-1}$ es también triangular inferior y se convierte en la matriz $\mathbf{L}$ de la descomposición LU deseada para $\mathbf{A}$.
+                        </p>
+                        <p style="margin-top: 0.5rem;">
+                          La representación de $\mathbf{L}$ se puede hacer más explícita al notar que $\mathbf{M}_k^{-1}$ es idéntica a $\mathbf{M}_k$ excepto que los términos fuera de la diagonal tienen signo opuesto. Por lo tanto, $\mathbf{L} = \mathbf{M}^{-1} = \mathbf{M}_1^{-1} \mathbf{M}_2^{-1} \cdots \mathbf{M}_{n-1}^{-1}$, lo cual se verifica fácilmente como:
+                        </p>
+
+                        <div class="formula-card">
+                          <div class="formula-card-title">Estructura Explícita de la Matriz Triangular Inferior $\mathbf{L}$</div>
+                          $$\mathbf{L} = \begin{bmatrix}
+                          1 & 0 & 0 & \cdots & 0 \\
+                          m_{21} & 1 & 0 & \cdots & 0 \\
+                          m_{31} & m_{32} & 1 & \cdots & 0 \\
+                          \vdots & \vdots & \vdots & \ddots & \vdots \\
+                          m_{n1} & m_{n2} & m_{n3} & \cdots & 1
+                          \end{bmatrix}$$
+                        </div>
+
+                        <div class="formula-card">
+                          <div class="formula-card-title">Descomposición $\mathbf{A} = \mathbf{L}\mathbf{U}$ de Gauss</div>
+                          $$\mathbf{A} = \mathbf{L}\mathbf{U} = \begin{bmatrix}
+                          1 & 0 & \cdots & 0 \\
+                          m_{21} & 1 & \cdots & 0 \\
+                          \vdots & \vdots & \ddots & \vdots \\
+                          m_{n1} & m_{n2} & \cdots & 1
+                          \end{bmatrix} \begin{bmatrix}
+                          u_{11} & u_{12} & \cdots & u_{1n} \\
+                          0 & u_{22} & \cdots & u_{2n} \\
+                          \vdots & \vdots & \ddots & \vdots \\
+                          0 & 0 & \cdots & u_{nn}
+                          \end{bmatrix}$$
+                        </div>
+                      </div>
+
+                      <!-- =================================================================
+               1.1.5.C ALGORITMO BIFÁSICO DE RESOLUCIÓN (APÉNDICE C.3)
+          ================================================================== -->
+                      <div class="math-box box-prop">
+                        <div class="math-box-header">3. Algoritmo de Solución Bifásica ($\mathbf{L}\mathbf{y} =
+                          \mathbf{b}$ y $\mathbf{U}\mathbf{x} = \mathbf{y}$) (Luenberger C.3)</div>
+
+                        <p>
+                          Una vez obtenida la factorización $\mathbf{A} = \mathbf{L}\mathbf{U}$, el sistema original
+                          $\mathbf{A}\mathbf{x} = \mathbf{b} \iff \mathbf{L}(\mathbf{U}\mathbf{x}) = \mathbf{b}$ se
+                          resuelve en dos fases triangulares secuenciales de orden $O(n^2)$:
+                        </p>
+
+                        <div class="notation-list">
+                          <div class="notation-item">
+                            <div class="notation-label">🔹 Fase 1 — Sustitución Progresiva (Forward Substitution):</div>
+                            <div class="notation-formula">
+                              Se resuelve el sistema triangular inferior unitario $\mathbf{L}\mathbf{y} = \mathbf{b}$
+                              desde la primera fila hacia adelante:
+                              $$y_1 = b_1, \qquad y_i = b_i - \sum_{j=1}^{i-1} l_{ij} y_j, \quad i = 2, 3, \dots, n$$
+                            </div>
+                          </div>
+                          <div class="notation-item">
+                            <div class="notation-label">🔹 Fase 2 — Sustitución Regresiva (Back Substitution):</div>
+                            <div class="notation-formula">
+                              Se resuelve el sistema triangular superior $\mathbf{U}\mathbf{x} = \mathbf{y}$ desde la
+                              última fila hacia atrás:
+                              $$x_n = \frac{y_n}{u_{nn}}, \qquad x_i = \frac{1}{u_{ii}} \left( y_i - \sum_{j=i+1}^n
+                              u_{ij} x_j \right), \quad i = n-1, n-2, \dots, 1$$
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- =================================================================
+               1.1.5.D PIVOTAJE PARCIAL Y ESTABILIDAD NUMÉRICA
+          ================================================================== -->
+                      <div class="math-box box-note">
+                        <div class="math-box-header">4. Pivotaje Parcial y Estabilidad Numérica (Row Interchanges)</div>
+                        <p>
+                          En la práctica, el elemento diagonal (pivote) $a_{kk}^{(k)}$ de la submatriz $\mathbf{A}^{(k)}$ puede volverse cero o muy cercano a cero, lo cual indefeniría el multiplicador $m_{ik} = a_{ik}^{(k)} / a_{kk}^{(k)}$ o haría que creciera desproporcionadamente.
+                        </p>
+                        <div class="notation-list">
+                          <div class="notation-item">
+                            <div class="notation-label">🔹 Estrategia de Pivotaje:</div>
+                            <div class="notation-formula">
+                              Es fundamental intercambiar la $k$-ésima fila con alguna fila debajo de ella para evitar divisiones por cero. Además, por consideraciones de precisión numérica, es deseable introducir continuamente intercambios de este tipo para garantizar que el pivote elegido sea el de mayor magnitud absoluta, lo que asegura que <strong>$|m_{ij}| \le 1$ para todo $i, j$</strong>.<br><br>
+                              Si se realiza esto, el procedimiento de eliminación Gaussiana goza de una <strong>excepcional estabilidad numérica</strong> y es el método menos susceptible a la acumulación de errores de redondeo (Luenberger p. 515).
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Ejemplo Práctico 9 -->
+                      <div class="math-box box-ex">
+                        <div class="math-box-header">Ejemplo Práctico 9: Factorización $\mathbf{A} =
+                          \mathbf{L}\mathbf{U}$ y Solución Completa de un Sistema $3 \times 3$</div>
+                        <div class="example-steps">
+                          <div class="example-step">
+                            <div class="example-step-title">📌 Sistema Lineal Planteado:</div>
+                            Resolver $\mathbf{A}\mathbf{x} = \mathbf{b}$ mediante descomposición $\mathbf{L}\mathbf{U}$:
+                            $$\begin{bmatrix} 2 & 1 & 1 \\ 4 & 3 & 3 \\ 8 & 7 & 9 \end{bmatrix} \begin{pmatrix} x_1 \\
+                            x_2 \\ x_3 \end{pmatrix} = \begin{pmatrix} 5 \\ 13 \\ 37 \end{pmatrix}$$
+                          </div>
+                          <div class="example-step">
+                            <div class="example-step-title">📌 Eliminación Gaussiana y Obtención de $\mathbf{L}$ y
+                              $\mathbf{U}$:</div>
+                            * Paso 1: $m_{21} = 4/2 = 2, \; m_{31} = 8/2 = 4 \implies F_2 \leftarrow F_2 - 2F_1, \; F_3
+                            \leftarrow F_3 - 4F_1$.<br>
+                            * Paso 2: $m_{32} = 3/1 = 3 \implies F_3 \leftarrow F_3 - 3F_2$.
+                            $$\mathbf{L} = \begin{bmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ 4 & 3 & 1 \end{bmatrix}, \qquad
+                            \mathbf{U} = \begin{bmatrix} 2 & 1 & 1 \\ 0 & 1 & 1 \\ 0 & 0 & 2 \end{bmatrix}$$
+                          </div>
+                          <div class="example-step">
+                            <div class="example-step-title">📌 Fase 1 — Sustitución Progresiva ($\mathbf{L}\mathbf{y} =
+                              \mathbf{b}$):</div>
+                            $$y_1 = 5, \quad y_2 = 13 - 2(5) = 3, \quad y_3 = 37 - 4(5) - 3(3) = 37 - 29 = 8 \implies
+                            \mathbf{y} = (5, 3, 8)^T$$
+                          </div>
+                          <div class="example-step">
+                            <div class="example-step-title">📌 Fase 2 — Sustitución Regresiva ($\mathbf{U}\mathbf{x} =
+                              \mathbf{y}$):</div>
+                            $$x_3 = \frac{8}{2} = 4, \quad x_2 = \frac{3 - (1)(4)}{1} = -1, \quad x_1 = \frac{5 -
+                            (1)(-1) - (1)(4)}{2} = \frac{2}{2} = 1 \implies \mathbf{x}^* = (1, -1, 4)^T \quad
+                            \checkmark$$
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- =================================================================
+               1.1.5.D COMPLEJIDAD Y CONTEO DE OPERACIONES (APÉNDICE C.4)
+          ================================================================== -->
+                      <div class="math-box box-prop">
+                        <div class="math-box-header">4. Conteo Riguroso de Operaciones y Complejidad Asintótica
+                          (Luenberger C.4)</div>
+
+                        <p>
+                          Luenberger detalla el número exacto de operaciones aritméticas en punto flotante
+                          (multiplicaciones y sumas) necesarias para procesar matrices de dimensión $n \times n$:
+                        </p>
+
+                        <table class="academic-table">
+                          <thead>
+                            <tr>
+                              <th>Etapa Algorítmica</th>
+                              <th>Multiplicaciones / Divisiones</th>
+                              <th>Sumas / Restas</th>
+                              <th>Complejidad Asintótica</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td><strong>Factorización $\mathbf{A} \to \mathbf{L}\mathbf{U}$</strong></td>
+                              <td>$\sum_{k=1}^{n-1} (n-k)(n-k+1) = \frac{n^3 - n}{3}$</td>
+                              <td>$\sum_{k=1}^{n-1} (n-k)^2 = \frac{2n^3 - 3n^2 + n}{6}$</td>
+                              <td>$\approx \frac{1}{3}n^3 + \frac{1}{3}n^3 = \frac{2}{3}n^3$</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Sustitución Progresiva ($\mathbf{L}\mathbf{y} = \mathbf{b}$)</strong></td>
+                              <td>$\frac{n(n-1)}{2}$</td>
+                              <td>$\frac{n(n-1)}{2}$</td>
+                              <td>$\approx n^2$ operaciones</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Sustitución Regresiva ($\mathbf{U}\mathbf{x} = \mathbf{y}$)</strong></td>
+                              <td>$\frac{n(n+1)}{2}$</td>
+                              <td>$\frac{n(n-1)}{2}$</td>
+                              <td>$\approx n^2$ operaciones</td>
+                            </tr>
+                            <tr>
+                              <td><strong>Total para Resolver $\mathbf{A}\mathbf{x} = \mathbf{b}$</strong></td>
+                              <td>$\frac{1}{3}n^3 + n^2 - \frac{1}{3}n$</td>
+                              <td>$\frac{1}{3}n^3 + \frac{1}{2}n^2 - \frac{5}{6}n$</td>
+                              <td><strong>$O\left(\frac{1}{3}n^3\right)$ flops</strong></td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <div class="notation-list" style="margin-top: 1rem;">
+                          <div class="notation-item">
+                            <div class="notation-label">🔹 Ventaja Fundamental de la Factorización LU en Optimización:
+                            </div>
+                            <div class="notation-formula">
+                              Si se requiere resolver el sistema para $p$ lados derechos diferentes $\mathbf{b}_1,
+                              \mathbf{b}_2, \dots, \mathbf{b}_p$ (por ejemplo, en cada iteración del método simplex o en
+                              búsquedas lineales de Newton), la costosa factorización $O(n^3/3)$ se ejecuta **una sola
+                              vez**. Cada solución subsiguiente toma solo $O(n^2)$ operaciones.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- HERRAMIENTA INTERACTIVA 2: SOLVER LU -->
+                      <div class="interactive-panel" style="margin-top: 2.5rem;">
+                        <div class="panel-header">
+                          <div class="panel-title">🛠️ Herramienta Interactiva 2: Calculadora de Factorización LU y
+                            Sustitución Bifásica</div>
+                          <span class="badge badge-interactive">Matemática Numérica</span>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                          Ingresa los coeficientes de una matriz $3 \times 3$ invertible $\mathbf{A}$ y el vector de
+                          términos independientes $\mathbf{b}$ para calcular los multiplicadores elementales de Gauss,
+                          las matrices triangulares $\mathbf{L}$ y $\mathbf{U}$, y la solución vectorial exacta
+                          $\mathbf{x}^*$:
+                        </p>
+                        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                          <div>
+                            <strong>Matriz A (3x3):</strong><br>
+                            <input id="m_a11" type="number" value="2" style="width: 55px; padding: 4px;"> <input
+                              id="m_a12" type="number" value="1" style="width: 55px; padding: 4px;"> <input id="m_a13"
+                              type="number" value="1" style="width: 55px; padding: 4px;"><br>
+                            <input id="m_a21" type="number" value="4"
+                              style="width: 55px; padding: 4px; margin-top:4px;"> <input id="m_a22" type="number"
+                              value="3" style="width: 55px; padding: 4px;"> <input id="m_a23" type="number" value="3"
+                              style="width: 55px; padding: 4px;"><br>
+                            <input id="m_a31" type="number" value="8"
+                              style="width: 55px; padding: 4px; margin-top:4px;"> <input id="m_a32" type="number"
+                              value="7" style="width: 55px; padding: 4px;"> <input id="m_a33" type="number" value="9"
+                              style="width: 55px; padding: 4px;">
+                          </div>
+                          <div>
+                            <strong>Vector b:</strong><br>
+                            <input id="m_b1" type="number" value="5" style="width: 55px; padding: 4px;"><br>
+                            <input id="m_b2" type="number" value="13"
+                              style="width: 55px; padding: 4px; margin-top:4px;"><br>
+                            <input id="m_b3" type="number" value="37"
+                              style="width: 55px; padding: 4px; margin-top:4px;">
+                          </div>
+                        </div>
+                        <button id="btnSolveLU" class="btn-ctrl"
+                          style="background: var(--accent-primary); color: white;">Calcular Factorización LU</button>
+                        <div id="luOutput"></div>
+                      </div>
+                    </div>
+        </section>
+
+        <!-- =====================================================================
+           TEMA 1.2: CONJUNTOS CONVEXOS
+      ====================================================================== -->
+        <section id="sec-1-2" style="margin-top: 4rem;">
+          <h2>
+            <span>1.2 Conjuntos Convexos</span>
+            <span class="ref-badge" style="width: fit-content;">Luenberger Apéndice B</span>
+          </h2>
+          <p>
+            Esta sección presenta de manera completa la geometría analítica de conjuntos convexos, variedades afines,
+            semiespacios, hiperplanos de separación y puntos extremos según el <strong>Apéndice B</strong> de
+            Luenberger.
+          </p>
+
+          <!-- 1.2.1 Definiciones Básicas -->
+          <div id="sec-1-2-1" style="margin-top: 2.5rem;">
+            <h3>
+              <span>1.2.1 Definiciones Básicas</span>
+              <span class="ref-badge">Luenberger Apéndice B.1</span>
+            </h3>
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Conjunto Convexo</div>
+              <p>
+                Un conjunto $C$ en $E^n$ se dice que es <strong>convexo</strong> si para todo $\mathbf{x}_1, \mathbf{x}_2 \in C$ y todo número real $\alpha$, $0 < \alpha < 1$, el punto $\alpha\mathbf{x}_1 + (1 - \alpha)\mathbf{x}_2 \in C$.
+              </p>
+              <p style="margin-top: 0.5rem;">
+                Esta definición puede interpretarse geométricamente al afirmar que un conjunto es convexo si, dados dos puntos en el conjunto, <em>cada punto en el segmento de línea que une estos dos puntos es también miembro del conjunto</em>. Esto se ilustra en la Fig. B.1.
+              </p>
+              
+              <div class="figure-container" style="text-align: center; margin: 2rem 0;">
+                <img src="assets/3.png" alt="Fig. B.1 Convexity" style="max-width: 100%; height: auto; margin: 0 auto; display: block;">
+                <div style="font-size: 0.9rem; color: var(--text-primary); margin-top: 0.5rem; text-align: center;"><strong>Fig. B.1</strong> Convexity</div>
+              </div>
+            </div>
+
+            <p style="margin-top: 1rem;">
+                La siguiente proposición muestra que ciertas operaciones familiares de conjuntos preservan la convexidad. Las demostraciones siguen directamente de la definición y las propiedades se ilustran en la Fig. B.2.
+            </p>
+
+            <div class="math-box box-prop">
+              <div class="math-box-header">Proposición 1: Operaciones que Preservan Convexidad</div>
+              <p>Los conjuntos convexos en $E^n$ satisfacen las siguientes relaciones:</p>
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">i) Múltiplo Escalar:</div>
+                  <div class="notation-formula">
+                    Si $C$ es un conjunto convexo y $\beta$ es un número real, el conjunto
+                    $$\beta C = \{\mathbf{x} : \mathbf{x} = \beta\mathbf{c}, \, \mathbf{c} \in C\}$$
+                    es convexo.
+                  </div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">ii) Suma (Minkowski):</div>
+                  <div class="notation-formula">
+                    Si $C$ y $D$ son conjuntos convexos, entonces el conjunto
+                    $$C + D = \{\mathbf{x} : \mathbf{x} = \mathbf{c} + \mathbf{d}, \, \mathbf{c} \in C, \, \mathbf{d} \in D\}$$
+                    es convexo.
+                  </div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">iii) Intersección:</div>
+                  <div class="notation-formula">
+                    La intersección de cualquier colección de conjuntos convexos es convexa.
+                  </div>
+                </div>
+              </div>
+              
+              <div class="math-box-header" style="margin-top: 2rem; font-size: 1rem;">Desarrollo Paso a Paso: Demostraciones de la Proposición 1</div>
+              <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">Aunque Luenberger deja las demostraciones "como ejercicio al lector" porque "se deducen directamente de la definición", su desarrollo formal paso a paso es el siguiente:</p>
+              <div class="notation-list" style="margin-bottom: 1.5rem;">
+                <div class="notation-item">
+                  <div class="notation-formula">
+                    <strong>Prueba de (i):</strong> Sean $\mathbf{y}_1, \mathbf{y}_2 \in \beta C$. Por definición, existen $\mathbf{c}_1, \mathbf{c}_2 \in C$ tales que $\mathbf{y}_1 = \beta \mathbf{c}_1$ y $\mathbf{y}_2 = \beta \mathbf{c}_2$. Para cualquier $\alpha \in [0, 1]$, formamos la combinación convexa:
+                    $$\alpha \mathbf{y}_1 + (1 - \alpha) \mathbf{y}_2 = \alpha (\beta \mathbf{c}_1) + (1 - \alpha) (\beta \mathbf{c}_2) = \beta [\alpha \mathbf{c}_1 + (1 - \alpha) \mathbf{c}_2]$$
+                    Dado que $C$ es convexo, la combinación convexa $[\alpha \mathbf{c}_1 + (1 - \alpha) \mathbf{c}_2]$ es igual a algún punto $\mathbf{c}^* \in C$. Por lo tanto, el punto resultante es $\beta \mathbf{c}^*$, lo que implica que pertenece a $\beta C$. $\blacksquare$
+                  </div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-formula">
+                    <strong>Prueba de (ii):</strong> Sean $\mathbf{x}_1, \mathbf{x}_2 \in C+D$. Existen $\mathbf{c}_1, \mathbf{c}_2 \in C$ y $\mathbf{d}_1, \mathbf{d}_2 \in D$ tales que $\mathbf{x}_1 = \mathbf{c}_1 + \mathbf{d}_1$ y $\mathbf{x}_2 = \mathbf{c}_2 + \mathbf{d}_2$. Para cualquier $\alpha \in [0, 1]$:
+                    $$\alpha \mathbf{x}_1 + (1-\alpha)\mathbf{x}_2 = \alpha(\mathbf{c}_1 + \mathbf{d}_1) + (1-\alpha)(\mathbf{c}_2 + \mathbf{d}_2)$$
+                    Por las propiedades de los espacios vectoriales, reagrupamos los términos:
+                    $$= [\alpha \mathbf{c}_1 + (1-\alpha)\mathbf{c}_2] + [\alpha \mathbf{d}_1 + (1-\alpha)\mathbf{d}_2]$$
+                    Como $C$ y $D$ son convexos, el primer corchete genera un punto $\mathbf{c}^* \in C$ y el segundo un punto $\mathbf{d}^* \in D$. Así, la combinación convexa es igual a $\mathbf{c}^* + \mathbf{d}^*$, la cual pertenece a $C+D$. $\blacksquare$
+                  </div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-formula">
+                    <strong>Prueba de (iii):</strong> Sea $I = \bigcap_{i} C_i$ una intersección de una familia arbitraria de conjuntos convexos. Sean $\mathbf{x}_1, \mathbf{x}_2 \in I$. Esto significa que $\mathbf{x}_1, \mathbf{x}_2 \in C_i$ para todo $i$. Dado que cada $C_i$ individualmente es convexo, la combinación convexa $\alpha\mathbf{x}_1 + (1-\alpha)\mathbf{x}_2 \in C_i$ para todo $i$. Por ende, al estar en todos los conjuntos, pertenece a su intersección $I$. $\blacksquare$
+                  </div>
+                </div>
+              </div>
+              
+              <div class="figure-container" style="text-align: center; margin: 2rem 0;">
+                <img src="assets/4.png" alt="Fig. B.2 Properties of convex sets" style="max-width: 100%; height: auto; margin: 0 auto; display: block;">
+                <div style="font-size: 0.9rem; color: var(--text-primary); margin-top: 0.5rem; text-align: center;"><strong>Fig. B.2</strong> Properties of convex sets</div>
+              </div>
+            </div>
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Envoltura Convexa y Conos</div>
+              <p>Otro concepto importante es el de formar el conjunto convexo más pequeño que contiene un conjunto dado.</p>
+              
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Envoltura Convexa (Convex Hull):</div>
+                  <div class="notation-formula">
+                    Sea $S$ un subconjunto de $E^n$. La <strong>envoltura convexa</strong> de $S$, denotada como $\text{co}(S)$, es el conjunto que resulta de la intersección de todos los conjuntos convexos que contienen a $S$. La <strong>envoltura convexa cerrada</strong> de $S$ se define como la cerradura de $\text{co}(S)$.
+                  </div>
+                </div>
+              </div>
+              <p style="margin-top: 1rem;">
+                Finalmente, concluimos esta sección definiendo un <em>cono</em> y un <em>cono convexo</em>. Un cono convexo es un tipo especial de conjunto convexo que surge con bastante frecuencia.
+              </p>
+              
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Cono y Cono Convexo:</div>
+                  <div class="notation-formula">
+                    Un conjunto $C$ es un <strong>cono</strong> si $\mathbf{x} \in C \implies \alpha\mathbf{x} \in C$ para todo $\alpha > 0$. Un cono que también es convexo se denomina <strong>cono convexo</strong>.
+                  </div>
+                </div>
+              </div>
+
+              <p style="margin-top: 1rem;">
+                Algunos conos se muestran en la Fig. B.3. Su propiedad básica es que si un punto $\mathbf{x}$ pertenece a un cono, entonces la semirrecta entera desde el origen a través del punto (pero no el origen en sí) también debe pertenecer al cono.
+              </p>
+
+              <div class="figure-container" style="text-align: center; margin: 2rem 0;">
+                <img src="assets/5.png" alt="Fig. B.3 Cones" style="max-width: 100%; height: auto; margin: 0 auto; display: block;">
+                <div style="font-size: 0.9rem; color: var(--text-primary); margin-top: 0.5rem; text-align: center;"><strong>Fig. B.3</strong> Cones</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1.2.2 Hiperplanos y Politopos -->
+          <div id="sec-1-2-2" style="margin-top: 2.5rem;">
+            <h3>
+              <span>1.2.2 Hiperplanos y Politopos</span>
+              <span class="ref-badge">Luenberger Apéndice B.2</span>
+            </h3>
+
+            <p>
+              El tipo más importante de conjunto convexo (además de los puntos individuales) es el hiperplano. Los hiperplanos dominan toda la teoría de la optimización, apareciendo bajo la apariencia de multiplicadores de Lagrange, teoría de dualidad o cálculos de gradiente.
+            </p>
+            <p>
+              La definición más natural de un hiperplano es la generalización lógica de las propiedades geométricas de un plano en tres dimensiones. Sin embargo, para los cálculos y para una descripción concreta de los hiperplanos, existe una definición algebraica equivalente que es más útil. Una gran parte de esta sección está dedicada a establecer esta equivalencia.
+            </p>
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Variedad Lineal e Hiperplano</div>
+              
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Variedad Lineal:</div>
+                  <div class="notation-formula">
+                    Se dice que un conjunto $V$ en $E^n$ es una <strong>variedad lineal</strong> si, dados cualesquiera $\mathbf{x}_1, \mathbf{x}_2 \in V$, tenemos que $\lambda\mathbf{x}_1 + (1-\lambda)\mathbf{x}_2 \in V$ para <em>todos los números reales</em> $\lambda$.
+                  </div>
+                </div>
+              </div>
+              <p style="margin-top: 0.5rem; font-size: 0.95rem;">
+                Notemos que la única diferencia entre la definición de variedad lineal y la de conjunto convexo es que, en una variedad lineal, la recta <em>entera</em> que pasa por cualesquiera dos puntos debe estar en el conjunto, no solo el segmento entre ellos. Así, en tres dimensiones, las variedades lineales no vacías son puntos, líneas, planos bidimensionales y el espacio entero. Por tanto, podemos hablar de la <em>dimensión</em> de una variedad lineal (ej. un punto es de dimensión cero, una línea de dimensión uno).
+              </p>
+
+              <div class="notation-list" style="margin-top: 1rem;">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Hiperplano:</div>
+                  <div class="notation-formula">
+                    Un <strong>hiperplano</strong> en $E^n$ es una variedad lineal de dimensión $(n-1)$.
+                  </div>
+                </div>
+              </div>
+              <p style="margin-top: 0.5rem; font-size: 0.95rem;">
+                Vemos que los hiperplanos generalizan el concepto de un plano bidimensional en un espacio tridimensional. Pueden ser considerados como las variedades lineales más grandes en un espacio, aparte del espacio entero mismo.
+              </p>
+            </div>
+
+            <p style="margin-top: 1.5rem;">
+              Ahora relacionaremos esta definición geométrica abstracta con una algebraica (ilustrada en la Fig. B.4).
+            </p>
+
+            <div class="math-box box-prop">
+              <div class="math-box-header">Equivalencia Algebraica del Hiperplano</div>
+              
+              <div class="formula-card">
+                <div class="formula-card-title">Proposición 2 (Luenberger p. 508)</div>
+                <p style="margin-bottom: 0.5rem;">Sea $\mathbf{a}$ un vector columna no nulo de dimensión $n$, y sea $c$ un número real. El conjunto:</p>
+                $$H = \{\mathbf{x} \in E^n : \mathbf{a}^T\mathbf{x} = c\}$$
+                <p style="margin-top: 0.5rem;">es un hiperplano en $E^n$.</p>
+              </div>
+              
+              <details class="proof-box" style="margin-bottom: 1.5rem;">
+                <summary>Prueba de la Proposición 2</summary>
+                <div class="proof-content">
+                  Se deduce directamente de la linealidad de la ecuación $\mathbf{a}^T\mathbf{x} = c$ que $H$ es una variedad lineal. Sea $\mathbf{x}_1$ cualquier vector en $H$. Trasladando por $-\mathbf{x}_1$ obtenemos el conjunto $M = H - \mathbf{x}_1$ el cual es un subespacio lineal de $E^n$. Este subespacio consiste de todos los vectores $\mathbf{x}$ que satisfacen $\mathbf{a}^T\mathbf{x} = 0$; en otras palabras, todos los vectores ortogonales a $\mathbf{a}$. Esto es claramente un subespacio de dimensión $(n-1)$. $\blacksquare$
+                </div>
+              </details>
+
+              <div class="formula-card">
+                <div class="formula-card-title">Proposición 3 (Luenberger p. 508)</div>
+                <p style="margin-bottom: 0.5rem;">Sea $H$ un hiperplano en $E^n$. Entonces existe un vector no nulo $\mathbf{a}$ de dimensión $n$ y una constante $c$ tal que:</p>
+                $$H = \{\mathbf{x} \in E^n : \mathbf{a}^T\mathbf{x} = c\}$$
+              </div>
+
+              <details class="proof-box">
+                <summary>Prueba de la Proposición 3</summary>
+                <div class="proof-content">
+                  Sea $\mathbf{x}_1 \in H$ y traslademos por $-\mathbf{x}_1$ obteniendo el conjunto $M = H - \mathbf{x}_1$. Como $H$ es un hiperplano, $M$ es un subespacio de dimensión $(n-1)$. Sea $\mathbf{a}$ cualquier vector no nulo que sea ortogonal a este subespacio, es decir, $\mathbf{a}$ pertenece al subespacio unidimensional $M^\perp$. Claramente $M = \{\mathbf{x} : \mathbf{a}^T\mathbf{x} = 0\}$. Haciendo $c = \mathbf{a}^T\mathbf{x}_1$ vemos que si $\mathbf{x}_2 \in H$ tenemos $\mathbf{x}_2 - \mathbf{x}_1 \in M$ y por ende $\mathbf{a}^T\mathbf{x}_2 - \mathbf{a}^T\mathbf{x}_1 = 0$, lo que implica $\mathbf{a}^T\mathbf{x}_2 = c$. Por ende $H \subset \{\mathbf{x} : \mathbf{a}^T\mathbf{x} = c\}$. Como $H$ es, por definición, de dimensión $n-1$ y $\{\mathbf{x} : \mathbf{a}^T\mathbf{x} = c\}$ es de dimensión $n-1$ por la Proposición 2, estos dos conjuntos deben ser iguales. $\blacksquare$
+                </div>
+              </details>
+            </div>
+
+            <div class="figure-container" style="text-align: center; margin: 2rem 0;">
+              <img src="assets/6.png" alt="Fig. B.4 Hyperplane" style="max-width: 100%; height: auto; margin: 0 auto; display: block;">
+              <div style="font-size: 0.9rem; color: var(--text-primary); margin-top: 0.5rem; text-align: center;"><strong>Fig. B.4</strong> Hyperplane</div>
+            </div>
+            
+            <p>
+              Combinando las Proposiciones 2 y 3, vemos que un hiperplano es el conjunto de soluciones de una única ecuación lineal. Ahora usamos los hiperplanos para construir otras clases importantes de conjuntos convexos.
+            </p>
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Semiespacios y Politopos Convexos</div>
+              
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Semiespacios Cerrados:</div>
+                  <div class="notation-formula">
+                    Sea $\mathbf{a}$ un vector no nulo en $E^n$ y $c$ un número real. Correspondiente al hiperplano $H = \{\mathbf{x} : \mathbf{a}^T\mathbf{x} = c\}$ están los semiespacios cerrados positivo y negativo:
+                    $$H_+ = \{\mathbf{x} : \mathbf{a}^T\mathbf{x} \ge c\}, \quad H_- = \{\mathbf{x} : \mathbf{a}^T\mathbf{x} \le c\}$$
+                  </div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Semiespacios Abiertos:</div>
+                  <div class="notation-formula">
+                    De igual forma se definen los semiespacios abiertos positivo y negativo:
+                    $$\mathring{H}_+ = \{\mathbf{x} : \mathbf{a}^T\mathbf{x} > c\}, \quad \mathring{H}_- = \{\mathbf{x} : \mathbf{a}^T\mathbf{x} < c\}$$
+                  </div>
+                </div>
+              </div>
+              <p style="margin-top: 0.5rem; font-size: 0.95rem;">
+                Es fácil ver que los semiespacios son conjuntos convexos y que la unión de $H_+$ y $H_-$ es el espacio entero.
+              </p>
+
+              <div class="notation-list" style="margin-top: 1rem;">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Politopo Convexo:</div>
+                  <div class="notation-formula">
+                    Un conjunto que puede ser expresado como la intersección de un <em>número finito</em> de semiespacios cerrados se denomina <strong>politopo convexo</strong>.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p>
+              Vemos que los politopos convexos son los conjuntos obtenidos como la familia de soluciones a un sistema de desigualdades lineales de la forma:
+              $$ \mathbf{a}_1^T\mathbf{x} \le b_1, \quad \mathbf{a}_2^T\mathbf{x} \le b_2, \quad \dots \quad, \mathbf{a}_m^T\mathbf{x} \le b_m $$
+              Varios politopos se ilustran en la Fig. B.5. Notamos que un politopo puede estar vacío, acotado o no acotado.
+            </p>
+
+            <div class="figure-container" style="text-align: center; margin: 2rem 0;">
+              <img src="assets/7.png" alt="Fig. B.5 Polytopes" style="max-width: 100%; height: auto; margin: 0 auto; display: block;">
+              <div style="font-size: 0.9rem; color: var(--text-primary); margin-top: 0.5rem; text-align: center;"><strong>Fig. B.5</strong> Polytopes</div>
+            </div>
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Poliedro</div>
+              <p>El caso de un politopo acotado y no vacío es de especial interés y se distingue por lo siguiente:</p>
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Poliedro:</div>
+                  <div class="notation-formula">
+                    Un politopo acotado no vacío se llama <strong>poliedro</strong>.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1.2.3 Hiperplanos Separadores y de Apoyo -->
+          <div id="sec-1-2-3" style="margin-top: 2.5rem;">
+            <h3>
+              <span>1.2.3 Hiperplanos Separadores y de Apoyo</span>
+              <span class="ref-badge">Luenberger Apéndice B.3</span>
+            </h3>
+
+            <!-- Teorema 1 de Luenberger -->
+            <div class="math-box box-thm">
+              <div class="math-box-header">Teorema 1 de Luenberger: Separación de Punto Exterior</div>
+
+              <div class="formula-card">
+                <div class="formula-card-title">Enunciado Formal del Teorema 1 de Separación</div>
+                <p style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary);">
+                  Sea $C \subset E^n$ un conjunto convexo cerrado y sea $\mathbf{y} \notin C$ un punto exterior.
+                  Entonces existe un vector normal no nulo $\mathbf{a} \neq \mathbf{0}$ tal que:
+                </p>
+                $$\mathbf{a}^T\mathbf{y} < \inf_{\mathbf{x} \in C} \mathbf{a}^T\mathbf{x}$$ </div>
+
+                  <details class="proof-box" open>
+                    <summary>Demostración Constructiva Rigurosa de Luenberger</summary>
+                    <div class="proof-content">
+                      <strong>Paso 1 (Existencia del punto más cercano):</strong> Sea $\delta = \inf_{\mathbf{x} \in C}
+                      \|\mathbf{x} - \mathbf{y}\| > 0$. Por el Teorema de Weierstrass sobre la bola cerrada
+                      $B(\mathbf{y}, 2\delta) \cap \bar{C}$, existe $\mathbf{x}_0 \in \partial C$ tal que
+                      $\|\mathbf{x}_0 - \mathbf{y}\| = \delta$.<br><br>
+                      <strong>Paso 2 (Construcción del vector normal):</strong> Definimos $\mathbf{a} = \mathbf{x}_0 -
+                      \mathbf{y} \neq \mathbf{0}$. Para todo $\mathbf{x} \in C$ y todo $\alpha \in [0, 1]$, el segmento
+                      $\mathbf{x}_0 + \alpha(\mathbf{x} - \mathbf{x}_0) \in \bar{C}$. Por minimalidad de $\delta$:
+                      $$\|\mathbf{x}_0 + \alpha(\mathbf{x} - \mathbf{x}_0) - \mathbf{y}\|^2 \ge \|\mathbf{x}_0 -
+                      \mathbf{y}\|^2 = \delta^2$$
+                      <strong>Paso 3 (Expansión del producto escalar):</strong>
+                      $$\|\mathbf{x}_0 - \mathbf{y}\|^2 + 2\alpha(\mathbf{x}_0 - \mathbf{y})^T(\mathbf{x} -
+                      \mathbf{x}_0) + \alpha^2 \|\mathbf{x} - \mathbf{x}_0\|^2 \ge \|\mathbf{x}_0 - \mathbf{y}\|^2$$
+                      Restando $\|\mathbf{x}_0 - \mathbf{y}\|^2$, dividiendo entre $\alpha > 0$ y tomando $\alpha \to
+                      0^+$:
+                      $$(\mathbf{x}_0 - \mathbf{y})^T(\mathbf{x} - \mathbf{x}_0) \ge 0 \implies (\mathbf{x}_0 -
+                      \mathbf{y})^T\mathbf{x} \ge (\mathbf{x}_0 - \mathbf{y})^T\mathbf{x}_0$$
+                      <strong>Paso 4 (Conclusión):</strong> Sustituyendo $\mathbf{x}_0 = \mathbf{y} + (\mathbf{x}_0 -
+                      \mathbf{y})$:
+                      $$(\mathbf{x}_0 - \mathbf{y})^T\mathbf{x}_0 = (\mathbf{x}_0 - \mathbf{y})^T\mathbf{y} +
+                      \|\mathbf{x}_0 - \mathbf{y}\|^2 = \mathbf{a}^T\mathbf{y} + \delta^2$$
+                      Por lo tanto: $\mathbf{a}^T\mathbf{x} \ge \mathbf{a}^T\mathbf{y} + \delta^2 >
+                      \mathbf{a}^T\mathbf{y}$ para todo $\mathbf{x} \in C$, probando que $\mathbf{a}^T\mathbf{y} <
+                        \inf_{\mathbf{x} \in C} \mathbf{a}^T\mathbf{x}$. <span class="qed">■</span>
+                    </div>
+                  </details>
+              </div>
+
+              <!-- Ejemplo Práctico 12 -->
+              <div class="math-box box-ex">
+                <div class="math-box-header">Ejemplo Práctico 12: Construcción Exacta del Hiperplano Separador</div>
+                <div class="example-steps">
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Conjunto y Punto Exterior:</div>
+                    Sea el disco convexo $C = \{(x_1, x_2) \in E^2 : x_1^2 + x_2^2 \le 1\}$ y el punto exterior
+                    $\mathbf{y} = (3, 4)$.
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Proyección $\mathbf{x}_0$ y Vector Normal $\mathbf{a}$:</div>
+                    La distancia del punto al centro es $\|\mathbf{y}\| = 5$. El punto más cercano en la frontera es:
+                    $$\mathbf{x}_0 = \frac{\mathbf{y}}{\|\mathbf{y}\|} = \begin{pmatrix} 0.6 \\ 0.8 \end{pmatrix} \in
+                    \partial C, \qquad \delta = \|\mathbf{x}_0 - \mathbf{y}\| = 4$$
+                    $$\mathbf{a} = \mathbf{x}_0 - \mathbf{y} = \begin{pmatrix} 0.6 - 3 \\ 0.8 - 4 \end{pmatrix} =
+                    \begin{pmatrix} -2.4 \\ -3.2 \end{pmatrix}$$
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">📌 Verificación de la Desigualdad Estricta:</div>
+                    $$\mathbf{a}^T\mathbf{y} = (-2.4)(3) + (-3.2)(4) = -7.2 - 12.8 = -20$$
+                    $$\inf_{\mathbf{x} \in C} \mathbf{a}^T\mathbf{x} = \mathbf{a}^T\mathbf{x}_0 = (-2.4)(0.6) +
+                    (-3.2)(0.8) = -1.44 - 2.56 = -4$$
+                    Como $-20 < -4$, el hiperplano $H=\{\mathbf{x} : -2.4x_1 - 3.2x_2=-12\}$ separa estrictamente al
+                      punto $\mathbf{y}$ del conjunto $C$. $\checkmark$ </div>
+                  </div>
+                </div>
+
+                <!-- Teoremas 2 y 3 de Luenberger -->
+                <div class="math-box box-thm">
+                  <div class="math-box-header">Teoremas 2 y 3 de Luenberger: Hiperplanos de Apoyo y Separación de
+                    Convexos Disjuntos</div>
+
+                  <div class="formula-card">
+                    <div class="formula-card-title">Teorema 2: Hiperplano de Apoyo en la Frontera (Luenberger p. 510)
+                    </div>
+                    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary);">
+                      Sea $C \subset E^n$ un conjunto convexo y sea $\mathbf{y} \in \partial C$ un punto en su frontera.
+                      Entonces existe un vector normal $\mathbf{a} \neq \mathbf{0}$ tal que:
+                    </p>
+                    $$\mathbf{a}^T\mathbf{y} \le \mathbf{a}^T\mathbf{x}, \quad \forall \mathbf{x} \in C$$
+                  </div>
+
+                  <div class="formula-card">
+                    <div class="formula-card-title">Teorema 3: Separación de Dos Conjuntos Convexos Disjuntos
+                      (Luenberger p. 511)</div>
+                    <p style="font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text-primary);">
+                      Sean $B, C \subset E^n$ dos conjuntos convexos cuyos interiores relativos son disjuntos
+                      ($\operatorname{ri}(B) \cap \operatorname{ri}(C) = \emptyset$). Entonces existe $\mathbf{a} \neq
+                      \mathbf{0}$ tal que:
+                    </p>
+                    $$\sup_{\mathbf{b} \in B} \mathbf{a}^T\mathbf{b} \le \inf_{\mathbf{c} \in C}
+                    \mathbf{a}^T\mathbf{c}$$
+                  </div>
+                </div>
+
+                <!-- INTERACTIVE TOOL 3 -->
+                <div class="interactive-panel">
+                  <div class="interactive-header">
+                    <div class="interactive-title">
+                      <span>📐</span> Herramienta Interactiva 3: Simulador del Teorema 1 de Separación de Luenberger
+                    </div>
+                  </div>
+                  <div class="interactive-grid">
+                    <div class="canvas-wrapper">
+                      <canvas id="sepCanvas" width="400" height="300"></canvas>
+                    </div>
+                    <div class="control-panel">
+                      <p style="font-size: 0.85rem;">
+                        <strong>Instrucción:</strong> Arrastra el punto rojo exterior $\mathbf{y}$. El algoritmo
+                        proyecta sobre la elipse convexa $C$, encuentra $\mathbf{x}_0 \in \partial C$, calcula
+                        $\mathbf{a} = \mathbf{x}_0 - \mathbf{y}$ y dibuja el hiperplano verde separador:
+                      </p>
+                      <div id="sepDeltaStat" class="stat-badge">δ = 1.80 | a = (-1.20, -0.95)</div>
+                      <div id="sepVerdict" class="stat-badge"
+                        style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                        Teorema 1 Verificado: aᵀy &lt; aᵀx₀
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 1.2.4 Puntos Extremos -->
+              <div id="sec-1-2-4" style="margin-top: 2.5rem;">
+                <h3>
+                  <span>1.2.4 Puntos Extremos</span>
+                  <span class="ref-badge">Luenberger Apéndice B.4</span>
+                </h3>
+
+                <div class="math-box box-def">
+                  <div class="math-box-header">Definición: Punto Extremo</div>
+                  
+                  <div class="notation-list">
+                    <div class="notation-item">
+                      <div class="notation-label">🔹 Punto Extremo:</div>
+                      <div class="notation-formula">
+                        Se dice que un punto $\mathbf{x}$ en un conjunto convexo $C$ es un <strong>punto extremo</strong> de $C$ si no existen dos puntos distintos $\mathbf{x}_1$ y $\mathbf{x}_2$ en $C$ tales que $\mathbf{x} = \alpha\mathbf{x}_1 + (1-\alpha)\mathbf{x}_2$ para algún $\alpha$ con $0 < \alpha < 1$.
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <p style="margin-top: 0.5rem; font-size: 0.95rem;">
+                    Por ejemplo, en $E^2$ los puntos extremos de un cuadrado son sus cuatro esquinas; los puntos extremos de un disco circular son todos los puntos de su frontera. Nótese que una variedad lineal que consiste en más de un punto no tiene puntos extremos.
+                  </p>
+                </div>
+
+                <div class="math-box box-prop">
+                  <div class="math-box-header">Lema 1 y su Demostración</div>
+                  
+                  <div class="formula-card">
+                    <div class="formula-card-title">Lema 1 (Luenberger p. 511)</div>
+                    <p style="margin-bottom: 0.5rem;">Sea $C$ un conjunto convexo, $H$ un hiperplano de apoyo de $C$, y $T$ la intersección de $H$ y $C$.</p>
+                    <p><em>Todo punto extremo de $T$ es un punto extremo de $C$.</em></p>
+                  </div>
+                  
+                  <details class="proof-box" style="margin-bottom: 1.5rem;">
+                    <summary>Prueba del Lema 1</summary>
+                    <div class="proof-content">
+                      Supongamos que $\mathbf{x}_0 \in T$ no es un punto extremo de $C$. Entonces $\mathbf{x}_0 = \alpha\mathbf{x}_1 + (1-\alpha)\mathbf{x}_2$ para algunos $\mathbf{x}_1, \mathbf{x}_2 \in C, \mathbf{x}_1 \neq \mathbf{x}_2, 0 < \alpha < 1$. Sea $H$ descrito como $H = \{\mathbf{x} : \mathbf{a}^T\mathbf{x} = c\}$ con $C$ contenido en su semiespacio cerrado positivo. Entonces
+                      $$\mathbf{a}^T\mathbf{x}_1 \ge c, \quad \mathbf{a}^T\mathbf{x}_2 \ge c$$
+                      Pero, como $\mathbf{x}_0 \in H$,
+                      $$c = \mathbf{a}^T\mathbf{x}_0 = \alpha\mathbf{a}^T\mathbf{x}_1 + (1-\alpha)\mathbf{a}^T\mathbf{x}_2$$
+                      y por ende $\mathbf{x}_1$ y $\mathbf{x}_2 \in H$. Por lo tanto, $\mathbf{x}_1, \mathbf{x}_2 \in T$ y $\mathbf{x}_0$ no es un punto extremo de $T$. $\blacksquare$
+                    </div>
+                  </details>
+                </div>
+
+                <div class="math-box box-thm">
+                  <div class="math-box-header">Teorema de Krein-Milman (Teorema 4)</div>
+
+                  <div class="formula-card">
+                    <div class="formula-card-title">Teorema 4 (Luenberger p. 511)</div>
+                    <p>Un conjunto convexo cerrado y acotado en $E^n$ es igual a la envoltura convexa cerrada de sus puntos extremos.</p>
+                  </div>
+
+                  <details class="proof-box">
+                    <summary>Prueba del Teorema 4</summary>
+                    <div class="proof-content">
+                      La demostración es por inducción sobre la dimensión del espacio $E^n$. Se puede ver fácilmente que la afirmación es cierta para $n=1$. Supongamos que es cierta para $n-1$. Sea $C$ un conjunto convexo cerrado y acotado en $E^n$, y sea $K$ la envoltura convexa cerrada de los puntos extremos de $C$. Deseamos mostrar que $K = C$.<br><br>
+                      Supongamos que existe $\mathbf{y} \in C$ pero $\mathbf{y} \notin K$. Entonces por el Teorema 1, Secc. B.3, existe un hiperplano que separa $\mathbf{y}$ de $K$; esto es, existe $\mathbf{a} \neq \mathbf{0}$ tal que $\mathbf{a}^T\mathbf{y} < \inf_{\mathbf{x} \in K} \mathbf{a}^T\mathbf{x}$. Sea $c_0 = \inf_{\mathbf{x} \in C}(\mathbf{a}^T\mathbf{x})$. El número $c_0$ es finito y existe un $\mathbf{x}_0 \in C$ para el cual $\mathbf{a}^T\mathbf{x}_0 = c_0$, porque por el Teorema de Weierstrass, la función continua $\mathbf{a}^T\mathbf{x}$ alcanza su mínimo sobre cualquier conjunto cerrado y acotado. Así, el hiperplano $H = \{\mathbf{x} : \mathbf{a}^T\mathbf{x} = c_0\}$ es un hiperplano de apoyo de $C$. Éste es disjunto de $K$ dado que $c_0 < \inf_{\mathbf{x} \in K}(\mathbf{a}^T\mathbf{x})$.<br><br>
+                      Sea $T = H \cap C$. Entonces $T$ es un subconjunto convexo cerrado y acotado de $H$, el cual puede ser considerado como un espacio de dimensión $n-1$. $T$ no es vacío, ya que contiene a $\mathbf{x}_0$. Por lo tanto, por la hipótesis de inducción, $T$ contiene puntos extremos; y por el Lema 1, éstos son también puntos extremos de $C$. Así, hemos encontrado puntos extremos de $C$ que no están en $K$, lo cual es una contradicción. $\blacksquare$
+                    </div>
+                  </details>
+                </div>
+
+                <div class="math-box box-thm" style="margin-top: 1.5rem;">
+                  <div class="math-box-header">Poliedros Convexos (Teorema 5)</div>
+                  
+                  <p>
+                    Investiguemos las implicaciones de este teorema para los poliedros convexos. Recordamos que un poliedro convexo es un politopo acotado. Siendo la intersección de semiespacios cerrados, un poliedro convexo es también cerrado. Así, cualquier poliedro convexo es la envoltura convexa cerrada de sus puntos extremos. Se puede demostrar (ver Secc. 2.5) que cualquier politopo tiene a lo sumo un número finito de puntos extremos y por ende un poliedro convexo es igual a la envoltura convexa de un número finito de puntos. La afirmación recíproca también se puede establecer, obteniendo las siguientes dos caracterizaciones equivalentes.
+                  </p>
+
+                  <div class="formula-card" style="margin-top: 1rem;">
+                    <div class="formula-card-title">Teorema 5 (Luenberger p. 512)</div>
+                    <p>Un poliedro convexo puede ser descrito ya sea como una intersección acotada de un número finito de semiespacios cerrados, o como la envoltura convexa de un número finito de puntos.</p>
+                  </div>
+                </div>
+              </div>
+        </section>
+
+        <!-- =====================================================================
+           TEMA 1.3: ELEMENTOS PARA LA OPTIMIZACIÓN
+      ====================================================================== -->
+        <section id="sec-1-3" style="margin-top: 4rem;">
+          <h2>
+            <span>1.3 Elementos para la Optimización</span>
+            <span class="ref-badge" style="width: fit-content;">Luenberger Capítulo 1 (Introduction)</span>
+          </h2>
+          <p>
+            Esta sección cubre rigurosamente los fundamentos conceptuales de la optimización matemática, la
+            clasificación de problemas, los espacios de búsqueda, la escala computacional y el análisis de convergencia
+            basados exclusivamente en el <strong>Capítulo 1 de Luenberger (pp. 1–8)</strong>.
+          </p>
+
+          <!-- 1.3.1 Tipos de problemas y espacios de búsqueda -->
+          <div id="sec-1-3-1" style="margin-top: 2.5rem;">
+            <h3>
+              <span>1.3.1 Tipos de Problemas y Espacios de Búsqueda</span>
+              <span class="ref-badge">Luenberger Cap. 1, Secciones 1.1 y 1.2</span>
+            </h3>
+
+            <!-- Definición: Filosofía y Formulación General -->
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Filosofía de la Optimización y Formulación General (Luenberger
+                1.1–1.2)</div>
+
+              <p>
+                El principio de optimización aproxima decisiones complejas mediante un único objetivo cuantitativo
+                sujeto a restricciones. Luenberger resalta que construir un modelo requiere balancear <strong>precisión
+                  analítica</strong> y <strong>tratabilidad computacional</strong>.
+              </p>
+
+              <div class="formula-card">
+                <div class="formula-card-title">Formulación General del Problema de Optimización Continua (Luenberger
+                  1.2)</div>
+                $$\begin{aligned}
+                \text{minimizar} \quad & f(\mathbf{x}) \\
+                \text{sujeto a} \quad & h_i(\mathbf{x}) = 0, \quad i = 1, 2, \dots, m \quad \text{(Restricciones de
+                Igualdad)} \\
+                & g_j(\mathbf{x}) \le 0, \quad j = 1, 2, \dots, p \quad \text{(Restricciones de Desigualdad)} \\
+                & \mathbf{x} \in S \subseteq E^n \quad \text{(Espacio de Búsqueda Factible)}
+                \end{aligned}$$
+              </div>
+
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Programación Lineal (PL):</div>
+                  <div class="notation-formula">La función objetivo $f(\mathbf{x})$ y todas las restricciones
+                    $h_i(\mathbf{x}), g_j(\mathbf{x})$ son funciones lineales afines.</div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Optimización No Restringida:</div>
+                  <div class="notation-formula">$\min_{\mathbf{x} \in E^n} f(\mathbf{x})$. Se busca ampliar el dominio o
+                    absorber restricciones en la función objetivo.</div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Optimización Restringida:</div>
+                  <div class="notation-formula">El espacio factible $S$ está delimitado por superficies
+                    hipersuperficiales suaves. Se analiza mediante multiplicadores de Lagrange y condiciones KKT.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejemplo Práctico 14 -->
+            <div class="math-box box-ex">
+              <div class="math-box-header">Ejemplo Práctico 14: Caracterización de Espacios de Búsqueda y Restricciones
+              </div>
+              <div class="example-steps">
+                <div class="example-step">
+                  <div class="example-step-title">📌 Planteamiento del Problema:</div>
+                  Minimizar la distancia euclidiana al origen sobre la parábola $x_2 = x_1^2 + 1$ con la condición $x_1
+                  \ge 0$:
+                  $$\min \; f(x_1, x_2) = x_1^2 + x_2^2 \quad \text{sujeto a} \quad h_1(x_1, x_2) = x_1^2 + 1 - x_2 = 0,
+                  \quad g_1(x_1, x_2) = -x_1 \le 0$$
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">📌 Espacio de Búsqueda Factible:</div>
+                  El espacio de búsqueda $S = \{(x_1, x_2) \in E^2 : x_2 = x_1^2 + 1, \; x_1 \ge 0\}$ es una curva
+                  unidimensional no lineal en $E^2$.
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">📌 Solución Óptima:</div>
+                  Sustituyendo $x_2 = x_1^2 + 1$ en $f$, obtenemos la función equivalente en una variable $\phi(x_1) =
+                  x_1^2 + (x_1^2 + 1)^2 = x_1^4 + 3x_1^2 + 1$. Al ser $x_1 \ge 0$, el mínimo se alcanza en $x_1^* = 0$,
+                  $x_2^* = 1$, con valor óptimo $f(0, 1) = 1$. $\checkmark$
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1.3.2 Tamaño y dificultad de los problemas -->
+          <div id="sec-1-3-2" style="margin-top: 2.5rem;">
+            <h3>
+              <span>1.3.2 Tamaño y Dificultad de los Problemas</span>
+              <span class="ref-badge">Luenberger Cap. 1, Sección 1.3</span>
+            </h3>
+            <p>
+              Luenberger clasifica los problemas de optimización según su dimensión ($n$ variables, $m$ restricciones) y
+              su estructura matricial, destacando que la viabilidad numérica depende críticamente de la
+              <strong>esparcidad</strong>.
+            </p>
+
+            <table class="academic-table">
+              <thead>
+                <tr>
+                  <th>Categoría de Escala</th>
+                  <th>Dimensión ($n, m$)</th>
+                  <th>Estrategia Teórica y Numérica (Luenberger p. 5–6)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Pequeña Escala</strong></td>
+                  <td>$\le 5$ variables</td>
+                  <td>Solución analítica manual directa, resolución de sistemas de ecuaciones de Lagrange en papel.</td>
+                </tr>
+                <tr>
+                  <td><strong>Mediana Escala</strong></td>
+                  <td>$5$ a $1\,000$ variables</td>
+                  <td>Computadoras de escritorio mediante algoritmos matriciales estándar (álgebra lineal densa).</td>
+                </tr>
+                <tr>
+                  <td><strong>Gran Escala</strong></td>
+                  <td>$>1\,000$ a millones</td>
+                  <td><strong>Abandono total del cálculo algebraico de Lagrange</strong>; algoritmos iterativos con
+                    <strong>explotación estricta de esparcidad</strong> (matrices ralas).</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Esparcidad Matricial y Dificultad Computacional (Luenberger 1.3)
+              </div>
+              <p>
+                En problemas de gran escala, la mayoría de los coeficientes de las derivadas o matrices de restricciones
+                son nulos ($a_{ij} = 0$). Una matriz con una fracción significativa de ceros se denomina <strong>matriz
+                  rala o esparsa (dispersa)</strong>.
+              </p>
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Densidad Matricial:</div>
+                  <div class="notation-formula">$\rho(\mathbf{A}) = \frac{\text{número de elementos no nulos}}{m \times
+                    n}$. En gran escala, $\rho(\mathbf{A}) \ll 1\%$ típicamente.</div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Explotación de Esparcidad:</div>
+                  <div class="notation-formula">Almacenar únicamente valores no nulos y sus índices $(i, j)$ para
+                    reducir la memoria de $O(n^2)$ a $O(n)$ y el costo de multiplicación de $O(n^2)$ a $O(\text{nnz})$.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejemplo Práctico 15 -->
+            <div class="math-box box-ex">
+              <div class="math-box-header">Ejemplo Práctico 15: Impacto de la Esparcidad en la Dificultad Computacional
+              </div>
+              <div class="example-steps">
+                <div class="example-step">
+                  <div class="example-step-title">📌 Escenario de Gran Escala ($n = 100\,000$ variables):</div>
+                  Supongamos una matriz Hessiana simétrica $\mathbf{F} \in \mathbb{R}^{100\,000 \times 100\,000}$ donde
+                  cada variable solo interactúa con otras $4$ variables vecinas ($5$ no nulos por fila).
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">📌 Enfoque Denso (Intratable):</div>
+                  Almacenar la matriz completa requeriría $10^{10}$ números en punto flotante $\approx 80\text{ GB}$ de
+                  RAM, y una multiplicación $\mathbf{F}\mathbf{x}$ tomaría $10^{10}$ operaciones.
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">📌 Enfoque Ralo (Tratable — Luenberger 1.3):</div>
+                  Almacenar solo los $500\,000$ elementos no nulos requiere apenas $\approx 6\text{ MB}$ de memoria, y
+                  el producto $\mathbf{F}\mathbf{x}$ se calcula en menos de $1\text{ ms}$ ($500\,000$ operaciones).
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1.3.3 Algoritmos iterativos y su convergencia -->
+          <div id="sec-1-3-3" style="margin-top: 2.5rem;">
+            <h3>
+              <span>1.3.3 Algoritmos Iterativos y su Convergencia</span>
+              <span class="ref-badge">Luenberger Cap. 1, Sección 1.4</span>
+            </h3>
+            <p>
+              <em>"Una buena teoría vale más que mil ejecuciones computacionales"</em> (Luenberger p. 6). La teoría de
+              algoritmos iterativos analiza la generación de sucesiones $\{\mathbf{x}_k\}$ a partir de tres pilares
+              fundamentales.
+            </p>
+
+            <div class="math-box box-thm">
+              <div class="math-box-header">Los Tres Aspectos Teóricos de los Algoritmos Iterativos (Luenberger 1.4)
+              </div>
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">1. Diseño del Algoritmo:</div>
+                  <div class="notation-formula">Mecanismo para generar el siguiente punto $\mathbf{x}_{k+1} =
+                    \mathbf{A}(\mathbf{x}_k)$ (dirección de búsqueda y tamaño de paso).</div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">2. Convergencia Global:</div>
+                  <div class="notation-formula">Garantía matemática de que la sucesión converge a un punto óptimo
+                    $\mathbf{x}_k \to \mathbf{x}^*$ desde cualquier punto inicial $\mathbf{x}_0$.</div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">3. Tasa de Convergencia Local:</div>
+                  <div class="notation-formula">Velocidad asintótica con la que el error $\|\mathbf{x}_k -
+                    \mathbf{x}^*\|$ se reduce a cero.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición: Clasificación Formal de Órdenes y Tasas de Convergencia</div>
+
+              <div class="formula-card">
+                <div class="formula-card-title">Orden de Convergencia $p$ y Razón Asintótica de Error $\beta$</div>
+                $$\lim_{k \to \infty} \frac{\|\mathbf{x}_{k+1} - \mathbf{x}^*\|}{\|\mathbf{x}_k - \mathbf{x}^*\|^p} =
+                \beta$$
+              </div>
+
+              <div class="notation-list">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Convergencia Lineal ($p = 1$):</div>
+                  <div class="notation-formula">$\frac{\|\mathbf{x}_{k+1} - \mathbf{x}^*\|}{\|\mathbf{x}_k -
+                    \mathbf{x}^*\|} \le \beta < 1$. El error decae geométricamente como $\beta^k$.</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Convergencia Superlineal:</div>
+                    <div class="notation-formula">$\lim_{k \to \infty} \frac{\|\mathbf{x}_{k+1} -
+                      \mathbf{x}^*\|}{\|\mathbf{x}_k - \mathbf{x}^*\|} = 0$ (tasa lineal efectiva $\beta \to 0$).</div>
+                  </div>
+                  <div class="notation-item">
+                    <div class="notation-label">🔹 Convergencia Cuadrática ($p = 2$):</div>
+                    <div class="notation-formula">$\frac{\|\mathbf{x}_{k+1} - \mathbf{x}^*\|}{\|\mathbf{x}_k -
+                      \mathbf{x}^*\|^2} \le M < \infty$. El número de dígitos correctos se duplica en cada iteración
+                        (Método de Newton).</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="math-box box-thm">
+                  <div class="math-box-header">Teorema: Tasa Canónica de Convergencia para Problemas Cuadráticos
+                    (Luenberger p. 8)</div>
+
+                  <p>
+                    Para el método de descenso de gradiente aplicado a una función cuadrática $f(\mathbf{x}) =
+                    \frac{1}{2}\mathbf{x}^T\mathbf{Q}\mathbf{x} - \mathbf{b}^T\mathbf{x}$ con matriz simétrica definida
+                    positiva $\mathbf{Q} \in \mathbb{R}^{n \times n}$, la convergencia es estrictamente lineal con tasa
+                    canónica exacta:
+                  </p>
+
+                  <div class="formula-card">
+                    <div class="formula-card-title">Tasa Canónica en la Norma $\mathbf{Q}$</div>
+                    $$\|\mathbf{x}_{k+1} - \mathbf{x}^*\|_{\mathbf{Q}} \le \left( \frac{\kappa(\mathbf{Q}) -
+                    1}{\kappa(\mathbf{Q}) + 1} \right) \|\mathbf{x}_k - \mathbf{x}^*\|_{\mathbf{Q}}$$
+                  </div>
+
+                  <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                    donde $\kappa(\mathbf{Q}) = \frac{\lambda_{\max}(\mathbf{Q})}{\lambda_{\min}(\mathbf{Q})}$ es el
+                    <strong>número de condición espectral</strong> de la matriz Hessiana $\mathbf{Q}$.
+                  </p>
+                </div>
+
+                <!-- Ejemplo Práctico 16 -->
+                <div class="math-box box-ex">
+                  <div class="math-box-header">Ejemplo Práctico 16: Cálculo de la Tasa Canónica de Convergencia según el
+                    Condicionamiento</div>
+                  <div class="example-steps">
+                    <div class="example-step">
+                      <div class="example-step-title">📌 Caso 1 (Hessiana Bien Condicionada):</div>
+                      Sea $\mathbf{Q}_1$ con autovalores $\lambda_{\max} = 10, \lambda_{\min} = 9 \implies
+                      \kappa(\mathbf{Q}_1) = \frac{10}{9} \approx 1.11$.
+                      $$\beta_1 = \frac{1.11 - 1}{1.11 + 1} = \frac{0.11}{2.11} \approx 0.052$$
+                      El error se reduce en un $94.8\%$ en cada iteración (convergencia casi instantánea).
+                    </div>
+                    <div class="example-step">
+                      <div class="example-step-title">📌 Caso 2 (Hessiana Mal Condicionada — Fenómeno de Zig-Zag):</div>
+                      Sea $\mathbf{Q}_2$ con autovalores $\lambda_{\max} = 100, \lambda_{\min} = 1 \implies
+                      \kappa(\mathbf{Q}_2) = 100$.
+                      $$\beta_2 = \frac{100 - 1}{100 + 1} = \frac{99}{101} \approx 0.9802$$
+                      El error solo disminuye un $1.98\%$ por iteración, requiriendo cientos de iteraciones para
+                      converger.
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </section>
+
+           MÓDULO DE CÓDIGO PYTHON
+      ====================================================================== -->
+        <section id="python-modules" style="margin-top: 4rem;">
+          <h2>🐍 Suite de Módulos Computacionales en Python</h2>
+          <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><a href="./python_src/01_algebra_lineal_formas_cuadraticas.py"
+                target="_blank"><strong>01_algebra_lineal_formas_cuadraticas.py:</strong></a> Cauchy-Schwarz, proyección
+              ortogonal única y descomposición espectral $\mathbf{Q}^T\mathbf{A}\mathbf{Q}=\mathbf{\Lambda}$.</li>
+            <li><a href="./python_src/02_factorizacion_lu_gauss.py"
+                target="_blank"><strong>02_factorizacion_lu_gauss.py:</strong></a> Factorización $LU$ con matrices
+              elementales $\mathbf{M}_k$ y sustitución bifásica.</li>
+            <li><a href="./python_src/03_geometria_convexa_separacion.py"
+                target="_blank"><strong>03_geometria_convexa_separacion.py:</strong></a> Demostración computacional del
+              Teorema 1 de separación e hiperplanos de apoyo.</li>
+            <li><a href="./python_src/05_convergencia_tasas_canonicas.py"
+                target="_blank"><strong>05_convergencia_tasas_canonicas.py:</strong></a> Tasas canónicas de convergencia
+              $\beta = \frac{\kappa(\mathbf{Q})-1}{\kappa(\mathbf{Q})+1}$ y comparación de órdenes lineales,
+              superlineales y cuadráticos.</li>
+          </ul>
+        </section>
+
+        <!-- =====================================================================
+           BIBLIOGRAFÍA OFICIAL DEL PROGRAMA IPN
+      ====================================================================== -->
+        <section id="bibliografia-oficial" class="bibliography-section">
+          <h2>📚 Bibliografía Oficial del Programa de Estudios (IPN)</h2>
+          <div class="bib-item">
+            <strong>[1] Bazaraa, M. S., Jarvis, J. J. & Sherali, H. D. (2011)</strong>. <em>Linear Programming and
+              Network Flows</em> (4th ed.). Hoboken, NJ: John Wiley & Sons. ISBN: 978-1-118-21132-8. [Tipo B]
+          </div>
+          <div class="bib-item">
+            <strong>[2] Bazaraa, M. S., Sherali, H. D. & Shetty, C. M. (2013)</strong>. <em>Nonlinear Programming:
+              Theory and Algorithms</em> (3rd ed.). Hoboken, NJ: John Wiley & Sons. ISBN: 978-1-118-85756-4. [Tipo B]
+          </div>
+          <div class="bib-item">
+            <strong>[3] Bonnans, J. F., Gilbert, J. C., Lemarechal, C. & Sagastizábal, C. (2006)</strong>. <em>Numerical
+              Optimization: Theoretical and Practical Aspects</em> (2nd ed.). Berlin: Springer-Verlag. ISBN:
+            978-3-540-35445-1. [Tipo C]
+          </div>
+          <div class="bib-item">
+            <strong>[4] Cottle, R. W. & Thapa, M. N. (2017)</strong>. <em>Linear and Nonlinear Optimization</em>. New
+            York: Springer. ISBN: 978-1-4939-7053-7. [Tipo B]
+          </div>
+          <div class="bib-item">
+            <strong>[5] Luenberger, D. G. & Ye, Y. (2016)</strong>. <em>Linear and Nonlinear Programming</em> (4th ed.).
+            Cham, Switzerland: Springer International Publishing. ISBN: 978-3-319-18841-6. [Tipo B — <strong>Texto Base
+              Obligatorio</strong>]
+          </div>
+          <div class="bib-item">
+            <strong>[6] Nocedal, J. & Wright, S. (2006)</strong>. <em>Numerical Optimization</em> (2nd ed.). New York:
+            Springer. ISBN: 978-0-387-30303-1. [Tipo B]
+          </div>
+          <div class="bib-item">
+            <strong>[7] Öchsner, A. & Makvandi, R. (2020)</strong>. <em>Numerical Engineering Optimization: Continuous
+              and Discrete Problems</em>. Cham, Switzerland: Springer. ISBN: 978-3-030-43387-1. [Tipo C]
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="./js/interactive_tools.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+
+</html>
