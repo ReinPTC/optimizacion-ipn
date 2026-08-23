@@ -1048,6 +1048,14 @@ table.academic-table tr:nth-child(even) {
 }
 
 @media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  #app-layout {
+    width: 100%;
+    overflow-x: hidden;
+  }
   .content-container {
     padding: 1.5rem 1rem 3rem 1rem;
   }
@@ -1065,9 +1073,13 @@ table.academic-table tr:nth-child(even) {
   .hero-banner, .course-presentation-section {
     padding: 1.5rem;
   }
-  .math-box {
+  .staff-grid {
+    grid-template-columns: 1fr;
+  }
+  .math-box, .formula-card {
     padding: 1rem;
     margin: 1.5rem 0;
+    overflow-x: auto;
   }
   .katex-display {
     overflow-x: auto;
