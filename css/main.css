@@ -1011,3 +1011,47 @@ table.academic-table tr:nth-child(even) {
     display: block;
   }
 }
+
+@media (max-width: 768px) {
+  .content-container {
+    padding: 1.5rem 1rem 3rem 1rem;
+  }
+  h1, .hero-title, .course-title {
+    font-size: 1.8rem;
+  }
+  h2 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+  }
+  .hero-banner, .course-presentation-section {
+    padding: 1.5rem;
+  }
+  .math-box {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 0.5rem;
+  }
+  pre {
+    padding: 1rem;
+    font-size: 0.75rem;
+  }
+  #top-header {
+    padding: 0 1rem;
+  }
+  .header-breadcrumbs {
+    font-size: 0.75rem;
+  }
+  table.academic-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
