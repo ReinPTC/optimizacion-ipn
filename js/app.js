@@ -49,14 +49,57 @@ document.addEventListener('DOMContentLoaded', () => {
       : '🌙 Modo Oscuro';
   }
 
-  // 2. Menú Móvil
+  // 2. Menú Móvil & Control de Barra Lateral Responsive
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
   const sidebar = document.getElementById('sidebar');
-  if (mobileMenuBtn && sidebar) {
+
+  function openSidebar() {
+    if (sidebar) sidebar.classList.add('open');
+    if (sidebarOverlay) sidebarOverlay.classList.add('active');
+    document.body.style.overflow = window.innerWidth <= 1024 ? 'hidden' : '';
+  }
+
+  function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (mobileMenuBtn) {
     mobileMenuBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
+      if (sidebar && sidebar.classList.contains('open')) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
     });
   }
+
+  if (sidebarCloseBtn) {
+    sidebarCloseBtn.addEventListener('click', closeSidebar);
+  }
+
+  if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', closeSidebar);
+  }
+
+  // Cerrar la barra lateral en móviles al tocar cualquier enlace de navegación
+  document.querySelectorAll('.sidebar-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) {
+        closeSidebar();
+      }
+    });
+  });
+
+  // Cerrar con tecla Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
+      closeSidebar();
+    }
+  });
 
   // 3. Búsqueda en Tiempo Real en la Barra Lateral
   const searchInput = document.getElementById('searchInput');

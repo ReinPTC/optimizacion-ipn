@@ -1000,6 +1000,7 @@ table.academic-table tr:nth-child(even) {
 @media (max-width: 1024px) {
   #sidebar {
     transform: translateX(-100%);
+    z-index: 1000;
   }
   #sidebar.open {
     transform: translateX(0);
@@ -1010,6 +1011,38 @@ table.academic-table tr:nth-child(even) {
   .mobile-menu-btn {
     display: block;
   }
+  
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+  }
+  
+  .sidebar-close-btn {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+}
+
+.sidebar-close-btn {
+  display: none;
 }
 
 @media (max-width: 768px) {
