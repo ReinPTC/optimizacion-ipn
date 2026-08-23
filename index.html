@@ -32,13 +32,10 @@
 <body>
 
   <div id="app-layout">
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
-
     <!-- =========================================================================
        BARRA LATERAL DE NAVEGACIÓN (TEMARIO OFICIAL IPN)
   ========================================================================== -->
     <aside id="sidebar">
-      <button id="sidebarCloseBtn" class="sidebar-close-btn">&times;</button>
       <div class="sidebar-header">
         <div class="sidebar-brand">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
@@ -46,6 +43,7 @@
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
           </svg>
           <span>Optimización</span> IPN
+          <button id="sidebarCloseBtn" class="sidebar-close-btn" aria-label="Cerrar Menú">✕</button>
         </div>
         <div class="badge-ipn">UNIDAD 1 • TEMARIO OFICIAL IPN</div>
       </div>
@@ -90,6 +88,9 @@
         <div>David G. Luenberger & Yinyu Ye (4ta Ed.)</div>
       </div>
     </aside>
+
+    <!-- Overlay para dispositivos móviles -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
     <!-- =========================================================================
        CONTENIDO PRINCIPAL
