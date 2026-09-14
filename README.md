@@ -1,4 +1,4 @@
-# Libro Digital Interactivo: Unidad 1 — Herramientas para la Optimización
+# Libro Digital Interactivo: Optimización — Unidades 1 y 2
 
 **Institución:** Instituto Politécnico Nacional (IPN)  
 **Unidad de Aprendizaje:** Optimización  
@@ -7,14 +7,18 @@
 ---
 
 ## 🎯 Descripción del Proyecto
-Este repositorio contiene la plataforma digital interactiva (Progressive Web App - PWA) y la suite computacional de notas para la **Unidad 1: Herramientas para la optimización**, desarrollada bajo rigurosos estándares académicos y pedagógicos.
+Este repositorio contiene la plataforma digital interactiva (Progressive Web App - PWA) y la suite computacional de notas para:
+- **Unidad 1: Herramientas para la optimización**
+- **Unidad 2: Programación Lineal (Algoritmo Simplex, Dos Fases, Dualidad)**
+
+Desarrollada bajo rigurosos estándares académicos y pedagógicos del IPN.
 
 El contenido presenta:
 - Explicaciones teóricas rigurosas y demostraciones exclusivas de Luenberger & Ye.
 - Renderizado matemático vectorial en LaTeX (KaTeX).
-- Herramientas y simuladores matemáticos 2D interactivos ejecutables directamente en el navegador.
+- Herramientas y simuladores matemáticos interactivos ejecutables directamente en el navegador (Formas cuadráticas, Factorización LU, Simplex interactivo, Visualizador de politopos 2D).
 - Módulos en Python 3 y Jupyter Notebooks para la experimentación computacional.
-- Plan de trabajo y dosificación oficial de reportes (R01 a R06) para los estudiantes basado en la bibliografía autorizada del IPN.
+- Planes maestros y planes de trabajo oficiales para estudiantes con dosificación de reportes.
 
 ---
 
@@ -29,25 +33,36 @@ Optimización/
 ├── requirements.txt             # Dependencias de Python (NumPy, SciPy, Matplotlib, Jupyter)
 │
 ├── css/
-│   └── main.css                 # Sistema de diseño, temas dark/light, cajas matemáticas
+│   └── main.css                 # Sistema de diseño, temas dark/light, tablas simplex, cajas KaTeX
 │
 ├── js/
 │   ├── app.js                   # Lógica de navegación, búsqueda en tiempo real y temas
-│   └── interactive_tools.js     # Simuladores Canvas (Formas cuadráticas, Teorema 1, LU Solver)
+│   └── interactive_tools.js     # Simuladores Canvas (Formas cuadráticas, LU Solver, Simplex Tabular)
 │
 ├── docs/
-│   ├── plan_maestro_unidad1.md  # Plan curricular y matriz de dependencias
-│   └── plan_trabajo_alumnos.md  # Guía de entrega de reportes R01 a R06 y rúbricas
+│   ├── plan_maestro_unidad1.md  # Plan curricular U1 y matriz de dependencias
+│   ├── plan_trabajo_alumnos.md  # Guía de entrega de reportes U1
+│   ├── plan_maestro_unidad2.md  # Plan curricular U2 (Programación Lineal)
+│   └── plan_trabajo_alumnos_u2.md # Guía de entrega de reportes U2
 │
-├── python_src/                  # Módulos en Python
+├── python_src/                  # Módulos computacionales en Python
 │   ├── 01_algebra_lineal_formas_cuadraticas.py
 │   ├── 02_factorizacion_lu_gauss.py
 │   ├── 03_geometria_convexa_separacion.py
 │   ├── 04_modelado_7_problemas_luenberger.py
-│   └── 05_convergencia_tasas_canonicas.py
+│   ├── 05_convergencia_tasas_canonicas.py
+│   ├── 06_soluciones_basicas_factibles.py
+│   ├── 07_simplex_primal_tabular.py
+│   ├── 08_dos_fases_y_gran_m.py
+│   ├── 09_simplex_revisado_lu.py
+│   ├── 10_dualidad_holgura_complementaria.py
+│   └── 11_simplex_dual.py
 │
 ├── notebooks/                   # Cuaderno de Jupyter interactivo
 │   └── Unidad1_Herramientas_Optimizacion_Luenberger.ipynb
+│
+├── Material U1/                 # Material bibliográfico y notas de apoyo Unidad 1
+├── Material U2/                 # Material gráfico y láminas de apoyo Unidad 2
 │
 └── .github/
     └── workflows/
@@ -71,13 +86,16 @@ Instala las dependencias necesarias:
 ```bash
 pip install -r requirements.txt
 ```
-Ejecuta cualquiera de los módulos computacionales:
+Ejecuta cualquiera de los módulos computacionales (ejemplos):
 ```bash
+# Unidad 1
 python python_src/01_algebra_lineal_formas_cuadraticas.py
 python python_src/02_factorizacion_lu_gauss.py
-python python_src/03_geometria_convexa_separacion.py
-python python_src/04_modelado_7_problemas_luenberger.py
-python python_src/05_convergencia_tasas_canonicas.py
+
+# Unidad 2
+python python_src/06_soluciones_basicas_factibles.py
+python python_src/07_simplex_primal_tabular.py
+python python_src/10_dualidad_holgura_complementaria.py
 ```
 
 ### 3. Cuaderno Interactivo en Jupyter / Google Colab

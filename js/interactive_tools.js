@@ -343,5 +343,354 @@ window.InteractiveTools = {
         });
       }
     });
+  },
+
+  // ============================================================================
+  // 4. VISUALIZADOR 2D: TEOREMA FUNDAMENTAL Y PUNTOS EXTREMOS (SBF) (Capítulo 2)
+  // ============================================================================
+  initLpFundamentalTool: function() {
+    const canvas = document.getElementById('lpCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const sliderC1 = document.getElementById('sliderC1');
+    const sliderC2 = document.getElementById('sliderC2');
+    const sliderB1 = document.getElementById('sliderB1');
+    const sliderB2 = document.getElementById('sliderB2');
+
+    const valC1 = document.getElementById('valC1');
+    const valC2 = document.getElementById('valC2');
+    const valB1 = document.getElementById('valB1');
+    const valB2 = document.getElementById('valB2');
+
+    const statVertices = document.getElementById('statLpVertices');
+    const statOpt = document.getElementById('statLpOptimal');
+
+    function redraw() {
+      const c1 = parseFloat(sliderC1.value);
+      const c2 = parseFloat(sliderC2.value);
+      const b1 = parseFloat(sliderB1.value);
+      const b2 = parseFloat(sliderB2.value);
+
+      valC1.textContent = c1.toFixed(1);
+      valC2.textContent = c2.toFixed(1);
+      valB1.textContent = b1.toFixed(1);
+      valB2.textContent = b2.toFixed(1);
+
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.clearRect(0, 0, width, height);
+
+      // Escala: plano cartesiano [0, 8] x [0, 8] con padding
+      const xMax = 8.0, yMax = 8.0;
+      const padLeft = 45, padBottom = 40, padTop = 20, padRight = 20;
+      const plotW = width - padLeft - padRight;
+      const plotH = height - padTop - padBottom;
+
+      function toScreen(x, y) {
+        return {
+          px: padLeft + (x / xMax) * plotW,
+          py: height - padBottom - (y / yMax) * plotH
+        };
+      }
+
+      // 1. Dibujar Grid y Ejes
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x <= xMax; x += 1) {
+        const p1 = toScreen(x, 0);
+        const p2 = toScreen(x, yMax);
+        ctx.beginPath();
+        ctx.moveTo(p1.px, p1.py);
+        ctx.lineTo(p2.px, p2.py);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= yMax; y += 1) {
+        const p1 = toScreen(0, y);
+        const p2 = toScreen(xMax, y);
+        ctx.beginPath();
+        ctx.moveTo(p1.px, p1.py);
+        ctx.lineTo(p2.px, p2.py);
+        ctx.stroke();
+      }
+
+      // Ejes coordenados principales
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      const o = toScreen(0, 0);
+      const ex = toScreen(xMax, 0);
+      const ey = toScreen(0, yMax);
+
+      ctx.beginPath();
+      ctx.moveTo(o.px, o.py);
+      ctx.lineTo(ex.px, ex.py);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(o.px, o.py);
+      ctx.lineTo(ey.px, ey.py);
+      ctx.stroke();
+
+      // Etiquetas ejes
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px JetBrains Mono, monospace';
+      for (let x = 2; x <= xMax; x += 2) {
+        const p = toScreen(x, 0);
+        ctx.fillText(x.toString(), p.px - 4, p.py + 18);
+      }
+      for (let y = 2; y <= yMax; y += 2) {
+        const p = toScreen(0, y);
+        ctx.fillText(y.toString(), p.px - 22, p.py + 4);
+      }
+
+      // 2. Determinar Vértices Factibles (Puntos Extremos)
+      // Restricciones:
+      // (R1) x1 + x2 <= b1
+      // (R2) x1 + 2*x2 <= b2
+      // x1 >= 0, x2 >= 0
+      const candidates = [
+        { x: 0, y: 0, name: '(0,0)' },
+        { x: b1, y: 0, name: `(${b1.toFixed(1)},0)` },
+        { x: 0, y: b2 / 2, name: `(0,${(b2/2).toFixed(1)})` }
+      ];
+
+      // Intersección de R1 y R2: x1 + x2 = b1, x1 + 2x2 = b2
+      // x2 = b2 - b1,  x1 = 2*b1 - b2
+      const interX2 = b2 - b1;
+      const interX1 = 2 * b1 - b2;
+      if (interX1 >= -1e-6 && interX2 >= -1e-6) {
+        candidates.push({ x: interX1, y: interX2, name: `(${interX1.toFixed(1)},${interX2.toFixed(1)})` });
+      }
+
+      // Filtrar factibles
+      const feasibleVertices = [];
+      candidates.forEach(pt => {
+        const sat1 = pt.x + pt.y <= b1 + 1e-6;
+        const sat2 = pt.x + 2 * pt.y <= b2 + 1e-6;
+        const satPos = pt.x >= -1e-6 && pt.y >= -1e-6;
+        if (sat1 && sat2 && satPos) {
+          if (!feasibleVertices.some(v => Math.abs(v.x - pt.x) < 1e-4 && Math.abs(v.y - pt.y) < 1e-4)) {
+            feasibleVertices.push(pt);
+          }
+        }
+      });
+
+      // Ordenar vértices angularmente alrededor del centroide para dibujar el polígono
+      if (feasibleVertices.length > 2) {
+        const cx = feasibleVertices.reduce((sum, v) => sum + v.x, 0) / feasibleVertices.length;
+        const cy = feasibleVertices.reduce((sum, v) => sum + v.y, 0) / feasibleVertices.length;
+        feasibleVertices.sort((a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx));
+      }
+
+      // 3. Dibujar Región Factible (Poliedro Convexo)
+      if (feasibleVertices.length >= 3) {
+        ctx.beginPath();
+        const start = toScreen(feasibleVertices[0].x, feasibleVertices[0].y);
+        ctx.moveTo(start.px, start.py);
+        for (let i = 1; i < feasibleVertices.length; i++) {
+          const p = toScreen(feasibleVertices[i].x, feasibleVertices[i].y);
+          ctx.lineTo(p.px, p.py);
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.22)';
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // 4. Dibujar Líneas de Restricción
+      // R1: x1 + x2 = b1 => (0, b1) a (b1, 0)
+      const r1_p1 = toScreen(0, b1);
+      const r1_p2 = toScreen(b1, 0);
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(r1_p1.px, r1_p1.py);
+      ctx.lineTo(r1_p2.px, r1_p2.py);
+      ctx.stroke();
+
+      // R2: x1 + 2x2 = b2 => (0, b2/2) a (b2, 0)
+      const r2_p1 = toScreen(0, b2 / 2);
+      const r2_p2 = toScreen(b2, 0);
+      ctx.strokeStyle = '#ec4899';
+      ctx.beginPath();
+      ctx.moveTo(r2_p1.px, r2_p1.py);
+      ctx.lineTo(r2_p2.px, r2_p2.py);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 5. Evaluar Óptimo según z = c1*x1 + c2*x2 (Minimización)
+      let optVertex = null;
+      let minZ = Infinity;
+
+      feasibleVertices.forEach(v => {
+        const z = c1 * v.x + c2 * v.y;
+        v.z = z;
+        if (z < minZ) {
+          minZ = z;
+          optVertex = v;
+        }
+      });
+
+      // 6. Dibujar Vértices y Resaltar Óptimo
+      feasibleVertices.forEach(v => {
+        const p = toScreen(v.x, v.y);
+        const isOpt = (v === optVertex);
+
+        ctx.beginPath();
+        ctx.arc(p.px, p.py, isOpt ? 8 : 5, 0, Math.PI * 2);
+        ctx.fillStyle = isOpt ? '#10b981' : '#38bdf8';
+        ctx.fill();
+        ctx.strokeStyle = isOpt ? '#ffffff' : '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = isOpt ? '#10b981' : '#e2e8f0';
+        ctx.font = isOpt ? 'bold 12px Inter, sans-serif' : '10px JetBrains Mono, monospace';
+        ctx.fillText(`${v.name} [z=${v.z.toFixed(1)}]`, p.px + 10, p.py - 6);
+      });
+
+      // 7. Curva de Nivel Óptima: c1*x1 + c2*x2 = minZ
+      if (optVertex && (Math.abs(c1) > 0.05 || Math.abs(c2) > 0.05)) {
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 3]);
+
+        // Intersecciones de la recta c1*x + c2*y = minZ con los bordes
+        let pLine1, pLine2;
+        if (Math.abs(c2) > 0.05) {
+          const y0 = (minZ - c1 * 0) / c2;
+          const yX = (minZ - c1 * xMax) / c2;
+          pLine1 = toScreen(0, y0);
+          pLine2 = toScreen(xMax, yX);
+        } else {
+          const xVal = minZ / c1;
+          pLine1 = toScreen(xVal, 0);
+          pLine2 = toScreen(xVal, yMax);
+        }
+        ctx.beginPath();
+        ctx.moveTo(pLine1.px, pLine1.py);
+        ctx.lineTo(pLine2.px, pLine2.py);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // 8. Actualizar Estadísticas y Diagnóstico
+      if (statVertices) {
+        statVertices.textContent = `Vértices Factibles (SBFs): ${feasibleVertices.length} | Combinaciones C(4,2) = 6`;
+      }
+      if (statOpt && optVertex) {
+        statOpt.innerHTML = `Vértice Óptimo (Teorema Fundamental): <strong style="color: #10b981;">x* = (${optVertex.x.toFixed(2)}, ${optVertex.y.toFixed(2)})</strong> con <strong style="color: #38bdf8;">z* = ${minZ.toFixed(2)}</strong>`;
+      }
+    }
+
+    [sliderC1, sliderC2, sliderB1, sliderB2].forEach(slider => {
+      if (slider) slider.addEventListener('input', redraw);
+    });
+
+    redraw();
+  },
+
+  // ============================================================================
+  // 6. VISUALIZADOR INTERACTIVO DE SOPORTE VECTORIAL (SVM) — FIGURA 2.2
+  // ============================================================================
+  initSvmVisualizerTool: function() {
+    const widget = document.getElementById('svmWidget');
+    if (!widget) return;
+
+    const btnCanonical = document.getElementById('svmModeCanonical');
+    const btnMargins = document.getElementById('svmModeMargins');
+    const btnSoft = document.getElementById('svmModeSoft');
+    const sliderBeta = document.getElementById('svmBetaSlider');
+    const valBeta = document.getElementById('svmBetaVal');
+    const btnReset = document.getElementById('svmResetBtn');
+
+    const dynamicGroup = document.getElementById('svmDynamicGroup');
+    const dimLayer = document.getElementById('svmDimLayer');
+    const softLayer = document.getElementById('svmSoftMarginLayer');
+    const svTags = widget.querySelectorAll('.svm-sv-tag');
+    const svPulses = widget.querySelectorAll('.svm-sv-pulse');
+
+    const statusText = document.getElementById('svmStatusText');
+    const metricText = document.getElementById('svmMetricText');
+
+    // Vector normal unitario perpendicular en coordenadas de pantalla
+    const ux = 0.534;
+    const uy = -0.845;
+
+    function setMode(mode) {
+      [btnCanonical, btnMargins, btnSoft].forEach(btn => {
+        if (btn) btn.classList.remove('active');
+      });
+
+      if (mode === 'canonical') {
+        if (btnCanonical) btnCanonical.classList.add('active');
+        if (dimLayer) dimLayer.style.display = 'block';
+        if (softLayer) softLayer.style.display = 'none';
+        svTags.forEach(el => el.style.display = 'none');
+        svPulses.forEach(el => el.style.opacity = '0.25');
+        if (statusText) statusText.innerHTML = 'Modo: <strong>Canónica de Luenberger (Figura 2.2)</strong>';
+      } else if (mode === 'margins') {
+        if (btnMargins) btnMargins.classList.add('active');
+        if (dimLayer) dimLayer.style.display = 'block';
+        if (softLayer) softLayer.style.display = 'none';
+        svTags.forEach(el => el.style.display = 'block');
+        svPulses.forEach(el => el.style.opacity = '1');
+        if (statusText) statusText.innerHTML = 'Modo: <strong>Vectores de Soporte Activos (λᵢ*, μⱼ* &gt; 0)</strong>';
+      } else if (mode === 'soft') {
+        if (btnSoft) btnSoft.classList.add('active');
+        if (dimLayer) dimLayer.style.display = 'block';
+        if (softLayer) softLayer.style.display = 'block';
+        svTags.forEach(el => el.style.display = 'block');
+        svPulses.forEach(el => el.style.opacity = '0.5');
+        if (statusText) statusText.innerHTML = 'Modo: <strong>Margen Suave con Holguras (Soft-Margin LP)</strong>';
+      }
+      updateDynamicElements();
+    }
+
+    function updateDynamicElements() {
+      const deltaBeta = parseFloat(sliderBeta ? sliderBeta.value : 0);
+      if (valBeta) {
+        valBeta.textContent = (deltaBeta >= 0 ? '+' : '') + (deltaBeta * 0.1).toFixed(1);
+      }
+
+      // Desplazamiento del hiperplano y márgenes en el plano cartesiano
+      const dx = deltaBeta * ux;
+      const dy = deltaBeta * uy;
+      if (dynamicGroup) {
+        dynamicGroup.setAttribute('transform', `translate(${dx.toFixed(2)}, ${dy.toFixed(2)})`);
+      }
+
+      // Diagnóstico matemático de separabilidad
+      if (metricText) {
+        if (Math.abs(deltaBeta) <= 6) {
+          metricText.innerHTML = 'Separación: <strong style="color: #10b981;">100% Factible (Margen Máximo)</strong>';
+        } else if (deltaBeta > 6) {
+          metricText.innerHTML = 'Separación: <strong style="color: #ef4444;">⚠️ Invasión de Margen (+1) por Clase 1</strong>';
+        } else {
+          metricText.innerHTML = 'Separación: <strong style="color: #f59e0b;">⚠️ Invasión de Margen (-1) por Clase 2</strong>';
+        }
+      }
+    }
+
+    if (btnCanonical) btnCanonical.addEventListener('click', () => setMode('canonical'));
+    if (btnMargins) btnMargins.addEventListener('click', () => setMode('margins'));
+    if (btnSoft) btnSoft.addEventListener('click', () => setMode('soft'));
+
+    if (sliderBeta) {
+      sliderBeta.addEventListener('input', updateDynamicElements);
+    }
+
+    if (btnReset) {
+      btnReset.addEventListener('click', () => {
+        if (sliderBeta) sliderBeta.value = 0;
+        setMode('canonical');
+      });
+    }
+
+    // Inicialización predeterminada
+    setMode('canonical');
   }
 };

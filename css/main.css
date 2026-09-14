@@ -651,11 +651,13 @@ a:hover {
 }
 .box-def .math-box-header { color: var(--def-border); }
 
-.box-thm {
+.box-thm,
+.box-theo {
   border-left-color: var(--thm-border);
   background-color: var(--thm-bg);
 }
-.box-thm .math-box-header { color: var(--thm-border); }
+.box-thm .math-box-header,
+.box-theo .math-box-header { color: var(--thm-border); }
 
 .box-prop {
   border-left-color: var(--prop-border);
@@ -824,6 +826,143 @@ details.proof-box summary:hover {
   font-size: 1.2rem;
   line-height: 1;
   font-weight: bold;
+}
+
+/* Academic Diagram / Figures */
+.academic-figure {
+  margin: 1.5rem auto;
+  padding: 1.25rem 1rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  max-width: 620px;
+  box-shadow: var(--shadow-sm);
+}
+
+.academic-figure svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.figure-caption {
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.6rem;
+  text-align: center;
+}
+
+.figure-caption strong {
+  color: var(--text-primary);
+}
+
+/* SVM Visualizer Interactive Styles */
+.svm-widget-box {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin: 1.75rem auto;
+  max-width: 680px;
+  box-shadow: var(--shadow-sm);
+}
+
+.svm-widget-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.svm-mode-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.svm-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.svm-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.svm-btn.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.svm-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.svm-slider-wrap input[type="range"] {
+  cursor: pointer;
+  accent-color: var(--accent-primary);
+  width: 90px;
+}
+
+.svm-status-bar {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.85rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+}
+
+.svm-status-bar strong {
+  color: var(--accent-primary);
+}
+
+@keyframes svPulse {
+  0% { opacity: 0.4; stroke-width: 1.5; }
+  50% { opacity: 1; stroke-width: 2.5; }
+  100% { opacity: 0.4; stroke-width: 1.5; }
+}
+
+.svm-sv-pulse {
+  animation: svPulse 2.4s infinite ease-in-out;
+  transition: opacity 0.25s ease;
+}
+
+.svm-sv-tag {
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  font-family: var(--font-mono, monospace);
 }
 
 /* Interactive Visualizer Canvas / Panels */

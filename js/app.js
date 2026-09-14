@@ -179,6 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
     window.InteractiveTools.initQuadraticFormTool();
     window.InteractiveTools.initSeparatingHyperplaneTool();
     window.InteractiveTools.initLUSolverTool();
+    if (typeof window.InteractiveTools.initLpFundamentalTool === 'function') {
+      window.InteractiveTools.initLpFundamentalTool();
+    }
+    if (typeof window.InteractiveTools.initSvmVisualizerTool === 'function') {
+      window.InteractiveTools.initSvmVisualizerTool();
+    }
   }
 });
 
