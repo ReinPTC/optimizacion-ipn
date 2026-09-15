@@ -692,5 +692,156 @@ window.InteractiveTools = {
 
     // Inicialización predeterminada
     setMode('canonical');
+  },
+
+  // ============================================================================
+  // 7. CALCULADORA INTERACTIVA PRIMAL-DUAL Y HOLGURA COMPLEMENTARIA (Capítulo 4)
+  // ============================================================================
+  initDualityTool: function() {
+    const widget = document.getElementById('dualityWidget');
+    if (!widget) return;
+
+    const sliderB1 = document.getElementById('sliderDualB1');
+    const sliderB2 = document.getElementById('sliderDualB2');
+    const sliderC1 = document.getElementById('sliderDualC1');
+    const sliderC2 = document.getElementById('sliderDualC2');
+
+    const valB1 = document.getElementById('valDualB1');
+    const valB2 = document.getElementById('valDualB2');
+    const valC1 = document.getElementById('valDualC1');
+    const valC2 = document.getElementById('valDualC2');
+
+    const dispPrimal = document.getElementById('dispPrimalResult');
+    const dispDual = document.getElementById('dispDualResult');
+    const badgeGap = document.getElementById('badgeDualGap');
+    const dispSlackness = document.getElementById('dispSlacknessList');
+
+    function updateDuality() {
+      const b1 = parseFloat(sliderB1 ? sliderB1.value : 4);
+      const b2 = parseFloat(sliderB2 ? sliderB2.value : 6);
+      const c1 = parseFloat(sliderC1 ? sliderC1.value : 6);
+      const c2 = parseFloat(sliderC2 ? sliderC2.value : 8);
+
+      if (valB1) valB1.textContent = b1.toFixed(1);
+      if (valB2) valB2.textContent = b2.toFixed(1);
+      if (valC1) valC1.textContent = c1.toFixed(1);
+      if (valC2) valC2.textContent = c2.toFixed(1);
+
+      // Primal Vertices (Minimización)
+      // Restricciones: x1 + x2 >= b1, x1 + 2x2 >= b2, x1, x2 >= 0
+      const pv = [
+        { x1: Math.max(b1, b2), x2: 0, label: 'Eje X₁' },
+        { x1: 0, x2: Math.max(b1, b2 / 2), label: 'Eje X₂' }
+      ];
+      if (b2 / 2 <= b1 && b1 <= b2) {
+        pv.push({ x1: 2 * b1 - b2, x2: b2 - b1, label: 'Intersección R1 y R2' });
+      }
+
+      let bestZ = Infinity;
+      let optX = { x1: 0, x2: 0, label: '' };
+      pv.forEach(v => {
+        if (v.x1 >= -1e-5 && v.x2 >= -1e-5 &&
+            (v.x1 + v.x2) >= b1 - 1e-5 &&
+            (v.x1 + 2 * v.x2) >= b2 - 1e-5) {
+          const z = c1 * v.x1 + c2 * v.x2;
+          if (z < bestZ) {
+            bestZ = z;
+            optX = v;
+          }
+        }
+      });
+
+      // Dual Vertices (Maximización)
+      // Restricciones: y1 + y2 <= c1, y1 + 2y2 <= c2, y1, y2 >= 0
+      const dv = [
+        { y1: 0, y2: 0, label: 'Origen' },
+        { y1: Math.min(c1, c2), y2: 0, label: 'Eje Y₁' },
+        { y1: 0, y2: Math.min(c1, c2 / 2), label: 'Eje Y₂' }
+      ];
+      if (c2 / 2 <= c1 && c1 <= c2) {
+        dv.push({ y1: 2 * c1 - c2, y2: c2 - c1, label: 'Intersección D1 y D2' });
+      }
+
+      let bestW = -Infinity;
+      let optY = { y1: 0, y2: 0, label: '' };
+      dv.forEach(v => {
+        if (v.y1 >= -1e-5 && v.y2 >= -1e-5 &&
+            (v.y1 + v.y2) <= c1 + 1e-5 &&
+            (v.y1 + 2 * v.y2) <= c2 + 1e-5) {
+          const w = b1 * v.y1 + b2 * v.y2;
+          if (w > bestW) {
+            bestW = w;
+            optY = v;
+          }
+        }
+      });
+
+      // Holguras
+      const s1 = optX.x1 + optX.x2 - b1;
+      const s2 = optX.x1 + 2 * optX.x2 - b2;
+      const e1 = c1 - (optY.y1 + optY.y2);
+      const e2 = c2 - (optY.y1 + 2 * optY.y2);
+
+      const gap = Math.abs(bestZ - bestW);
+
+      if (dispPrimal) {
+        dispPrimal.innerHTML = `
+          <div>• <strong>Vértice Óptimo x*:</strong> (${optX.x1.toFixed(2)}, ${optX.x2.toFixed(2)}) <span style="font-size:0.85rem; color:var(--text-muted);">[${optX.label}]</span></div>
+          <div>• <strong>Costo Óptimo z*:</strong> <span style="font-weight:700; color:#2563eb; font-size:1.1rem;">${bestZ.toFixed(2)}</span></div>
+          <div>• <strong>Holguras Primales:</strong> s₁ = ${s1.toFixed(2)} ${s1 < 0.01 ? '<span style="color:#10b981;">(Activa)</span>' : '<span style="color:var(--text-muted);">(Inactiva)</span>'}, s₂ = ${s2.toFixed(2)} ${s2 < 0.01 ? '<span style="color:#10b981;">(Activa)</span>' : '<span style="color:var(--text-muted);">(Inactiva)</span>'}</div>
+        `;
+      }
+
+      if (dispDual) {
+        dispDual.innerHTML = `
+          <div>• <strong>Vector Dual y*:</strong> (${optY.y1.toFixed(2)}, ${optY.y2.toFixed(2)}) <span style="font-size:0.85rem; color:var(--text-muted);">[${optY.label}]</span></div>
+          <div>• <strong>Beneficio Dual w*:</strong> <span style="font-weight:700; color:#10b981; font-size:1.1rem;">${bestW.toFixed(2)}</span></div>
+          <div>• <strong>Holguras Duales:</strong> e₁ = ${e1.toFixed(2)}, e₂ = ${e2.toFixed(2)}</div>
+        `;
+      }
+
+      if (badgeGap) {
+        if (gap < 1e-4) {
+          badgeGap.style.background = '#10b981';
+          badgeGap.textContent = `Δ = 0.000 (Dualidad Fuerte Verificada: z* = w* = ${bestZ.toFixed(2)})`;
+        } else {
+          badgeGap.style.background = '#ef4444';
+          badgeGap.textContent = `Δ = ${gap.toFixed(3)} (Brecha de Dualidad Positiva)`;
+        }
+      }
+
+      if (dispSlackness) {
+        const prodX1 = Math.abs(optX.x1 * e1);
+        const prodX2 = Math.abs(optX.x2 * e2);
+        const prodY1 = Math.abs(optY.y1 * s1);
+        const prodY2 = Math.abs(optY.y2 * s2);
+
+        dispSlackness.innerHTML = `
+          <div style="background: var(--bg-card); padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);">
+            <strong>x₁ · e₁ = 0:</strong> ${(optX.x1).toFixed(2)} × ${(e1).toFixed(2)} = <strong>${prodX1.toFixed(2)}</strong>
+            <span style="color:#10b981; font-weight:bold;"> ✓</span>
+          </div>
+          <div style="background: var(--bg-card); padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);">
+            <strong>x₂ · e₂ = 0:</strong> ${(optX.x2).toFixed(2)} × ${(e2).toFixed(2)} = <strong>${prodX2.toFixed(2)}</strong>
+            <span style="color:#10b981; font-weight:bold;"> ✓</span>
+          </div>
+          <div style="background: var(--bg-card); padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);">
+            <strong>y₁ · s₁ = 0:</strong> ${(optY.y1).toFixed(2)} × ${(s1).toFixed(2)} = <strong>${prodY1.toFixed(2)}</strong>
+            <span style="color:#10b981; font-weight:bold;"> ✓</span>
+          </div>
+          <div style="background: var(--bg-card); padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);">
+            <strong>y₂ · s₂ = 0:</strong> ${(optY.y2).toFixed(2)} × ${(s2).toFixed(2)} = <strong>${prodY2.toFixed(2)}</strong>
+            <span style="color:#10b981; font-weight:bold;"> ✓</span>
+          </div>
+        `;
+      }
+    }
+
+    [sliderB1, sliderB2, sliderC1, sliderC2].forEach(sl => {
+      if (sl) sl.addEventListener('input', updateDuality);
+    });
+
+    updateDuality();
   }
 };
+

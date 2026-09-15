@@ -5102,62 +5102,842 @@
             <span class="ref-badge" style="width: fit-content;">Luenberger Capítulo 4</span>
           </h2>
           <p>
-            La teoría de la dualidad es una de las construcciones matemáticas más elegantes y profundas de la optimización. Demuestra que cada programa lineal tiene un "espejo" dual con idéntico valor óptimo. Sus implicaciones abarcan desde la verificación instantánea de optimalidad hasta la teoría de precios sombra en economía y el diseño de algoritmos de descomposición.
+            La <strong>teoría de la dualidad</strong> constituye una de las construcciones algebraicas, geométricas y computacionales más profundas y elegantes de la matemática aplicada. En el marco de la optimización lineal, demuestra que asociado a todo problema lineal —denominado <strong>Primal</strong>— existe un problema complementario íntimamente ligado —llamado <strong>Dual</strong>— formulado con los mismos parámetros numéricos ($\mathbf{A}, \mathbf{b}, \mathbf{c}$) pero estructurado bajo una perspectiva inversa: los recursos limitantes del primal actúan como ponderadores de costo en el dual, y las metas de minimización/maximización se reflejan recíprocamente.
+          </p>
+          <p>
+            En este tema abordamos con rigor analítico la formulación en formas simétricas y asimétricas, las demostraciones constructivas de los teoremas de dualidad débil y fuerte (incluyendo la célebre demostración geométrica de Luenberger basada en <em>hiperplanos separadores sobre conos convexos</em>), el Lema de Farkas, el vínculo exacto con los multiplicadores simplex, el <strong>Teorema de Holgura Complementaria</strong>, el análisis de sensibilidad mediante precios sombra, el algoritmo <strong>Simplex Dual de Lemke</strong> y el clásico algoritmo <strong>Primal-Dual de Dantzig-Ford-Fulkerson</strong>.
           </p>
 
-          <div id="sec-2-3-1" style="margin-top: 2rem;">
-            <h3><span>2.3.1 Programas Lineales Duales</span> <span class="ref-badge">Luenberger Sec. 4.1</span></h3>
+          <!-- =====================================================================
+             SUBTEMA 2.3.1: PROGRAMAS LINEALES DUALES Y TABLAS DE TRANSFORMACIÓN
+          ====================================================================== -->
+          <div id="sec-2-3-1" style="margin-top: 2.5rem;">
+            <h3>
+              <span>2.3.1 Programas Lineales Duales y Tablas de Transformación</span>
+              <span class="ref-badge">Luenberger Sec. 4.1</span>
+            </h3>
             <p>
-              Dado el problema primal estándar $\min \mathbf{c}^T \mathbf{x}$ s.a. $\mathbf{A}\mathbf{x} = \mathbf{b}, \mathbf{x} \ge \mathbf{0}$, su dual asociado es:
+              El programa dual surge de manera natural al buscar cotas algebraicas analíticas sobre el valor objetivo del programa primal. Consideremos el problema primal en desigualdades (forma canónica simétrica). Si deseamos encontrar una cota inferior para el costo $\mathbf{c}^T \mathbf{x}$, podemos construir combinaciones lineales no negativas de las restricciones funcionales $\sum_{i=1}^m y_i (\mathbf{a}_{i\cdot} \mathbf{x}) \ge \sum_{i=1}^m y_i b_i$. Para que dicha suma sea menor o igual a $\mathbf{c}^T \mathbf{x}$ en todo el espacio factible, se exige $\mathbf{y}^T \mathbf{A} \le \mathbf{c}^T$, maximizando la cota $\mathbf{y}^T \mathbf{b}$.
             </p>
-            <div class="formula-card">
-              <div class="formula-card-title">Par Primal-Dual Canónico</div>
-              $$\text{(Primal)} \ \min \ \{\mathbf{c}^T \mathbf{x} : \mathbf{A}\mathbf{x} = \mathbf{b}, \mathbf{x} \ge \mathbf{0}\} \quad \iff \quad \text{(Dual)} \ \max \ \{\mathbf{b}^T \mathbf{y} : \mathbf{A}^T \mathbf{y} \le \mathbf{c}, \mathbf{y} \in \mathbb{R}^m\}$$
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Definición 2.14: Par Primal-Dual Canónico (Forma Simétrica de Luenberger Sec. 4.1)</div>
+              <p>
+                Se define el par simétrico de programas lineales asociados cuando el primal está expresado puramente en desigualdades del mismo sentido y variables no negativas:
+              </p>
+              <div class="formula-card">
+                <div class="formula-card-title">Par Simétrico Canónico</div>
+                $$\begin{aligned}
+                  \textbf{(Primal Canónico)} \quad & \min_{\mathbf{x}} \\ \mathbf{c}^T \mathbf{x} \quad \text{sujeto a} \quad \mathbf{A}\mathbf{x} \ge \mathbf{b}, \quad \mathbf{x} \ge \mathbf{0} \\
+                  \textbf{(Dual Canónico)} \quad & \max_{\mathbf{y}} \\ \mathbf{y}^T \mathbf{b} \quad \text{sujeto a} \quad \mathbf{y}^T \mathbf{A} \le \mathbf{c}^T, \quad \mathbf{y} \ge \mathbf{0}
+                \end{aligned}$$
+              </div>
+              <div class="notation-list" style="margin-top: 1rem;">
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Dimensión de las Variables:</div>
+                  <div class="notation-formula">Si el Primal tiene $n$ variables y $m$ restricciones ($\mathbf{A} \in \mathbb{R}^{m \times n}$), el Dual tiene $m$ variables $\mathbf{y} \in \mathbb{R}^m$ y $n$ restricciones ($\mathbf{A}^T \in \mathbb{R}^{n \times m}$).</div>
+                </div>
+                <div class="notation-item">
+                  <div class="notation-label">🔹 Inversión de Sentido:</div>
+                  <div class="notation-formula">Un problema primal de minimización con restricciones $\ge$ se transforma en un dual de maximización con restricciones $\le$.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="math-box box-def" style="margin-top: 1.5rem;">
+              <div class="math-box-header">Definición 2.15: Par Primal-Dual Estándar (Forma Asimétrica de Luenberger Sec. 4.1)</div>
+              <p>
+                Cuando el programa primal se encuentra en la <strong>forma estándar</strong> de la programación lineal (ecuaciones de igualdad estricta requeridas por el Método Simplex):
+              </p>
+              <div class="formula-card">
+                <div class="formula-card-title">Par Asimétrico Estándar (Simplex)</div>
+                $$\begin{aligned}
+                  \textbf{(Primal Estándar)} \quad & \min_{\mathbf{x}} \\ \mathbf{c}^T \mathbf{x} \quad \text{sujeto a} \quad \mathbf{A}\mathbf{x} = \mathbf{b}, \quad \mathbf{x} \ge \mathbf{0} \\
+                  \textbf{(Dual Estándar)} \quad & \max_{\mathbf{y}} \\ \mathbf{y}^T \mathbf{b} \quad \text{sujeto a} \quad \mathbf{y}^T \mathbf{A} \le \mathbf{c}^T, \quad \mathbf{y} \in \mathbb{R}^m \\ \text{(variables irrestrictas)}
+                \end{aligned}$$
+              </div>
+              <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                <strong>Observación Fundamental:</strong> Las restricciones de igualdad en el primal liberan de signo a las variables duales correspondientes ($y_i \in \mathbb{R}$), debido a que una igualdad $\mathbf{a}_{i\cdot}\mathbf{x} = b_i$ equivale a dos desigualdades opuestas ($\ge$ y $\le$), dando lugar a una variable dual descompuesta $y_i = y_i^+ - y_i^-$.
+              </p>
+            </div>
+
+            <div class="math-box box-thm" style="margin-top: 1.5rem;">
+              <div class="math-box-header">Teorema 2.11: Propiedad de Involución — El Dual del Dual es el Primal (Luenberger p. 85)</div>
+              <p>
+                Sea $(P)$ un programa lineal general y sea $(D)$ su programa dual correspondiente. Entonces, el programa dual del problema $(D)$ es matemáticamente idéntico a $(P)$.
+              </p>
+              <div class="example-steps">
+                <div class="example-step">
+                  <div class="example-step-title">Paso 1: Reescribir el Dual en formato canónico de minimización:</div>
+                  El Dual es $\max \mathbf{b}^T \mathbf{y}$ s.a. $\mathbf{A}^T \mathbf{y} \le \mathbf{c}, \mathbf{y} \ge \mathbf{0}$. Esto equivale exactamente a:
+                  $$\min (-\mathbf{b})^T \mathbf{y} \quad \text{sujeto a} \quad (-\mathbf{A}^T) \mathbf{y} \ge (-\mathbf{c}), \quad \mathbf{y} \ge \mathbf{0}$$
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">Paso 2: Aplicar la Definición 2.14 para obtener el Dual del Dual $(DD)$:</div>
+                  Identificando la matriz $\tilde{\mathbf{A}} = -\mathbf{A}^T$, el vector de costo $\tilde{\mathbf{c}} = -\mathbf{b}$ y el término independiente $\tilde{\mathbf{b}} = -\mathbf{c}$, el dual de este problema con variable dual $\mathbf{w}$ es:
+                  $$\max \tilde{\mathbf{b}}^T \mathbf{w} \quad \text{sujeto a} \quad \tilde{\mathbf{A}}^T \mathbf{w} \le \tilde{\mathbf{c}}, \quad \mathbf{w} \ge \mathbf{0}$$
+                  Sustituyendo los parámetros:
+                  $$\max (-\mathbf{c})^T \mathbf{w} \quad \text{sujeto a} \quad (-\mathbf{A}) \mathbf{w} \le (-\mathbf{b}), \quad \mathbf{w} \ge \mathbf{0}$$
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">Paso 3: Multiplicar por $-1$ para restaurar la orientación primal:</div>
+                  $$\max -(\mathbf{c}^T \mathbf{w}) \iff -\min \mathbf{c}^T \mathbf{w}, \quad \text{y} \quad -\mathbf{A}\mathbf{w} \le -\mathbf{b} \iff \mathbf{A}\mathbf{w} \ge \mathbf{b}$$
+                  lo cual produce exactamente: $\min \mathbf{c}^T \mathbf{w}$ s.a. $\mathbf{A}\mathbf{w} \ge \mathbf{b}, \mathbf{w} \ge \mathbf{0}$. Identificando $\mathbf{w} \equiv \mathbf{x}$, se recupera el problema $(P)$ original. $\blacksquare$
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h4>Tabla Maestra Universal de Transformación Primal-Dual</h4>
+              <p>
+                Para cualquier programa lineal con restricciones mixtas ($\le, \ge, =$) y variables con signo no negativo, no positivo o irrestricto, la construcción del dual sigue rigurosamente la siguiente correspondencia canónica:
+              </p>
+              <div class="table-responsive">
+                <table class="academic-table" style="width: 100%; font-size: 0.95rem;">
+                  <thead>
+                    <tr>
+                      <th style="width: 48%;">Problema Primal (Minimización)</th>
+                      <th style="width: 4%;">$\Longleftrightarrow$</th>
+                      <th style="width: 48%;">Problema Dual (Maximización)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Matriz de coeficientes tecnológicos $\mathbf{A}$</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td>Matriz transpuesta $\mathbf{A}^T$</td>
+                    </tr>
+                    <tr>
+                      <td>Vector de costos $\mathbf{c}$ (función objetivo)</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td>Vector de recursos $\mathbf{c}$ (términos independientes)</td>
+                    </tr>
+                    <tr>
+                      <td>Vector de recursos $\mathbf{b}$ (términos independientes)</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td>Vector de coeficientes objetivo $\mathbf{b}$</td>
+                    </tr>
+                    <tr style="background: rgba(37, 99, 235, 0.04);">
+                      <td><strong>Restricción $i$-ésima:</strong> $\sum_j a_{ij} x_j \ge b_i$</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td><strong>Variable $y_i$:</strong> $y_i \ge 0$ (no negativa)</td>
+                    </tr>
+                    <tr style="background: rgba(37, 99, 235, 0.04);">
+                      <td><strong>Restricción $i$-ésima:</strong> $\sum_j a_{ij} x_j \le b_i$</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td><strong>Variable $y_i$:</strong> $y_i \le 0$ (no positiva)</td>
+                    </tr>
+                    <tr style="background: rgba(37, 99, 235, 0.04);">
+                      <td><strong>Restricción $i$-ésima:</strong> $\sum_j a_{ij} x_j = b_i$</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td><strong>Variable $y_i$:</strong> $y_i \in \mathbb{R}$ (irrestricta / libre de signo)</td>
+                    </tr>
+                    <tr style="background: rgba(16, 185, 129, 0.04);">
+                      <td><strong>Variable $x_j$:</strong> $x_j \ge 0$ (no negativa)</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td><strong>Restricción $j$-ésima:</strong> $\sum_i a_{ij} y_i \le c_j$</td>
+                    </tr>
+                    <tr style="background: rgba(16, 185, 129, 0.04);">
+                      <td><strong>Variable $x_j$:</strong> $x_j \le 0$ (no positiva)</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td><strong>Restricción $j$-ésima:</strong> $\sum_i a_{ij} y_i \ge c_j$</td>
+                    </tr>
+                    <tr style="background: rgba(16, 185, 129, 0.04);">
+                      <td><strong>Variable $x_j$:</strong> $x_j \in \mathbb{R}$ (irrestricta / libre)</td>
+                      <td style="text-align: center;">$\Longleftrightarrow$</td>
+                      <td><strong>Restricción $j$-ésima:</strong> $\sum_i a_{ij} y_i = c_j$</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Ejemplo Resuelto 2.7 -->
+            <div class="math-box box-prop" style="margin-top: 1.75rem;">
+              <div class="math-box-header">Ejemplo Resuelto 2.7: Derivación Analítica del Dual de un PL con Restricciones Mixtas</div>
+              <p>
+                Construir analíticamente el problema dual exacto para el siguiente programa lineal primal:
+              </p>
+              $$\begin{aligned}
+                \text{minimizar} \quad & z = 3x_1 - 2x_2 + 4x_3 \\
+                \text{sujeto a} \quad & x_1 + x_2 + 2x_3 \ge 5 \quad &(R_1) \\
+                & 2x_1 - x_2 + x_3 \le 8 \quad &(R_2) \\
+                & x_1 + 3x_2 - x_3 = 10 \quad &(R_3) \\
+                & x_1 \ge 0, \quad x_2 \le 0, \quad x_3 \\ \text{libre}
+              \end{aligned}$$
+
+              <div class="example-steps" style="margin-top: 1rem;">
+                <div class="example-step">
+                  <div class="example-step-title">1. Asociación de Variables Duales a cada Restricción Primal:</div>
+                  <ul>
+                    <li>Restricción $R_1$ ($\ge 5$) en problema de $\min \implies$ Variable dual $y_1 \ge 0$.</li>
+                    <li>Restricción $R_2$ ($\le 8$) en problema de $\min \implies$ Variable dual $y_2 \le 0$.</li>
+                    <li>Restricción $R_3$ ($= 10$) en problema de $\min \implies$ Variable dual $y_3 \in \mathbb{R}$ (irrestricta).</li>
+                  </ul>
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">2. Construcción de la Función Objetivo Dual:</div>
+                  El objetivo es maximizar el producto con los lados derechos $\mathbf{b} = (5, 8, 10)^T$:
+                  $$w(y_1, y_2, y_3) = 5y_1 + 8y_2 + 10y_3$$
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">3. Construcción de las Restricciones Duales asociadas a cada Variable Primal:</div>
+                  <ul>
+                    <li>Para $x_1 \ge 0$: La columna es $(1, 2, 1)^T$ y el costo $c_1 = 3 \implies y_1 + 2y_2 + y_3 \le 3$.</li>
+                    <li>Para $x_2 \le 0$: La columna es $(1, -1, 3)^T$ y el costo $c_2 = -2 \implies y_1 - y_2 + 3y_3 \ge -2$.</li>
+                    <li>Para $x_3$ libre: La columna es $(2, 1, -1)^T$ y el costo $c_3 = 4 \implies 2y_1 + y_2 - y_3 = 4$.</li>
+                  </ul>
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">4. Formulación Final del Programa Dual:</div>
+                  $$\begin{aligned}
+                    \text{maximizar} \quad & w = 5y_1 + 8y_2 + 10y_3 \\
+                    \text{sujeto a} \quad & y_1 + 2y_2 + y_3 \le 3 \\
+                    & y_1 - y_2 + 3y_3 \ge -2 \\
+                    & 2y_1 + y_2 - y_3 = 4 \\
+                    & y_1 \ge 0, \quad y_2 \le 0, \quad y_3 \in \mathbb{R}
+                  \end{aligned}$$
+                </div>
+              </div>
             </div>
           </div>
 
-          <div id="sec-2-3-2" style="margin-top: 2rem;">
-            <h3><span>2.3.2 El Teorema de Dualidad</span> <span class="ref-badge">Luenberger Sec. 4.2</span></h3>
-            <div class="example-steps">
-              <div class="example-step">
-                <div class="example-step-title">Teorema de Dualidad Débil:</div>
-                Si $\mathbf{x}$ es factible en el Primal y $\mathbf{y}$ es factible en el Dual, entonces $\mathbf{c}^T \mathbf{x} \ge \mathbf{b}^T \mathbf{y}$. El dual provee una cota inferior universal para el costo primal.
+          <!-- =====================================================================
+             SUBTEMA 2.3.2: EL TEOREMA DE DUALIDAD: DÉBIL, FUERTE Y LEMA DE FARKAS
+          ====================================================================== -->
+          <div id="sec-2-3-2" style="margin-top: 3rem;">
+            <h3>
+              <span>2.3.2 El Teorema de Dualidad: Débil, Fuerte y Lema de Farkas</span>
+              <span class="ref-badge">Luenberger Sec. 4.2</span>
+            </h3>
+            <p>
+              El corazón analítico de la programación lineal descansa sobre la interacción cuantitativa entre los valores funcionales de los pares factibles $(\mathbf{x}, \mathbf{y})$. El Teorema de Dualidad proporciona no solo condiciones necesarias y suficientes de optimalidad, sino también el fundamento de convergencia de los algoritmos modernos de puntos interiores y métodos primales-duales.
+            </p>
+
+            <div class="math-box box-thm">
+              <div class="math-box-header">Lema 2.2: Lema de Dualidad Débil (Luenberger Sec. 4.2, p. 86)</div>
+              <p>
+                Sean $\mathbf{x}$ cualquier vector factible del programa primal canónico ($\mathbf{A}\mathbf{x} \ge \mathbf{b}, \mathbf{x} \ge \mathbf{0}$) e $\mathbf{y}$ cualquier vector factible del programa dual canónico ($\mathbf{y}^T \mathbf{A} \le \mathbf{c}^T, \mathbf{y} \ge \mathbf{0}$). Entonces:
+              </p>
+              <div class="formula-card">
+                <div class="formula-card-title">Desigualdad Fundamental de Dualidad Débil</div>
+                $$\mathbf{y}^T \mathbf{b} \le \mathbf{c}^T \mathbf{x} \iff \sum_{i=1}^m b_i y_i \le \sum_{j=1}^n c_j x_j$$
               </div>
-              <div class="example-step">
-                <div class="example-step-title">Teorema de Dualidad Fuerte:</div>
-                Si el Primal admite una solución óptima $\mathbf{x}^*$, entonces el Dual admite una solución óptima $\mathbf{y}^*$ y sus valores óptimos coinciden sin brecha de dualidad: $\mathbf{c}^T \mathbf{x}^* = \mathbf{b}^T \mathbf{y}^*$.
+              <div class="math-box box-proof" style="margin-top: 1rem;">
+                <div class="math-box-header">Demostración Analítica:</div>
+                <p>
+                  Multiplicando la condición de factibilidad primal $\mathbf{A}\mathbf{x} \ge \mathbf{b}$ por la izquierda por el vector dual no negativo $\mathbf{y}^T \ge \mathbf{0}^T$, el orden de la desigualdad se conserva:
+                  $$\mathbf{y}^T (\mathbf{A}\mathbf{x}) \ge \mathbf{y}^T \mathbf{b}$$
+                  Análogamente, multiplicando la condición de factibilidad dual $\mathbf{y}^T \mathbf{A} \le \mathbf{c}^T$ por la derecha por el vector primal no negativo $\mathbf{x} \ge \mathbf{0}$:
+                  $$(\mathbf{y}^T \mathbf{A})\mathbf{x} \le \mathbf{c}^T \mathbf{x}$$
+                  Por la propiedad asociativa del producto matricial, $\mathbf{y}^T(\mathbf{A}\mathbf{x}) = (\mathbf{y}^T\mathbf{A})\mathbf{x}$. Encadenando ambas desigualdades:
+                  $$\mathbf{y}^T \mathbf{b} \le \mathbf{y}^T \mathbf{A}\mathbf{x} \le \mathbf{c}^T \mathbf{x}$$
+                  Por transitividad, $\mathbf{y}^T \mathbf{b} \le \mathbf{c}^T \mathbf{x}$. La diferencia $\Delta(\mathbf{x}, \mathbf{y}) = \mathbf{c}^T \mathbf{x} - \mathbf{y}^T \mathbf{b} \ge 0$ se denomina <strong>Brecha de Dualidad</strong> (<em>Duality Gap</em>). $\blacksquare$
+                </p>
+              </div>
+            </div>
+
+            <!-- Corolarios de Dualidad Débil -->
+            <div class="math-box box-prop" style="margin-top: 1.5rem;">
+              <div class="math-box-header">Corolarios Fundamentales de Dualidad Débil</div>
+              <div class="example-steps">
+                <div class="example-step">
+                  <div class="example-step-title">Corolario 1: Criterio de Certificación Incondicional de Optimalidad:</div>
+                  Si $\mathbf{x}^*$ es factible primal, $\mathbf{y}^*$ es factible dual, y se verifica que $\mathbf{c}^T \mathbf{x}^* = \mathbf{y}^{*T} \mathbf{b}$ (brecha de dualidad nula $\Delta = 0$), entonces $\mathbf{x}^*$ es una <strong>solución óptima global del primal</strong> y $\mathbf{y}^*$ es una <strong>solución óptima global del dual</strong>.
+                  <br><em>Demostración:</em> Para cualquier otro $\mathbf{x}$ factible primal, $\mathbf{c}^T \mathbf{x} \ge \mathbf{y}^{*T}\mathbf{b} = \mathbf{c}^T\mathbf{x}^*$, de modo que $\mathbf{x}^*$ minimiza el costo. Para cualquier $\mathbf{y}$ factible dual, $\mathbf{y}^T\mathbf{b} \le \mathbf{c}^T\mathbf{x}^* = \mathbf{y}^{*T}\mathbf{b}$, de modo que $\mathbf{y}^*$ maximiza el beneficio.
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">Corolario 2: Propagación de No Acotamiento a Infactibilidad:</div>
+                  <ul>
+                    <li>Si el programa primal no está acotado inferiormente ($\inf_{\mathbf{x}} \mathbf{c}^T\mathbf{x} = -\infty$), el programa dual es <strong>infactible</strong> ($\Omega_D = \emptyset$).</li>
+                    <li>Si el programa dual no está acotado superiormente ($\sup_{\mathbf{y}} \mathbf{y}^T\mathbf{b} = +\infty$), el programa primal es <strong>infactible</strong> ($\Omega_P = \emptyset$).</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h4>Matriz de Compatibilidad Primal-Dual (Luenberger p. 87)</h4>
+              <p>
+                La dualidad lineal clasifica exhaustivamente las combinaciones posibles de solvabilidad entre el Primal y el Dual:
+              </p>
+              <div class="table-responsive">
+                <table class="academic-table" style="width: 100%; font-size: 0.95rem;">
+                  <thead>
+                    <tr>
+                      <th>Primal $\downarrow$ \\ Dual $\rightarrow$</th>
+                      <th>Solución Óptima Finita</th>
+                      <th>No Acotado ($\sup = +\infty$)</th>
+                      <th>Infactible ($\Omega_D = \emptyset$)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Solución Óptima Finita</strong></td>
+                      <td><strong style="color: #10b981;">POSIBLE</strong> ($\mathbf{c}^T\mathbf{x}^* = \mathbf{y}^{*T}\mathbf{b}$)</td>
+                      <td><span style="color: #ef4444;">IMPOSIBLE</span></td>
+                      <td><span style="color: #ef4444;">IMPOSIBLE</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>No Acotado ($\inf = -\infty$)</strong></td>
+                      <td><span style="color: #ef4444;">IMPOSIBLE</span></td>
+                      <td><span style="color: #ef4444;">IMPOSIBLE</span></td>
+                      <td><strong style="color: #10b981;">POSIBLE</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Infactible ($\Omega_P = \emptyset$)</strong></td>
+                      <td><span style="color: #ef4444;">IMPOSIBLE</span></td>
+                      <td><strong style="color: #10b981;">POSIBLE</strong></td>
+                      <td><strong style="color: #f59e0b;">POSIBLE</strong> (Ambos infactibles)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Teorema de Dualidad Fuerte y Demostración Geométrica de Luenberger -->
+            <div class="math-box box-thm" style="margin-top: 2rem;">
+              <div class="math-box-header">Teorema 2.12: Teorema Fundamental de Dualidad Fuerte (Luenberger Sec. 4.2, pp. 86–88)</div>
+              <p>
+                Si el programa lineal primal $(P)$ o el programa dual $(D)$ posee una solución factible óptima finita, entonces el otro problema también posee una solución factible óptima finita, y los valores óptimos de sus respectivas funciones objetivo coinciden exactamente:
+              </p>
+              <div class="formula-card">
+                <div class="formula-card-title">Teorema de Dualidad Fuerte</div>
+                $$\min_{\mathbf{x} \in \Omega_P} \mathbf{c}^T \mathbf{x} = \max_{\mathbf{y} \in \Omega_D} \mathbf{y}^T \mathbf{b}$$
+              </div>
+
+              <div class="math-box box-proof" style="margin-top: 1.25rem;">
+                <div class="math-box-header">Demostración Geométrica de Luenberger (Separación en Conos Convexos):</div>
+                <p>
+                  Esta demostración, propia del texto de <strong>David G. Luenberger & Yinyu Ye</strong> (pp. 87–88, reproducida en las Láminas 44 y 45 del Material Oficial), demuestra la dualidad mediante la separación estricta de conjuntos convexos en $\mathbb{R}^{m+1}$:
+                </p>
+                <div class="example-steps">
+                  <div class="example-step">
+                    <div class="example-step-title">1. Construcción del Cono Convexo $C$:</div>
+                    Supongamos que el primal estándar $\min \{\mathbf{c}^T\mathbf{x} : \mathbf{A}\mathbf{x} = \mathbf{b}, \mathbf{x} \ge \mathbf{0}\}$ posee solución óptima finita $\mathbf{x}^*$ con valor $z_0 = \mathbf{c}^T \mathbf{x}^*$. Definimos el subconjunto $C \subset \mathbb{R}^{m+1}$:
+                    $$C = \left\{ (r, \mathbf{w}) \in \mathbb{R} \times \mathbb{R}^m : r = \mathbf{c}^T\mathbf{x} - t z_0, \\ \mathbf{w} = \mathbf{A}\mathbf{x} - t\mathbf{b}, \\ \mathbf{x} \ge \mathbf{0}, \\ t \ge 0 \right\}$$
+                    $C$ es un <strong>cono convexo cerrado</strong> generado por combinaciones lineales no negativas de las columnas de $[\mathbf{c}^T; \mathbf{A}]$ y el vector $[-z_0; -\mathbf{b}]$.
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">2. Demostración de que $(1, \mathbf{0}) \notin C$:</div>
+                    Supongamos por contradicción que el punto $(1, \mathbf{0}) \in C$. Entonces existen $\mathbf{x} \ge \mathbf{0}$ y $t \ge 0$ tales que:
+                    $$\mathbf{A}\mathbf{x} - t\mathbf{b} = \mathbf{0} \quad \text{y} \quad \mathbf{c}^T\mathbf{x} - t z_0 = 1$$
+                    <ul>
+                      <li><strong>Caso $t > 0$:</strong> Dividiendo entre $t$, el vector $\mathbf{x}/t \ge \mathbf{0}$ satisface $\mathbf{A}(\mathbf{x}/t) = \mathbf{b}$, por lo que es una solución factible primal. Su costo es $\mathbf{c}^T(\mathbf{x}/t) = z_0 + 1/t > z_0$. Por otra parte, para el óptimo $\mathbf{x}^*$, se tiene $\mathbf{A}\mathbf{x}^* = \mathbf{b}$ y $\mathbf{c}^T\mathbf{x}^* = z_0$. Restando, $\mathbf{A}(\mathbf{x}^* - \mathbf{x}/t) = \mathbf{0}$ y $\mathbf{c}^T(\mathbf{x}^* - \mathbf{x}/t) = -1/t < 0$, lo que permitiría decrecer arbitrariamente el costo sumando múltiplos de esta dirección, contradiciendo la optimalidad finita de $z_0$.</li>
+                      <li><strong>Caso $t = 0$:</strong> Se tendría $\mathbf{A}\mathbf{x} = \mathbf{0}, \mathbf{x} \ge \mathbf{0}$ y $\mathbf{c}^T\mathbf{x} = 1$. Entonces $\mathbf{x}_0 = -\mathbf{x}$ satisfaría $\mathbf{c}^T \mathbf{x}_0 = -1 < 0$, generando rayos de descenso infinito $\mathbf{x}^* + \alpha \mathbf{x}_0$, imposible porque $z_0$ es el mínimo finito.</li>
+                    </ul>
+                    En consecuencia, el punto $(1, \mathbf{0})$ <strong>no pertenece al cono cerrado $C$</strong>.
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">3. Aplicación del Teorema de Separación de Hiperplanos (Teorema 1, Unidad 1):</div>
+                    Dado que $C$ es un conjunto convexo cerrado y $(1, \mathbf{0}) \notin C$, el <strong>Teorema de Separación</strong> garantiza la existencia de un vector no nulo $[s, \mathbf{y}] \in \mathbb{R} \times \mathbb{R}^m$ tal que para todo $(r, \mathbf{w}) \in C$:
+                    $$s(1) + \mathbf{y}^T \mathbf{0} < s r + \mathbf{y}^T \mathbf{w} \implies s < \inf_{(r, \mathbf{w}) \in C} \{s r + \mathbf{y}^T \mathbf{w}\}$$
+                    Dado que $C$ es un cono que contiene al origen $(0, \mathbf{0})$, el ínfimo sobre $C$ debe ser idénticamente cero (si existiera un valor negativo, tomando múltiplos escalares $\alpha \to \infty$ el producto iría a $-\infty$). Por tanto, $s < 0$. Sin pérdida de generalidad, escalamos el vector separador para fijar $s = -1$.
+                  </div>
+                  <div class="example-step">
+                    <div class="example-step-title">4. Conclusión de la Factibilidad y Optimalidad Dual:</div>
+                    Al tener $-r + \mathbf{y}^T \mathbf{w} \ge 0$ para todo $(r, \mathbf{w}) \in C$, sustituyendo las definiciones de $r$ y $\mathbf{w}$:
+                    $$-(\mathbf{c}^T \mathbf{x} - t z_0) + \mathbf{y}^T (\mathbf{A}\mathbf{x} - t\mathbf{b}) \ge 0 \iff (\mathbf{y}^T \mathbf{A} - \mathbf{c}^T)\mathbf{x} + t(z_0 - \mathbf{y}^T\mathbf{b}) \ge 0$$
+                    Esta relación debe cumplirse para todo $\mathbf{x} \ge \mathbf{0}$ y todo $t \ge 0$:
+                    <ul>
+                      <li>Haciendo $t = 0$: $(\mathbf{y}^T\mathbf{A} - \mathbf{c}^T)\mathbf{x} \ge 0 \\ \forall \mathbf{x}\ge\mathbf{0} \implies \mathbf{y}^T\mathbf{A} \le \mathbf{c}^T$ (<strong>$\mathbf{y}$ es factible dual</strong>).</li>
+                      <li>Haciendo $\mathbf{x} = \mathbf{0}$ y $t = 1$: $z_0 - \mathbf{y}^T\mathbf{b} \ge 0 \implies \mathbf{y}^T\mathbf{b} \le z_0$.</li>
+                    </ul>
+                    Pero por el Lema de Dualidad Débil, $\mathbf{y}^T\mathbf{b} \ge \mathbf{c}^T\mathbf{x}^* = z_0$. Por tanto, se concluye forzosamente que $\mathbf{y}^T\mathbf{b} = z_0$, demostrando que $\mathbf{y}$ es óptimo dual y que $\mathbf{y}^T\mathbf{b} = \mathbf{c}^T\mathbf{x}^*$. $\blacksquare$
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lema de Farkas -->
+            <div class="math-box box-def" style="margin-top: 1.5rem;">
+              <div class="math-box-header">Teorema 2.13: Lema de Farkas de Alternativas (Luenberger Sec. 4.2)</div>
+              <p>
+                Dada una matriz $\mathbf{A} \in \mathbb{R}^{m \times n}$ y un vector $\mathbf{b} \in \mathbb{R}^m$, <strong>exactamente uno</strong> de los dos sistemas algebraicos siguientes admite solución:
+              </p>
+              <div class="formula-card">
+                <div class="formula-card-title">Alternativa de Farkas</div>
+                $$\begin{aligned}
+                  \textbf{Sistema I:} \quad & \mathbf{A}\mathbf{x} = \mathbf{b}, \quad \mathbf{x} \ge \mathbf{0} \\
+                  \textbf{Sistema II:} \quad & \mathbf{A}^T \mathbf{y} \le \mathbf{0}, \quad \mathbf{b}^T \mathbf{y} > 0
+                \end{aligned}$$
+              </div>
+              <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                <em>Interpretación Geométrica:</em> O bien el vector $\mathbf{b}$ pertenece al cono poliédrico convexo generado por las columnas de $\mathbf{A}$ ($\operatorname{cone}(\mathbf{a}_1, \dots, \mathbf{a}_n)$), o bien existe un hiperplano con vector normal $\mathbf{y}$ que separa estrictamente a $\mathbf{b}$ de dicho cono.
+              </p>
+            </div>
+          </div>
+
+          <!-- =====================================================================
+             SUBTEMA 2.3.3: RELACIONES CON EL PROCEDIMIENTO SIMPLEX Y MULTIPLICADORES
+          ====================================================================== -->
+          <div id="sec-2-3-3" style="margin-top: 3rem;">
+            <h3>
+              <span>2.3.3 Relaciones con el Procedimiento Simplex y Multiplicadores</span>
+              <span class="ref-badge">Luenberger Sec. 4.3</span>
+            </h3>
+            <p>
+              Una de las propiedades computacionales más notables de la programación lineal es que el <strong>Algoritmo Simplex Primal resuelve simultáneamente tanto el problema primal como el problema dual</strong> sin realizar ningún cálculo adicional. Al alcanzar la tabla óptima del primal, la solución dual óptima ya se encuentra calculada explícitamente en el renglón de costos reducidos.
+            </p>
+
+            <div class="math-box box-thm">
+              <div class="math-box-header">Teorema 2.14: Los Multiplicadores Simplex como Solución Dual Óptima (Luenberger p. 89)</div>
+              <p>
+                Sea $\mathbf{B}$ una base factible óptima para el problema primal estándar $\min \{\mathbf{c}^T\mathbf{x} : \mathbf{A}\mathbf{x}=\mathbf{b}, \mathbf{x}\ge\mathbf{0}\}$, con vector de costos básicos $\mathbf{c}_B$. Se define el vector de <strong>multiplicadores simplex</strong> por:
+              </p>
+              $$\mathbf{y}^{*T} = \mathbf{c}_B^T \mathbf{B}^{-1} \iff \mathbf{y}^* = (\mathbf{B}^{-1})^T \mathbf{c}_B$$
+              <p>
+                Entonces $\mathbf{y}^*$ es la <strong>solución óptima exacta</strong> del problema dual $\max \{\mathbf{b}^T\mathbf{y} : \mathbf{A}^T\mathbf{y} \le \mathbf{c}^T\}$.
+              </p>
+              <div class="example-steps" style="margin-top: 0.75rem;">
+                <div class="example-step">
+                  <div class="example-step-title">1. Verificación de Factibilidad Dual:</div>
+                  La condición de optimalidad del Método Simplex Primal establece que todos los costos reducidos relativos deben ser no negativos:
+                  $$r_j = c_j - z_j = c_j - \mathbf{c}_B^T \mathbf{B}^{-1} \mathbf{a}_j \ge 0, \quad \forall j=1,\dots,n$$
+                  Sustituyendo $\mathbf{y}^{*T} = \mathbf{c}_B^T \mathbf{B}^{-1}$, esta condición se convierte en:
+                  $$c_j - \mathbf{y}^{*T} \mathbf{a}_j \ge 0 \iff \mathbf{y}^{*T} \mathbf{a}_j \le c_j, \quad \forall j=1,\dots,n \iff \mathbf{y}^{*T} \mathbf{A} \le \mathbf{c}^T$$
+                  Por lo tanto, $\mathbf{y}^*$ satisface estrictamente todas las restricciones del problema dual.
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">2. Verificación de Igualdad de Valores Objetivos:</div>
+                  Evaluando la función objetivo dual en $\mathbf{y}^*$:
+                  $$w(\mathbf{y}^*) = \mathbf{y}^{*T} \mathbf{b} = (\mathbf{c}_B^T \mathbf{B}^{-1}) \mathbf{b} = \mathbf{c}_B^T (\mathbf{B}^{-1}\mathbf{b}) = \mathbf{c}_B^T \mathbf{x}_B^* = \mathbf{c}^T \mathbf{x}^* = z^*$$
+                  Al coincidir el valor dual con el valor primal óptimo, el Corolario 1 de Dualidad Débil certifica de manera definitiva que $\mathbf{y}^*$ es óptimo dual. $\blacksquare$
+                </div>
+              </div>
+            </div>
+
+            <div class="math-box box-def" style="margin-top: 1.5rem;">
+              <div class="math-box-header">Lectura Directa de $\mathbf{y}^*$ desde el Tablero Simplex Canónico</div>
+              <p>
+                En cualquier tablero simplex estándar, la transformación por filas equivale a premultiplicar el tablero inicial por $\mathbf{B}^{-1}$. Por consiguiente:
+              </p>
+              <ul>
+                <li>Si el problema original contenía variables de holgura canónicas asociadas a una matriz identidad inicial $[\mathbf{a}_{s_1}, \dots, \mathbf{a}_{s_m}] = \mathbf{I}$, las columnas finales de dichas variables contienen explícitamente la matriz $\mathbf{B}^{-1}$.</li>
+                <li>En el renglón 0 (renglón de costos reducidos), debajo de las columnas de holgura iniciales se lee:
+                  $$r_{s_i} = c_{s_i} - \mathbf{c}_B^T \mathbf{B}^{-1} \mathbf{e}_i = 0 - y_i^* = -y_i^*$$
+                  (o directamente $+y_i^*$ dependiendo de si el renglón 0 se formuló como $z - \mathbf{c}^T\mathbf{x} = 0$ o $\mathbf{c}^T\mathbf{x} - z = 0$).
+                </li>
+              </ul>
+            </div>
+
+            <!-- Tablero Numérico de Lectura Dual -->
+            <div style="margin-top: 1.5rem;">
+              <h4>Ejemplo Tabular: Extracción Inmediata del Óptimo Dual</h4>
+              <p>
+                Consideremos el problema primal resuelto por el Simplex: $\max z = 3x_1 + 5x_2$ sujeto a $x_1 \le 4$, $2x_2 \le 12$, $3x_1 + 2x_2 \le 18$, $x_1, x_2 \ge 0$. Tras agregar holguras $s_1, s_2, s_3$, el tablero final óptimo es:
+              </p>
+              <div class="table-responsive">
+                <table class="academic-table" style="width: 100%; font-size: 0.95rem;">
+                  <thead>
+                    <tr>
+                      <th>Base</th>
+                      <th>$x_1$</th>
+                      <th>$x_2$</th>
+                      <th style="background: rgba(37, 99, 235, 0.1);">$s_1$</th>
+                      <th style="background: rgba(37, 99, 235, 0.1);">$s_2$</th>
+                      <th style="background: rgba(37, 99, 235, 0.1);">$s_3$</th>
+                      <th>$\mathbf{b}$</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="font-weight: 700; background: rgba(16, 185, 129, 0.08);">
+                      <td>$z$</td>
+                      <td>$0$</td>
+                      <td>$0$</td>
+                      <td style="color: #2563eb;">$0$</td>
+                      <td style="color: #2563eb;">$3/2 = 1.5$</td>
+                      <td style="color: #2563eb;">$1$</td>
+                      <td style="color: #10b981;">$36$</td>
+                    </tr>
+                    <tr>
+                      <td>$s_1$</td>
+                      <td>$0$</td>
+                      <td>$0$</td>
+                      <td>$1$</td>
+                      <td>$1/3$</td>
+                      <td>$-1/3$</td>
+                      <td>$2$</td>
+                    </tr>
+                    <tr>
+                      <td>$x_2$</td>
+                      <td>$0$</td>
+                      <td>$1$</td>
+                      <td>$0$</td>
+                      <td>$1/2$</td>
+                      <td>$0$</td>
+                      <td>$6$</td>
+                    </tr>
+                    <tr>
+                      <td>$x_1$</td>
+                      <td>$1$</td>
+                      <td>$0$</td>
+                      <td>$0$</td>
+                      <td>$-1/3$</td>
+                      <td>$1/3$</td>
+                      <td>$2$</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <strong>Extracción directa:</strong> Los coeficientes en el renglón $z$ bajo las holguras originales $s_1, s_2, s_3$ entregan inmediatamente la solución óptima dual: $y_1^* = 0$, $y_2^* = 1.5$, $y_3^* = 1$, con valor objetivo dual $w^* = 4(0) + 12(1.5) + 18(1) = 0 + 18 + 18 = 36 = z^*$.
+              </p>
+            </div>
+          </div>
+
+          <!-- =====================================================================
+             SUBTEMA 2.3.4: SENSIBILIDAD, PRECIOS SOMBRA Y HOLGURA COMPLEMENTARIA
+          ====================================================================== -->
+          <div id="sec-2-3-4" style="margin-top: 3rem;">
+            <h3>
+              <span>2.3.4 Sensibilidad, Precios Sombra y Holgura Complementaria</span>
+              <span class="ref-badge">Luenberger Sec. 4.4</span>
+            </h3>
+            <p>
+              El <strong>Teorema de Holgura Complementaria</strong> (<em>Complementary Slackness Theorem</em>) establece el puente algebraico definitivo entre las soluciones óptimas primal y dual. Corresponde a las condiciones de Karush-Kuhn-Tucker (KKT) en optimización lineal y constituye la herramienta analítica más potente para verificar optimalidad y calcular variables duales sin necesidad de tableros simplex.
+            </p>
+
+            <div class="math-box box-thm">
+              <div class="math-box-header">Teorema 2.15: Teorema de Holgura Complementaria (Luenberger Sec. 4.4, pp. 90–92)</div>
+              <p>
+                Sean $\mathbf{x}$ una solución factible primal del problema canónico ($\mathbf{A}\mathbf{x} \ge \mathbf{b}, \mathbf{x} \ge \mathbf{0}$) e $\mathbf{y}$ una solución factible dual ($\mathbf{y}^T \mathbf{A} \le \mathbf{c}^T, \mathbf{y} \ge \mathbf{0}$). Una condición <strong>necesaria y suficiente</strong> para que $\mathbf{x}$ e $\mathbf{y}$ sean soluciones óptimas de sus respectivos problemas es que se cumplan simultáneamente las siguientes relaciones de complementariedad:
+              </p>
+              <div class="formula-card">
+                <div class="formula-card-title">Condiciones Canónicas de Holgura Complementaria</div>
+                $$\begin{aligned}
+                  x_j \left( c_j - \sum_{i=1}^m a_{ij} y_i \right) = 0, \quad \forall j=1,\dots,n \quad &\iff \quad (\mathbf{c}^T - \mathbf{y}^T \mathbf{A})\mathbf{x} = 0 \\
+                  y_i \left( \sum_{j=1}^n a_{ij} x_j - b_i \right) = 0, \quad \forall i=1,\dots,m \quad &\iff \quad \mathbf{y}^T (\mathbf{A}\mathbf{x} - \mathbf{b}) = 0
+                \end{aligned}$$
+              </div>
+
+              <div class="math-box box-proof" style="margin-top: 1rem;">
+                <div class="math-box-header">Demostración Analítica Rigurosa:</div>
+                <p>
+                  Consideremos la diferencia entre el costo primal y el beneficio dual (la brecha de dualidad):
+                  $$\Delta = \mathbf{c}^T \mathbf{x} - \mathbf{y}^T \mathbf{b} = \mathbf{c}^T \mathbf{x} - \mathbf{y}^T \mathbf{A}\mathbf{x} + \mathbf{y}^T \mathbf{A}\mathbf{x} - \mathbf{y}^T \mathbf{b} = (\mathbf{c}^T - \mathbf{y}^T \mathbf{A})\mathbf{x} + \mathbf{y}^T(\mathbf{A}\mathbf{x} - \mathbf{b})$$
+                  Dado que $\mathbf{x} \ge \mathbf{0}$ y $\mathbf{c} - \mathbf{A}^T\mathbf{y} \ge \mathbf{0}$, cada término del sumatorio $(\mathbf{c}^T - \mathbf{y}^T \mathbf{A})\mathbf{x} = \sum_{j=1}^n (c_j - \mathbf{y}^T\mathbf{a}_j) x_j$ es producto de dos cantidades no negativas, luego es $\ge 0$.
+                  <br>
+                  Similarmente, como $\mathbf{y} \ge \mathbf{0}$ y $\mathbf{A}\mathbf{x} - \mathbf{b} \ge \mathbf{0}$, el segundo término $\mathbf{y}^T(\mathbf{A}\mathbf{x} - \mathbf{b}) = \sum_{i=1}^m y_i (\mathbf{a}_{i\cdot}\mathbf{x} - b_i)$ es también una suma de productos no negativos $\ge 0$.
+                  <br>
+                  Por el Teorema de Dualidad Fuerte, $\mathbf{x}$ e $\mathbf{y}$ son óptimos si y solo si $\Delta = 0$. Pero una suma de números no negativos es cero si y solo si <strong>cada término individual es idénticamente cero</strong>. Por tanto:
+                  $$(c_j - \mathbf{y}^T\mathbf{a}_j) x_j = 0 \\ \forall j, \quad \text{y} \quad y_i (\mathbf{a}_{i\cdot}\mathbf{x} - b_i) = 0 \\ \forall i. \quad \blacksquare$$
+                </p>
+              </div>
+            </div>
+
+            <div class="math-box box-prop" style="margin-top: 1.5rem;">
+              <div class="math-box-header">Regla Nemotécnica Operativa para Estudiantes (Luenberger p. 91)</div>
+              <p>El principio de complementariedad se resume en dos postulados axiomáticos:</p>
+              <ol style="margin-left: 1.5rem; line-height: 1.8;">
+                <li><strong>Si una variable primal es estrictamente positiva ($x_j^* > 0$),</strong> la restricción dual asociada debe cumplirse obligatoriamente como una <em>igualdad estricta</em> ($\sum_i a_{ij} y_i^* = c_j$).</li>
+                <li><strong>Si una restricción primal tiene holgura positiva ($\sum_j a_{ij} x_j^* > b_i$),</strong> la variable dual correspondiente debe ser forzosamente <em>cero</em> ($y_i^* = 0$).</li>
+                <li>Recíprocamente: si una variable dual es positiva ($y_i^* > 0$), la restricción primal asociada está activa sin holgura ($\sum_j a_{ij} x_j^* = b_i$).</li>
+              </ol>
+            </div>
+
+            <!-- Precios Sombra e Interpretación Económica -->
+            <div style="margin-top: 2rem;">
+              <h4>Precios Sombra (Shadow Prices) y Sensibilidad Marginal</h4>
+              <p>
+                Supongamos que el vector de disponibilidades de recursos $\mathbf{b}$ experimenta una pequeña perturbación $\mathbf{b} \to \mathbf{b} + \Delta \mathbf{b}$. Si la perturbación es suficientemente pequeña para que la base óptima $\mathbf{B}$ se preserve, el nuevo valor óptimo de la función objetivo es:
+                $$z^*(\mathbf{b} + \Delta \mathbf{b}) = \mathbf{c}_B^T \mathbf{B}^{-1} (\mathbf{b} + \Delta \mathbf{b}) = \mathbf{c}_B^T \mathbf{B}^{-1}\mathbf{b} + \mathbf{c}_B^T \mathbf{B}^{-1}\Delta \mathbf{b} = z^*(\mathbf{b}) + \mathbf{y}^{*T} \Delta \mathbf{b}$$
+                Tomando el límite cuando $\Delta b_i \to 0$:
+              </p>
+              <div class="formula-card">
+                <div class="formula-card-title">Derivada Marginal de la Función de Valor Óptimo</div>
+                $$\frac{\partial z^*(\mathbf{b})}{\partial b_i} = y_i^*, \quad i=1,\dots,m$$
+              </div>
+              <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-primary); margin-top: 0.75rem;">
+                <strong>Interpretación Económica Fundamental:</strong> La variable dual $y_i^*$ representa el <strong>precio sombra</strong> (<em>shadow price</em>) o valor marginal del recurso $i$. Indica la tasa a la cual mejoraría la función objetivo si se dispusiera de una unidad marginal adicional del recurso $b_i$.
+                <br>• Si el recurso no se agota por completo (holgura $s_i > 0$), su precio sombra es $y_i^* = 0$: disponer de más recurso no aporta beneficio alguno (recurso no restrictivo).
+                <br>• Si el recurso está totalmente saturado ($s_i = 0$), su precio sombra $y_i^* > 0$ cuantifica exactamente la disposición máxima a pagar por una unidad extra del mismo.
+              </p>
+            </div>
+
+            <!-- WIDGET INTERACTIVO PRIMAL-DUAL -->
+            <div class="math-box box-def" id="dualityWidget" style="margin-top: 2.5rem; background: var(--bg-card); border: 2px solid var(--accent-primary);">
+              <div class="math-box-header" style="font-size: 1.15rem; color: var(--accent-primary);">
+                🧮 Herramienta Interactiva: Calculadora Primal-Dual en Tiempo Real y Verificador de Holgura Complementaria
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                Ajusta interactivamente los recursos $b_1, b_2$ y los costos $c_1, c_2$ para visualizar simultáneamente las soluciones óptimas primal y dual, constatar la anulación exacta de la brecha de dualidad y observar cómo las condiciones de holgura complementaria se activan en tiempo real.
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md);">
+                <div>
+                  <label style="font-size: 0.85rem; font-weight: 600;">Recurso $b_1$ (R1: $x_1 + x_2 \ge b_1$): <span id="valDualB1" style="color: var(--accent-primary); font-weight: 700;">4.0</span></label>
+                  <input type="range" id="sliderDualB1" min="1" max="10" step="0.5" value="4" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.85rem; font-weight: 600;">Recurso $b_2$ (R2: $x_1 + 2x_2 \ge b_2$): <span id="valDualB2" style="color: var(--accent-primary); font-weight: 700;">6.0</span></label>
+                  <input type="range" id="sliderDualB2" min="1" max="12" step="0.5" value="6" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.85rem; font-weight: 600;">Costo $c_1$ (Variable $x_1$): <span id="valDualC1" style="color: var(--accent-primary); font-weight: 700;">6.0</span></label>
+                  <input type="range" id="sliderDualC1" min="1" max="12" step="0.5" value="6" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="font-size: 0.85rem; font-weight: 600;">Costo $c_2$ (Variable $x_2$): <span id="valDualC2" style="color: var(--accent-primary); font-weight: 700;">8.0</span></label>
+                  <input type="range" id="sliderDualC2" min="1" max="16" step="0.5" value="8" style="width: 100%;">
+                </div>
+              </div>
+
+              <!-- Comparación Primal vs Dual en dos columnas -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid #2563eb;">
+                  <h4 style="color: #2563eb; margin-top: 0;">Primal: $\min z = c_1 x_1 + c_2 x_2$</h4>
+                  <div id="dispPrimalResult" style="font-size: 0.95rem; line-height: 1.8;">
+                    Cargando solución primal...
+                  </div>
+                </div>
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid #10b981;">
+                  <h4 style="color: #10b981; margin-top: 0;">Dual: $\max w = b_1 y_1 + b_2 y_2$</h4>
+                  <div id="dispDualResult" style="font-size: 0.95rem; line-height: 1.8;">
+                    Cargando solución dual...
+                  </div>
+                </div>
+              </div>
+
+              <!-- Brecha y Condiciones KKT -->
+              <div style="margin-top: 1.25rem; background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                  <span style="font-weight: 700; font-size: 0.95rem;">Brecha de Dualidad ($\Delta = z^* - w^*$):</span>
+                  <span id="badgeDualGap" style="background: #10b981; color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: 700; font-size: 0.9rem;">Δ = 0.000 (Dualidad Fuerte Verificada)</span>
+                </div>
+                
+                <h5 style="margin-top: 1rem; margin-bottom: 0.5rem;">Verificación de Condiciones de Holgura Complementaria:</h5>
+                <div id="dispSlacknessList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; font-size: 0.85rem;">
+                  <!-- Se actualiza por JS -->
+                </div>
               </div>
             </div>
           </div>
 
-          <div id="sec-2-3-3" style="margin-top: 2rem;">
-            <h3><span>2.3.3 Relaciones con el Procedimiento Simplex</span> <span class="ref-badge">Luenberger Sec. 4.3</span></h3>
+          <!-- =====================================================================
+             SUBTEMA 2.3.5: EL MÉTODO SIMPLEX DUAL
+          ====================================================================== -->
+          <div id="sec-2-3-5" style="margin-top: 3rem;">
+            <h3>
+              <span>2.3.5 El Método Simplex Dual</span>
+              <span class="ref-badge">Luenberger Sec. 4.6</span>
+            </h3>
             <p>
-              La Sección 4.3 de Luenberger & Ye demuestra que el vector de multiplicadores simplex $\mathbf{y}^* = (\mathbf{B}^{-1})^T \mathbf{c}_B$ calculado en la última iteración del Simplex satisface exactamente $\mathbf{A}^T \mathbf{y}^* \le \mathbf{c}$, constituyendo de manera inmediata la <strong>solución óptima exacta del programa dual</strong>.
+              Diseñado por <strong>Carlton Lemke (1954)</strong>, el <strong>Algoritmo Simplex Dual</strong> resuelve un programa lineal operando sobre bases que satisfacen en todo momento la condición de <strong>optimalidad dual (o factibilidad dual: $r_j \ge 0 \\ \forall j$)</strong>, mientras que la factibilidad primal ($\mathbf{x}_B \ge \mathbf{0}$) se encuentra temporalmente violada.
             </p>
+            <p>
+              El método es extraordinariamente eficiente en dos situaciones operativas cruciales:
+              <br>1. <strong>Adición de Nuevas Restricciones:</strong> Cuando a un problema ya resuelto se le agrega una restricción que deja fuera al óptimo previo (como en los algoritmos de <em>Branch & Bound</em> y <em>Planos Cortantes de Gomory</em> para programación entera).
+              <br>2. <strong>Variación en el Vector de Recursos $\mathbf{b}$ (Análisis de Sensibilidad):</strong> Cuando cambios en el mercado hacen que una o más componentes del lado derecho resulten negativas ($\bar{b}_i < 0$).
+            </p>
+
+            <div class="math-box box-def">
+              <div class="math-box-header">Estructura Comparativa: Simplex Primal vs Simplex Dual</div>
+              <div class="table-responsive">
+                <table class="academic-table" style="width: 100%; font-size: 0.95rem;">
+                  <thead>
+                    <tr>
+                      <th style="width: 25%;">Característica</th>
+                      <th style="width: 37%;">Simplex Primal</th>
+                      <th style="width: 38%;">Simplex Dual (Lemke)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Punto de Partida</strong></td>
+                      <td>Solución Básica Factible ($\mathbf{x}_B \ge \mathbf{0}$)</td>
+                      <td>Solución Dual Factible ($r_j \ge 0 \\ \forall j$)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Invariante del Algoritmo</strong></td>
+                      <td>Mantiene Factibilidad Primal en cada pivote</td>
+                      <td>Mantiene Factibilidad Dual ($r_j \ge 0$) en cada pivote</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Criterio de Parada</strong></td>
+                      <td>Todos los costos reducidos son $\ge 0$ ($r_j \ge 0$)</td>
+                      <td>Todas las variables básicas son no negativas ($\mathbf{x}_B \ge \mathbf{0}$)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Selección de la Variable que Sale</strong></td>
+                      <td>Regla de la Razón Mínima Primal: $\min_i \{x_{Bi} / y_{is} : y_{is} > 0\}$</td>
+                      <td>Fila más negativa: $r = \arg\min_i \{x_{Bi} : x_{Bi} < 0\}$</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Selección de la Variable que Entra</strong></td>
+                      <td>Costo reducido más negativo: $\min_j \{r_j : r_j < 0\}$</td>
+                      <td>Regla de la Razón Mínima Dual: $\min_j \{r_j / |y_{rj}| : y_{rj} < 0\}$</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="math-box box-thm" style="margin-top: 1.5rem;">
+              <div class="math-box-header">Algoritmo Simplex Dual Formal Paso a Paso (Luenberger Sec. 4.6, pp. 102–104)</div>
+              <div class="example-steps">
+                <div class="example-step">
+                  <div class="example-step-title">Paso 1 (Prueba de Factibilidad Primal y Optimalidad):</div>
+                  Examinar el vector de términos independientes actual $\bar{\mathbf{b}} = \mathbf{B}^{-1}\mathbf{b}$. Si todas las componentes son no negativas ($x_{Bi} \ge 0 \\ \forall i=1,\dots,m$), <strong>detenerse</strong>: la base actual es simultáneamente factible primal y factible dual, por lo que representa la <strong>solución óptima única</strong>.
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">Paso 2 (Determinación de la Fila Pivote — Variable que Sale):</div>
+                  Elegir la variable básica con el valor más negativo:
+                  $$r = \arg\min_{i=1,\dots,m} \left\{ x_{Bi} : x_{Bi} < 0 \right\}$$
+                  La variable básica asociada a la fila $r$, $x_{Br}$, abandonará la base.
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">Paso 3 (Prueba de Infactibilidad Primal):</div>
+                  Examinar todos los coeficientes de la fila pivote $r$: $\{y_{rj} : j \notin B\}$.
+                  <br>Si todos los elementos son mayores o iguales a cero ($y_{rj} \ge 0 \\ \forall j$), <strong>detenerse</strong>: el problema primal es <strong>infactible</strong> (el cono dual no está acotado).
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">Paso 4 (Determinación de la Columna Pivote — Prueba de la Razón Dual):</div>
+                  Para preservar los costos reducidos no negativos ($r_j' \ge 0$) tras el pivoteo, la variable que ingresa a la base se determina mediante la <strong>regla de la razón mínima dual</strong> sobre los elementos estrictamente negativos de la fila $r$:
+                  $$s = \arg\min_{j : y_{rj} < 0} \left\{ \frac{r_j}{|y_{rj}|} \right\} = \arg\min_{j : y_{rj} < 0} \left\{ \frac{r_j}{-y_{rj}} \right\}$$
+                  El elemento en la intersección $(r, s)$, $y_{rs} < 0$, es el <strong>elemento pivote</strong>.
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">Paso 5 (Pivoteo Gaussiano):</div>
+                  Realizar las operaciones elementales de fila para transformar la columna $s$ en el vector canónico unitario $\mathbf{e}_r$. Regresar al Paso 1.
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejemplo Resuelto Simplex Dual -->
+            <div class="math-box box-prop" style="margin-top: 1.75rem;">
+              <div class="math-box-header">Ejemplo Resuelto 2.9: Reoptimización por Simplex Dual tras Agregar una Restricción Violada</div>
+              <p>
+                Supóngase que para el problema $\min z = 2x_1 + x_2$ s.a. $3x_1 + x_2 \ge 3, 4x_1 + 3x_2 \ge 6, x_1, x_2 \ge 0$, se había obtenido la solución óptima $\mathbf{x}^* = (3/5, 6/5)$ con $z^* = 12/5$. Supongamos que se incorpora la nueva restricción:
+                $$x_1 + 2x_2 \le 2$$
+                Evaluando en la solución actual: $3/5 + 2(6/5) = 15/5 = 3 > 2$. La solución previa queda <strong>violada</strong>.
+              </p>
+              <div class="example-steps" style="margin-top: 1rem;">
+                <div class="example-step">
+                  <div class="example-step-title">1. Incorporación de la Nueva Restricción al Tablero:</div>
+                  Escribimos la nueva restricción con holgura $s_3 \ge 0$: $x_1 + 2x_2 + s_3 = 2$.
+                  <br>Expresando $x_1$ y $x_2$ en función de las variables no básicas originales y despejando $s_3$, se obtiene un valor negativo en el lado derecho:
+                  $$s_3 = 2 - (3/5) - 2(6/5) = -1 < 0$$
+                  El tablero resultante preserva todos sus costos reducidos $\ge 0$ (dual factible), pero tiene $s_3 = -1$ (primal infactible).
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">2. Aplicación de la Razón Dual y Pivoteo:</div>
+                  La fila con $-1$ es la fila pivote $r$. Calculando las razones $\frac{r_j}{|y_{rj}|}$ sobre los coeficientes negativos, se selecciona la columna entrante y se realiza un único pivoteo de Gauss-Jordan.
+                  <br>En una sola iteración se alcanza la nueva solución óptima sin necesidad de volver a ejecutar el método de Dos Fases desde cero. Código ejecutable disponible en <a href="./python_src/11_simplex_dual.py" target="_blank"><code>11_simplex_dual.py</code></a>.
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div id="sec-2-3-4" style="margin-top: 2rem;">
-            <h3><span>2.3.4 Sensibilidad y Holgura Complementaria</span> <span class="ref-badge">Luenberger Sec. 4.4</span></h3>
+          <!-- =====================================================================
+             SUBTEMA 2.3.6: EL ALGORITMO PRIMAL-DUAL
+          ====================================================================== -->
+          <div id="sec-2-3-6" style="margin-top: 3rem;">
+            <h3>
+              <span>2.3.6 El Algoritmo Primal-Dual</span>
+              <span class="ref-badge">Luenberger Sec. 4.7</span>
+            </h3>
             <p>
-              El Teorema de Holgura Complementaria establece que en el óptimo:
-              $$x_j^* (c_j - \mathbf{a}_j^T \mathbf{y}^*) = 0, \quad \forall j=1,\dots,n$$
-              Si una variable primal es positiva ($x_j^* > 0$), la restricción dual asociada se cumple como igualdad estricta. Las variables duales $y_i^*$ son los <strong>precios sombra</strong>: $\frac{\partial z^*}{\partial b_i} = y_i^*$ (<a href="./python_src/10_dualidad_holgura_complementaria.py" target="_blank"><code>10_dualidad_holgura_complementaria.py</code></a>).
+              El <strong>Algoritmo Primal-Dual</strong> propuesto originalmente por <strong>George Dantzig, Lester Ford y Delbert Fulkerson (1956)</strong> constituye uno de los esquemas metodológicos más influyentes de la ciencia de la computación y la optimización combinatoria. A diferencia del Simplex Dual (que pivotea entre bases adyacentes), el método primal-dual resuelve en cada ciclo un <strong>problema primal restringido</strong> para determinar la dirección de máxima mejora en el dual.
             </p>
-          </div>
+            <p>
+              Este algoritmo es el progenitor directo del célebre <em>Algoritmo Húngaro</em> para asignación de Kuhn-Munkres, los algoritmos de flujo de costo mínimo (Busacker-Gowen), y la técnica moderna de diseño de algoritmos de aproximación para problemas NP-difíciles.
+            </p>
 
-          <div id="sec-2-3-5" style="margin-top: 2rem;">
-            <h3><span>2.3.5 El Método Simplex Dual</span> <span class="ref-badge">Luenberger Sec. 4.6</span></h3>
-            <p>
-              El algoritmo Simplex Dual de C. Lemke mantiene la optimalidad y factibilidad dual ($\mathbf{r}_N \ge \mathbf{0}$) y busca la factibilidad primal ($\mathbf{x}_B \ge \mathbf{0}$). Es el método predilecto cuando se agregan nuevas restricciones o cortes a un problema ya resuelto (<a href="./python_src/11_simplex_dual.py" target="_blank"><code>11_simplex_dual.py</code></a>).
-            </p>
-          </div>
+            <div class="math-box box-thm">
+              <div class="math-box-header">Mecanismo Algorítmico de Dantzig-Ford-Fulkerson (Luenberger pp. 104–106)</div>
+              <p>Dado el problema primal estándar $\min \mathbf{c}^T\mathbf{x}$ s.a. $\mathbf{A}\mathbf{x}=\mathbf{b}, \mathbf{x}\ge\mathbf{0}$ con $\mathbf{b}\ge\mathbf{0}$ y su dual $\max \mathbf{y}^T\mathbf{b}$ s.a. $\mathbf{y}^T\mathbf{A}\le\mathbf{c}^T$:</p>
+              
+              <div class="example-steps">
+                <div class="example-step">
+                  <div class="example-step-title">1. Inicialización Dual:</div>
+                  Comenzar con cualquier solución dual factible $\mathbf{y}$ tal que $\mathbf{y}^T \mathbf{a}_j \le c_j \\ \forall j$. (Si $\mathbf{c} \ge \mathbf{0}$, $\mathbf{y} = \mathbf{0}$ es siempre una elección factible inmediata).
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">2. Identificación del Conjunto de Índices Activos $J$:</div>
+                  Determinar el conjunto de columnas donde la restricción dual se cumple con igualdad estricta (holgura dual cero):
+                  $$J = \left\{ j \in \{1, \dots, n\} : \mathbf{y}^T \mathbf{a}_j = c_j \right\}$$
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">3. Formulación y Resolución del Problema Primal Restringido (RP):</div>
+                  Para satisfacer la complementariedad, solo se permite que $x_j > 0$ si $j \in J$. Se introducen variables artificiales $\mathbf{x}_a \in \mathbb{R}^m$ para absorber cualquier discrepancia con $\mathbf{b}$:
+                  $$\begin{aligned}
+                    \text{minimizar} \quad & \xi = \sum_{i=1}^m x_{ai} \\
+                    \text{sujeto a} \quad & \sum_{j \in J} \mathbf{a}_j x_j + \mathbf{x}_a = \mathbf{b} \\
+                    & x_j \ge 0 \\ (j \in J), \quad \mathbf{x}_a \ge \mathbf{0}
+                  \end{aligned}$$
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">4. Prueba de Optimalidad Primal:</div>
+                  Si el valor óptimo del Primal Restringido es $\xi^* = 0$, todas las variables artificiales se anulan ($\mathbf{x}_a^* = \mathbf{0}$). En consecuencia, la solución $\mathbf{x}^*$ (extendida con $x_j^* = 0$ para $j \notin J$) es factible para el problema primal original y satisface exactamente las condiciones de holgura complementaria con $\mathbf{y}$. <strong>Detenerse: $\mathbf{x}^*$ e $\mathbf{y}$ son soluciones óptimas</strong>.
+                </div>
+                <div class="example-step">
+                  <div class="example-step-title">5. Actualización de la Solución Dual (Dirección de Ascenso):</div>
+                  Si $\xi^* > 0$, sea $\mathbf{u}$ el vector de multiplicadores simplex óptimos del problema primal restringido ($\mathbf{u}^T \mathbf{a}_j \le 0 \\ \forall j \in J$ y $\mathbf{u}^T \mathbf{b} = \xi^* > 0$).
+                  <br>Se actualiza el vector dual sumando un múltiplo $\epsilon > 0$ de la dirección $\mathbf{u}$:
+                  $$\mathbf{y}_{\text{nuevo}} = \mathbf{y} + \epsilon \mathbf{u}$$
+                  Para garantizar que $\mathbf{y}_{\text{nuevo}}$ siga siendo factible para todas las restricciones duales fuera de $J$, se define el paso máximo $\epsilon$:
+                  $$\epsilon = \min_{j \notin J, \\ \mathbf{u}^T\mathbf{a}_j > 0} \left\{ \frac{c_j - \mathbf{y}^T\mathbf{a}_j}{\mathbf{u}^T\mathbf{a}_j} \right\}$$
+                  Si $\mathbf{u}^T\mathbf{a}_j \le 0$ para todo $j \notin J$, el problema primal es <strong>infactible</strong>.
+                  <br>Al aplicar este paso $\epsilon$, el nuevo valor objetivo dual aumenta estrictamente en $\epsilon (\mathbf{u}^T\mathbf{b}) = \epsilon \xi^* > 0$, y <strong>al menos un nuevo índice entra al conjunto activo $J$</strong>. Regresar al Paso 2.
+                </div>
+              </div>
+            </div>
 
-          <div id="sec-2-3-6" style="margin-top: 2rem;">
-            <h3><span>2.3.6 El Algoritmo Primal-Dual</span> <span class="ref-badge">Luenberger Sec. 4.7</span></h3>
-            <p>
-              El Algoritmo Primal-Dual de Dantzig-Ford-Fulkerson mantiene factibilidad dual y resuelve una secuencia de problemas primales restringidos de flujo o suma de holguras. Constituye el fundamento de los algoritmos para flujo de costo mínimo y emparejamiento bipartito.
-            </p>
+            <!-- Tableros Canónicos del Ejemplo de Luenberger -->
+            <div style="margin-top: 2rem;">
+              <h4>El Ejemplo Canónico de Luenberger & Ye (pp. 105–106 / Láminas 61–63)</h4>
+              <p>
+                Consideremos el problema lineal canónico presentado en el texto base oficial:
+                $$\min 2x_1 + x_2 + 4x_3 \quad \text{s.a.} \quad x_1 + x_2 + 2x_3 = 3, \quad 2x_1 + x_2 + 3x_3 = 5, \quad x_1, x_2, x_3 \ge 0$$
+                El algoritmo parte del vector dual inicial $\mathbf{y} = (0, 0)^T$. A continuación se ilustra la secuencia de tableros del Primal Restringido y la actualización de multiplicadores:
+              </p>
+              
+              <div class="table-responsive">
+                <table class="academic-table" style="width: 100%; font-size: 0.9rem;">
+                  <thead>
+                    <tr>
+                      <th>Iteración</th>
+                      <th>$J$ Activo</th>
+                      <th>Vector Dual $\mathbf{y}$</th>
+                      <th>Multiplicador $\mathbf{u}$</th>
+                      <th>Paso $\epsilon$</th>
+                      <th>Valor $\xi^*$</th>
+                      <th>Diagnóstico</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Inicio</strong></td>
+                      <td>$\emptyset$</td>
+                      <td>$(0, 0)^T$</td>
+                      <td>$(1, 1)^T$</td>
+                      <td>$\epsilon_0 = 1/2$</td>
+                      <td>$8$</td>
+                      <td>Se activa la columna $\mathbf{a}_2$ ($c_2 - \mathbf{y}^T\mathbf{a}_2 = 0$)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Iteración 1</strong></td>
+                      <td>$\{2\}$</td>
+                      <td>$(1/2, 1/2)^T$</td>
+                      <td>$(-1/2, 1/2)^T$</td>
+                      <td>$\epsilon_1 = 1/2$</td>
+                      <td>$2$</td>
+                      <td>Se activa la columna $\mathbf{a}_1$ en el conjunto $J$</td>
+                    </tr>
+                    <tr style="background: rgba(16, 185, 129, 0.08);">
+                      <td><strong>Iteración 2</strong></td>
+                      <td>$\{1, 2\}$</td>
+                      <td>$(1, 0)^T$</td>
+                      <td>$(0, 0)^T$</td>
+                      <td>—</td>
+                      <td><strong style="color: #10b981;">0</strong></td>
+                      <td><strong>Óptimo Alcanzado:</strong> $x_1^* = 2, x_2^* = 1, x_3^* = 0$. Costo $z^* = 2(2) + 1(1) = 5$.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </section>
 

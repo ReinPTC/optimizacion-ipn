@@ -677,6 +677,13 @@ a:hover {
 }
 .box-note .math-box-header { color: var(--note-border); }
 
+.box-proof {
+  border-left-color: #8b5cf6;
+  background-color: rgba(139, 92, 246, 0.05);
+}
+.box-proof .math-box-header { color: #8b5cf6; }
+
+
 /* Structured Notation Items (Formato Formal Desglosado) */
 .notation-list {
   display: flex;

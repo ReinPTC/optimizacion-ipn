@@ -185,6 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.InteractiveTools.initSvmVisualizerTool === 'function') {
       window.InteractiveTools.initSvmVisualizerTool();
     }
+    if (typeof window.InteractiveTools.initDualityTool === 'function') {
+      window.InteractiveTools.initDualityTool();
+    }
   }
 });
 
