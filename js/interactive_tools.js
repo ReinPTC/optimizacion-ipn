@@ -842,6 +842,473 @@ window.InteractiveTools = {
     });
 
     updateDuality();
+  },
+
+  // ============================================================================
+  // 7. ANALIZADOR DE SUPERFICIES 2D, HESSIANO Y PUNTOS DE ENSILLADURA (Cap. 7)
+  // ============================================================================
+  initHessianSaddleTool: function() {
+    const canvas = document.getElementById('hessianCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const selectFunc = document.getElementById('hessianFuncSelect');
+    const sliderX1 = document.getElementById('sliderHessianX1');
+    const sliderX2 = document.getElementById('sliderHessianX2');
+    const valX1 = document.getElementById('valHessianX1');
+    const valX2 = document.getElementById('valHessianX2');
+
+    const dispF = document.getElementById('dispValF');
+    const dispGrad = document.getElementById('dispValGrad');
+    const dispNormGrad = document.getElementById('dispNormGrad');
+    const dispMatrix = document.getElementById('dispMatrixHessian');
+    const dispEigen = document.getElementById('dispEigenvals');
+    const dispDet = document.getElementById('dispDetHessian');
+    const badgeStatus = document.getElementById('badgeHessianStatus');
+
+    // Definición de funciones y derivadas analíticas
+    const functions = {
+      luen71: {
+        name: "Ejemplo 7.1.1: f = x₁² - x₁x₂ + x₂² - 3x₂",
+        range: { minX: -2, maxX: 4, minY: -1, maxY: 5 },
+        defaultX: 1.0,
+        defaultY: 2.0,
+        f: (x, y) => x*x - x*y + y*y - 3*y,
+        grad: (x, y) => [2*x - y, -x + 2*y - 3],
+        hessian: (x, y) => [[2, -1], [-1, 2]]
+      },
+      luen73: {
+        name: "Ejemplo 7.3.2: f = x₁³ - x₁²x₂ + 2x₂² (Punto de Silla)",
+        range: { minX: -2, maxX: 8, minY: -2, maxY: 12 },
+        defaultX: 6.0,
+        defaultY: 9.0,
+        f: (x, y) => Math.pow(x, 3) - x*x*y + 2*y*y,
+        grad: (x, y) => [3*x*x - 2*x*y, -x*x + 4*y],
+        hessian: (x, y) => [[6*x - 2*y, -2*x], [-2*x, 4]]
+      },
+      saddle: {
+        name: "Silla Canónica: f = x₁² - x₂²",
+        range: { minX: -3, maxX: 3, minY: -3, maxY: 3 },
+        defaultX: 0.0,
+        defaultY: 0.0,
+        f: (x, y) => x*x - y*y,
+        grad: (x, y) => [2*x, -2*y],
+        hessian: (x, y) => [[2, 0], [0, -2]]
+      },
+      rosenbrock: {
+        name: "Valle de Rosenbrock: f = (1-x₁)² + 10(x₂-x₁²)²",
+        range: { minX: -2, maxX: 2, minY: -1, maxY: 3 },
+        defaultX: 1.0,
+        defaultY: 1.0,
+        f: (x, y) => Math.pow(1 - x, 2) + 10 * Math.pow(y - x*x, 2),
+        grad: (x, y) => [-2*(1 - x) - 40*x*(y - x*x), 20*(y - x*x)],
+        hessian: (x, y) => [[2 - 40*y + 120*x*x, -40*x], [-40*x, 20]]
+      }
+    };
+
+    function updateRanges() {
+      const fnKey = selectFunc ? selectFunc.value : 'luen73';
+      const cur = functions[fnKey] || functions.luen73;
+      if (sliderX1 && sliderX2) {
+        sliderX1.min = cur.range.minX;
+        sliderX1.max = cur.range.maxX;
+        sliderX1.step = 0.1;
+        sliderX1.value = cur.defaultX;
+
+        sliderX2.min = cur.range.minY;
+        sliderX2.max = cur.range.maxY;
+        sliderX2.step = 0.1;
+        sliderX2.value = cur.defaultY;
+      }
+      render();
+    }
+
+    function render() {
+      const fnKey = selectFunc ? selectFunc.value : 'luen73';
+      const cur = functions[fnKey] || functions.luen73;
+
+      const x = parseFloat(sliderX1.value);
+      const y = parseFloat(sliderX2.value);
+
+      if (valX1) valX1.textContent = x.toFixed(2);
+      if (valX2) valX2.textContent = y.toFixed(2);
+
+      const fVal = cur.f(x, y);
+      const [gx, gy] = cur.grad(x, y);
+      const normG = Math.sqrt(gx*gx + gy*gy);
+      const [[h11, h12], [h21, h22]] = cur.hessian(x, y);
+
+      // Autovalores de F
+      const tr = h11 + h22;
+      const det = h11 * h22 - h12 * h21;
+      const disc = Math.sqrt(Math.max(0, tr*tr - 4*det));
+      const lam1 = (tr + disc) / 2.0;
+      const lam2 = (tr - disc) / 2.0;
+
+      // Actualizar métricas textuales
+      if (dispF) dispF.textContent = fVal.toFixed(4);
+      if (dispGrad) dispGrad.textContent = `[${gx.toFixed(3)}, ${gy.toFixed(3)}]`;
+      if (dispNormGrad) dispNormGrad.textContent = normG.toFixed(4);
+      if (dispMatrix) {
+        dispMatrix.innerHTML = `
+          <div style="font-family: monospace; line-height: 1.4; padding: 0.25rem 0.5rem; background: var(--bg-primary); border-radius: 4px; border: 1px solid var(--border-color); display: inline-block;">
+            [ ${h11.toFixed(2)}, ${h12.toFixed(2)} ]<br>
+            [ ${h21.toFixed(2)}, ${h22.toFixed(2)} ]
+          </div>
+        `;
+      }
+      if (dispEigen) dispEigen.textContent = `λ₁ = ${lam1.toFixed(3)}, λ₂ = ${lam2.toFixed(3)}`;
+      if (dispDet) dispDet.textContent = `det(F) = ${det.toFixed(3)}`;
+
+      // Diagnóstico de Optimalidad
+      const tolGrad = 0.05;
+      const tolEig = 0.02;
+      const esEstacionario = normG < tolGrad;
+
+      if (!badgeStatus) return;
+
+      if (!esEstacionario) {
+        badgeStatus.className = "badge-status";
+        badgeStatus.style.background = "rgba(100, 116, 139, 0.2)";
+        badgeStatus.style.color = "#94a3b8";
+        badgeStatus.style.border = "1px solid #64748b";
+        badgeStatus.textContent = "PUNTO ORDINARIO (||∇f|| > 0 — No estacionario)";
+      } else {
+        if (lam1 > tolEig && lam2 > tolEig) {
+          badgeStatus.style.background = "rgba(16, 185, 129, 0.2)";
+          badgeStatus.style.color = "#10b981";
+          badgeStatus.style.border = "1px solid #10b981";
+          badgeStatus.textContent = "✓ MÍNIMO LOCAL ESTRICTO (FONC & SOSC: ∇f = 0, F ≻ 0)";
+        } else if (lam1 < -tolEig && lam2 < -tolEig) {
+          badgeStatus.style.background = "rgba(239, 68, 68, 0.2)";
+          badgeStatus.style.color = "#ef4444";
+          badgeStatus.style.border = "1px solid #ef4444";
+          badgeStatus.textContent = "▲ MÁXIMO LOCAL ESTRICTO (F ≺ 0)";
+        } else if (lam1 * lam2 < -tolEig) {
+          badgeStatus.style.background = "rgba(245, 158, 11, 0.2)";
+          badgeStatus.style.color = "#f59e0b";
+          badgeStatus.style.border = "1px solid #f59e0b";
+          badgeStatus.textContent = "⚡ PUNTO DE ENSILLADURA (Saddle Point: det(F) < 0)";
+        } else {
+          badgeStatus.style.background = "rgba(147, 51, 234, 0.2)";
+          badgeStatus.style.color = "#a855f7";
+          badgeStatus.style.border = "1px solid #a855f7";
+          badgeStatus.textContent = "❓ PUNTO DEGENERADO (det(F) ≈ 0 — Criterio Inconcluso)";
+        }
+      }
+
+      // Dibujar en Canvas mapa de curvas de nivel
+      drawContour(canvas, ctx, cur, x, y, gx, gy);
+    }
+
+    function drawContour(canvas, ctx, cur, curX, curY, gx, gy) {
+      const W = canvas.width;
+      const H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const { minX, maxX, minY, maxY } = cur.range;
+      const toCanvasX = (vx) => ((vx - minX) / (maxX - minX)) * W;
+      const toCanvasY = (vy) => H - ((vy - minY) / (maxY - minY)) * H;
+
+      // Ejes
+      const origX = toCanvasX(0);
+      const origY = toCanvasY(0);
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.25)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      if (origX >= 0 && origX <= W) {
+        ctx.moveTo(origX, 0); ctx.lineTo(origX, H);
+      }
+      if (origY >= 0 && origY <= H) {
+        ctx.moveTo(0, origY); ctx.lineTo(W, origY);
+      }
+      ctx.stroke();
+
+      // Muestrear gradilla para isolíneas discretas
+      const step = 6;
+      for (let px = 0; px < W; px += step) {
+        for (let py = 0; py < H; py += step) {
+          const vx = minX + (px / W) * (maxX - minX);
+          const vy = minY + ((H - py) / H) * (maxY - minY);
+          const val = cur.f(vx, vy);
+          const normVal = Math.sin(val * 0.35);
+          if (Math.abs(normVal) < 0.15) {
+            ctx.fillStyle = "rgba(56, 189, 248, 0.15)";
+            ctx.fillRect(px, py, step, step);
+          }
+        }
+      }
+
+      // Punto actual
+      const cx = toCanvasX(curX);
+      const cy = toCanvasY(curY);
+
+      // Flecha de Gradiente (Dirección de máximo ascenso)
+      const gradLen = Math.sqrt(gx*gx + gy*gy);
+      if (gradLen > 1e-4) {
+        const arrowScale = 25 / (gradLen + 1e-3);
+        const endX = cx + (gx * arrowScale);
+        const endY = cy - (gy * arrowScale);
+
+        ctx.strokeStyle = "#38bdf8";
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+
+        // Punta de flecha
+        const angle = Math.atan2(endY - cy, endX - cx);
+        ctx.fillStyle = "#38bdf8";
+        ctx.beginPath();
+        ctx.moveTo(endX, endY);
+        ctx.lineTo(endX - 8 * Math.cos(angle - Math.PI / 6), endY - 8 * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(endX - 8 * Math.cos(angle + Math.PI / 6), endY - 8 * Math.sin(angle + Math.PI / 6));
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // Marcador del punto x*
+      ctx.fillStyle = "#f59e0b";
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 7, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+
+      // Etiqueta del punto
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 12px Inter, sans-serif";
+      ctx.fillText(`(${curX.toFixed(1)}, ${curY.toFixed(1)})`, cx + 10, cy - 8);
+    }
+
+    if (selectFunc) selectFunc.addEventListener('change', updateRanges);
+    if (sliderX1) sliderX1.addEventListener('input', render);
+    if (sliderX2) sliderX2.addEventListener('input', render);
+
+    updateRanges();
+  },
+
+  // ============================================================================
+  // 8. SIMULADOR INTERACTIVO DE BÚSQUEDA SOBRE UNA LÍNEA (Cap. 8.1)
+  // ============================================================================
+  initLineSearch1DTool: function() {
+    const canvas = document.getElementById('lineSearchCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const btnNextStep = document.getElementById('btnLineSearchNext');
+    const btnReset = document.getElementById('btnLineSearchReset');
+    const selMethod = document.getElementById('selLineSearchMethod');
+    const dispIter = document.getElementById('dispLineIter');
+    const dispBracket = document.getElementById('dispLineBracket');
+    const dispAlpha = document.getElementById('dispLineAlpha');
+    const dispReduction = document.getElementById('dispLineReduction');
+    const logBox = document.getElementById('lineSearchLog');
+
+    // Función unimodal de prueba f(x) = 2x² - exp(0.5x) - 3x en [0, 3]
+    const f1D = (x) => 2.0 * x * x - Math.exp(0.5 * x) - 3.0 * x;
+    const df1D = (x) => 4.0 * x - 0.5 * Math.exp(0.5 * x) - 3.0;
+
+    const tau = (Math.sqrt(5.0) - 1.0) / 2.0; // 0.6180339887
+    let a = 0.0;
+    let b = 3.0;
+    let c = b - tau * (b - a);
+    let d = a + tau * (b - a);
+    let fc = f1D(c);
+    let fd = f1D(d);
+    let iter = 0;
+    let armijoAlpha = 2.0;
+    let armijoBacktracks = 0;
+
+    function resetSimulation() {
+      a = 0.0;
+      b = 3.0;
+      c = b - tau * (b - a);
+      d = a + tau * (b - a);
+      fc = f1D(c);
+      fd = f1D(d);
+      iter = 0;
+      armijoAlpha = 2.0;
+      armijoBacktracks = 0;
+      if (logBox) logBox.innerHTML = '';
+      logStep("Simulación reiniciada. Intervalo inicial: [0.000, 3.000]");
+      updateUI();
+    }
+
+    function logStep(msg) {
+      if (!logBox) return;
+      const item = document.createElement('div');
+      item.style.padding = '0.2rem 0';
+      item.style.borderBottom = '1px solid rgba(148, 163, 184, 0.15)';
+      item.innerHTML = msg;
+      logBox.appendChild(item);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function stepGoldenSection() {
+      iter++;
+      const len = b - a;
+      if (len < 1e-4) {
+        logStep(`<strong>✓ Convergencia alcanzada</strong> (Longitud = ${len.toFixed(5)} < 10⁻⁴). x* ≈ ${((a+b)/2).toFixed(5)}`);
+        return;
+      }
+
+      if (fc < fd) {
+        logStep(`Iter ${iter}: f(c) = ${fc.toFixed(4)} < f(d) = ${fd.toFixed(4)} ⇒ Nuevo intervalo: [${a.toFixed(3)}, ${d.toFixed(3)}]`);
+        b = d;
+        d = c;
+        fd = fc;
+        c = b - tau * (b - a);
+        fc = f1D(c);
+      } else {
+        logStep(`Iter ${iter}: f(c) = ${fc.toFixed(4)} ≥ f(d) = ${fd.toFixed(4)} ⇒ Nuevo intervalo: [${c.toFixed(3)}, ${b.toFixed(3)}]`);
+        a = c;
+        c = d;
+        fc = fd;
+        d = a + tau * (b - a);
+        fd = f1D(d);
+      }
+      updateUI();
+    }
+
+    function stepArmijo() {
+      iter++;
+      const phi0 = f1D(0.0);
+      const dphi0 = df1D(0.0);
+      const eps = 0.1;
+      const beta = 0.5;
+
+      const phiAlpha = f1D(armijoAlpha);
+      const umbral = phi0 + eps * dphi0 * armijoAlpha;
+      const cumple = phiAlpha <= umbral;
+
+      if (cumple) {
+        logStep(`<strong>✓ Paso Armijo Aceptado en iter ${iter}:</strong> α = ${armijoAlpha.toFixed(4)} satisface φ(α) = ${phiAlpha.toFixed(4)} ≤ ${umbral.toFixed(4)}`);
+      } else {
+        logStep(`Iter ${iter}: α = ${armijoAlpha.toFixed(4)} RECHAZADO (φ(α)=${phiAlpha.toFixed(4)} > umbral=${umbral.toFixed(4)}). Retroceso α ← ${beta}α = ${(armijoAlpha * beta).toFixed(4)}`);
+        armijoAlpha *= beta;
+        armijoBacktracks++;
+      }
+      updateUI();
+    }
+
+    function updateUI() {
+      const method = selMethod ? selMethod.value : 'golden';
+      if (dispIter) dispIter.textContent = iter;
+
+      if (method === 'golden') {
+        if (dispBracket) dispBracket.textContent = `[${a.toFixed(4)}, ${b.toFixed(4)}]`;
+        if (dispAlpha) dispAlpha.textContent = ((a + b) / 2).toFixed(4);
+        if (dispReduction) dispReduction.textContent = `${((b - a) / 3.0 * 100).toFixed(1)}%`;
+      } else {
+        if (dispBracket) dispBracket.textContent = `α actual = ${armijoAlpha.toFixed(4)}`;
+        if (dispAlpha) dispAlpha.textContent = armijoAlpha.toFixed(4);
+        if (dispReduction) dispReduction.textContent = `Retrocesos: ${armijoBacktracks}`;
+      }
+
+      drawPlot(method);
+    }
+
+    function drawPlot(method) {
+      const W = canvas.width;
+      const H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const minX = -0.2, maxX = 3.2;
+      const minY = -3.2, maxY = 1.0;
+
+      const toX = (vx) => ((vx - minX) / (maxX - minX)) * W;
+      const toY = (vy) => H - ((vy - minY) / (maxY - minY)) * H;
+
+      // Eje coordenado
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.3)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(toX(minX), toY(0)); ctx.lineTo(toX(maxX), toY(0));
+      ctx.moveTo(toX(0), toY(minY)); ctx.lineTo(toX(0), toY(maxY));
+      ctx.stroke();
+
+      // Curva f(x)
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let px = 0; px <= W; px++) {
+        const vx = minX + (px / W) * (maxX - minX);
+        const vy = f1D(vx);
+        if (px === 0) ctx.moveTo(toX(vx), toY(vy));
+        else ctx.lineTo(toX(vx), toY(vy));
+      }
+      ctx.stroke();
+
+      if (method === 'golden') {
+        // Franja sombreada del intervalo [a, b]
+        ctx.fillStyle = "rgba(56, 189, 248, 0.15)";
+        ctx.fillRect(toX(a), 0, toX(b) - toX(a), H);
+
+        // Líneas verticales de a y b
+        ctx.strokeStyle = "#ef4444";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(toX(a), 0); ctx.lineTo(toX(a), H);
+        ctx.moveTo(toX(b), 0); ctx.lineTo(toX(b), H);
+        ctx.stroke();
+
+        // Puntos c y d
+        ctx.fillStyle = "#10b981";
+        [c, d].forEach(pt => {
+          ctx.beginPath();
+          ctx.arc(toX(pt), toY(f1D(pt)), 5, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+
+        // Mínimo aproximado actual
+        const mid = (a + b) / 2;
+        ctx.fillStyle = "#f59e0b";
+        ctx.beginPath();
+        ctx.arc(toX(mid), toY(f1D(mid)), 7, 0, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        // Graficar recta de Armijo
+        const phi0 = f1D(0.0);
+        const dphi0 = df1D(0.0);
+        const eps = 0.1;
+
+        ctx.strokeStyle = "#f59e0b";
+        ctx.setLineDash([5, 5]);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(toX(0), toY(phi0));
+        ctx.lineTo(toX(3.0), toY(phi0 + eps * dphi0 * 3.0));
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Punto de prueba actual
+        const curY = f1D(armijoAlpha);
+        const armijoY = phi0 + eps * dphi0 * armijoAlpha;
+        const cumple = curY <= armijoY;
+
+        ctx.fillStyle = cumple ? "#10b981" : "#ef4444";
+        ctx.beginPath();
+        ctx.arc(toX(armijoAlpha), toY(curY), 7, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    if (btnNextStep) {
+      btnNextStep.addEventListener('click', () => {
+        const method = selMethod ? selMethod.value : 'golden';
+        if (method === 'golden') stepGoldenSection();
+        else stepArmijo();
+      });
+    }
+
+    if (btnReset) btnReset.addEventListener('click', resetSimulation);
+    if (selMethod) selMethod.addEventListener('change', resetSimulation);
+
+    resetSimulation();
   }
 };
+
 

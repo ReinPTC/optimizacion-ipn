@@ -188,6 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.InteractiveTools.initDualityTool === 'function') {
       window.InteractiveTools.initDualityTool();
     }
+    if (typeof window.InteractiveTools.initHessianSaddleTool === 'function') {
+      window.InteractiveTools.initHessianSaddleTool();
+    }
+    if (typeof window.InteractiveTools.initLineSearch1DTool === 'function') {
+      window.InteractiveTools.initLineSearch1DTool();
+    }
   }
 });
 
